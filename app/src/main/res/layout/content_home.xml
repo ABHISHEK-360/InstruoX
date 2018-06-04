@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity"
-    android:background="@drawable/background"
-    android:alpha="0.7"
-    >
+    tools:context=".HomeActivity"
+    tools:showIn="@layout/activity_home">
 
-
-
-
-
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/action_bar"
+        android:layout_width="387dp"
+        android:layout_height="71dp"
+        tools:layout_editor_absoluteX="-3dp"
+        tools:layout_editor_absoluteY="0dp"></include>
 
 </android.support.constraint.ConstraintLayout>

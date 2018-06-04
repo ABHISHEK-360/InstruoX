@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home_id"
+            android:title="Home"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/home">
+
+        </item>
+
+        <item
+            android:id="@+id/about__id"
+            android:title="About Instruo"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/about">
+
+        </item>
+    </group>
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/events_id"
+            android:title="Events"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/events">
+
+        </item>
+
+        <item
+            android:id="@+id/workshops_id"
+            android:title="Workshops"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/workshop">
+
+        </item>
+
+        <item
+            android:id="@+id/automaton_id"
+            android:title="Automaton"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/automaton">
+
+        </item>
+
+        <item
+            android:id="@+id/schedule_id"
+            android:title="Schedules"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/schedule">
+
+
+        </item>
+
+    </group>
+
+    <group android:checkableBehavior="single">
+
+
+        <item
+            android:id="@+id/directions_id"
+            android:title="Directions"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/directions">
+
+        </item>
+
+        <item
+            android:id="@+id/contacts_id"
+            android:title="Contact Us"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/schedule">
+
+        </item>
+
+        <item
+            android:id="@+id/team_id"
+            android:title="Instruo Team"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/team">
+
+        </item>
+
+        <item
+            android:id="@+id/developers_id"
+            android:title="Developers"
+            android:textColor="#1871ba"
+
+            android:icon="@drawable/developer">
+
+        </item>
+
+    </group>
+
+</menu>
