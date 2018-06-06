@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:background="@drawable/popup_baclground"
+    android:padding="5dp"
+    android:layout_gravity="center">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/closeDialog"
+
+        app:srcCompat="@drawable/close"
+
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/email"
+        android:layout_marginStart="256dp"
+        android:clickable="true" />
+
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="288dp"
+        android:layout_margin="5dp"
+
+        android:layout_height="51dp"
+        android:hint="Email or Phone No"
+        android:padding="5dp" />
+
+    <EditText
+        android:id="@+id/Password"
+        android:layout_width="300dp"
+        android:layout_height="49dp"
+        android:hint="Password"
+        android:layout_margin="5dp"
+
+
+        android:padding="5dp" />
+
+    <Button
+        android:id="@+id/signIn"
+        android:layout_width="269dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/buttonstyle"
+        android:padding="5dp"
+
+
+        android:text="SignIn"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:id="@+id/regi"
+        android:layout_width="269dp"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:layout_margin="10dp"
+
+
+        android:background="@drawable/buttonstyle"
+
+        android:text="Register" />
+
+</LinearLayout>

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="150dp"
+    android:id="@+id/header_layout"
     android:background="@drawable/header_background">
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -22,13 +23,13 @@
         android:layout_height="35dp"
         android:layout_alignParentStart="true"
 
-        android:layout_alignTop="@+id/email"
+        android:layout_alignTop="@+id/hemail"
         android:layout_marginStart="67dp"
         android:clickable="true"
         app:srcCompat="@drawable/camera" />
 
     <TextView
-        android:id="@+id/name_user"
+        android:id="@+id/hname_user"
         android:layout_width="224dp"
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
@@ -41,14 +42,27 @@
         android:text="ABHISHEK KUMAR" />
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/hemail"
         android:layout_width="225dp"
         android:layout_height="29dp"
-        android:layout_alignBottom="@+id/ProfilePic"
 
-        android:layout_alignStart="@+id/name_user"
-        android:layout_marginBottom="5dp"
+
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="86dp"
         android:text="abhi.kumar310@gmail.com"
         android:textColor="#ffffff" />
+
+    <ImageView
+        android:id="@+id/logoView"
+        android:layout_width="116dp"
+        android:layout_height="141dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="0dp"
+        app:srcCompat="@drawable/instruo_logo" />
 
 </RelativeLayout>
