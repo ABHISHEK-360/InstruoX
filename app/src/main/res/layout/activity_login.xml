@@ -75,6 +75,7 @@
         android:layout_width="245dp"
         android:layout_height="40dp"
         android:background="@drawable/buttonstyle"
+        android:onClick="onClick"
 
         android:drawableLeft="@drawable/common_google_signin_btn_icon_light_normal"
         android:fontFamily="@font/nunito_regular"

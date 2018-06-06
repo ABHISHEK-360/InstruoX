@@ -34,6 +34,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         myDailog = new Dialog(this);
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
+
+
 
     }
     public void showPopUp(View V)
@@ -43,9 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         pass = (TextView)findViewById(R.id.Password);
         signIn = (Button)findViewById(R.id.signIn);
         regi = (Button)findViewById(R.id.regi);
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
-
 
         FloatingActionButton closeBtn = (FloatingActionButton) myDailog.findViewById(R.id.closeDialog);
 
