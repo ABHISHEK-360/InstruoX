@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".DirectionsFragment"
+    android:background="@drawable/background"
+    android:id="@+id/directions_fragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+        <Button
+            android:id="@+id/iiest_1gate"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="10dp"
+
+            android:background="@drawable/buttonstyle"
+
+
+            android:capitalize="none"
+            android:gravity="center"
+            android:text="IIEST,First Gate" />
+        <Button
+            android:id="@+id/netaji_bhawan"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center"
+            android:layout_margin="10dp"
+
+
+            android:background="@drawable/buttonstyle"
+            android:text="Netaji Bhawan" />
+        <Button
+            android:id="@+id/regis_desk"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="10dp"
+
+            android:background="@drawable/buttonstyle"
+
+
+            android:capitalize="none"
+            android:gravity="center"
+            android:text="Registration Desk" />
+        <Button
+            android:id="@+id/i_hall"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center"
+            android:layout_margin="10dp"
+
+
+            android:background="@drawable/buttonstyle"
+            android:text="I-hall" />
+        <Button
+            android:id="@+id/new_building"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="10dp"
+
+            android:background="@drawable/buttonstyle"
+
+
+            android:capitalize="none"
+            android:gravity="center"
+            android:text="New/S &amp; T  Building" />
+        <Button
+            android:id="@+id/hospital"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center"
+            android:layout_margin="10dp"
+
+
+            android:background="@drawable/buttonstyle"
+            android:text="Hospital" />
+
+        <Button
+            android:id="@+id/a_seminar_hall"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:gravity="center"
+            android:layout_margin="10dp"
+
+
+            android:background="@drawable/buttonstyle"
+            android:text="Alumni Seminar Hall" />
+
+        <Button
+            android:id="@+id/sengupta_hall"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="10dp"
+
+            android:background="@drawable/buttonstyle"
+
+
+            android:capitalize="none"
+            android:gravity="center"
+            android:text="Sengupta Hall" />
+
+
+    </LinearLayout>
+
+</ScrollView>

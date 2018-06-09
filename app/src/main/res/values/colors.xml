@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="background">#ffffff</color>
     <color name="myColor">#1B3DE5</color>
+    <color name="selectItemColor">#e801fa1a</color>
+    <color name="menuItemBack">#d0fa0d01</color>
+
 </resources>

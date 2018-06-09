@@ -21,7 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener
 {
     private TextView username,pass;
-    private Button signIn,regi;
+    private Button signIn,regi,register;
     private static final int REQUEST_CODE=9001;
     private GoogleApiClient googleApiClient;
     String name="alpha",email="alpha@base",imgURL="alpha.com";
@@ -34,8 +34,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         myDailog = new Dialog(this);
+        register = (Button)findViewById(R.id.register) ;
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this,this).addApi(Auth.GOOGLE_SIGN_IN_API,signInOptions).build();
+
+        register.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(registerIntent);
+            }
+        });
 
 
 
@@ -43,10 +54,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void showPopUp(View V)
     {
         myDailog.setContentView(R.layout.custompopup);
-        username = (TextView)findViewById(R.id.username);
-        pass = (TextView)findViewById(R.id.Password);
-        signIn = (Button)findViewById(R.id.signIn);
-        regi = (Button)findViewById(R.id.regi);
+        username = (TextView)myDailog.findViewById(R.id.username);
+        pass = (TextView)myDailog.findViewById(R.id.Password);
+        signIn = (Button)myDailog.findViewById(R.id.signIn);
+        regi = (Button)myDailog.findViewById(R.id.regi);
 
         FloatingActionButton closeBtn = (FloatingActionButton) myDailog.findViewById(R.id.closeDialog);
 
@@ -61,6 +72,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
         myDailog.show();
+
+        regi.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                myDailog.dismiss();
+            }
+        });
 
 
     }

@@ -21,6 +21,9 @@
         </item>
     </group>
 
+    <item
+        android:title="Events' Details">
+
     <group android:checkableBehavior="single">
 
         <item
@@ -61,6 +64,8 @@
         </item>
 
     </group>
+
+    </item>
 
     <group android:checkableBehavior="single">
 

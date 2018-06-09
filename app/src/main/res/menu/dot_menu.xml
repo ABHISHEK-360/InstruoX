@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+
         android:id="@+id/myprofile_id"
         android:title="My Profile"
         android:textColor="#1871ba"
@@ -13,6 +14,14 @@
     <item
         android:id="@+id/logout__id"
         android:title="Sign Out"
+        android:textColor="#1871ba"
+        app:showAsAction="never">
+
+    </item>
+
+    <item
+        android:id="@+id/reg_events__id"
+        android:title="Registered Events"
         android:textColor="#1871ba"
         app:showAsAction="never">
 
