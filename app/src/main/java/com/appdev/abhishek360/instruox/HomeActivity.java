@@ -29,7 +29,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,DirectionsFragment.OnFragmentInteractionListener,HomeFragment.OnFragmentInteractionListener,
                                                             EventWorkshopFragment.OnFragmentInteractionListener,
-                                                                    EventsFragment.OnFragmentInteractionListener,EventTechnicalTabFragment.OnFragmentInteractionListener,EventAutomatonTabFragment.OnFragmentInteractionListener
+                                                                    EventsFragment.OnFragmentInteractionListener,EventTechnicalTabFragment.OnFragmentInteractionListener,EventAutomatonTabFragment.OnFragmentInteractionListener,
+                                                                            TeamFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener,SponsorsFragment.OnFragmentInteractionListener
+                                                                                ,EventGamingTabFragment.OnFragmentInteractionListener,EventExibitionsTabFragment.OnFragmentInteractionListener
+
+
 {
     ActionBarDrawerToggle actionBarDrawerToggle;
     DrawerLayout drawerLayout;
@@ -61,6 +65,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
         toolbar = (Toolbar) findViewById(R.id.action_bar);
+        toolbar.setSubtitle("2nd-4th November");
+        toolbar.setLogo(R.drawable.ic_new_instruo_logo);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -85,6 +91,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView)findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setItemIconTintList(null);
         View header = navigationView.getHeaderView(0);
 
 
@@ -227,6 +234,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
 
+            case R.id.team_id:
+
+                fragment = new TeamFragment();
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.commit();
+                break;
+
             case R.id.home_id:
                 fragment =new HomeFragment();
                 ft= getSupportFragmentManager().beginTransaction();
@@ -234,6 +249,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 ft.commit();
 
                 break;
+
+            case R.id.sponsors_id:
+                fragment =new SponsorsFragment();
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.commit();
+
+                break;
+
+
+            case R.id.about__id:
+                fragment =new AboutFragment();
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.commit();
+
+                break;
+
             case R.id.events_id:
                 fragment= new EventsFragment();
                 fragment= new EventsFragment();
@@ -283,6 +316,127 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         return false;
     }
+
+    public void getDirection(View v)
+    {
+        Intent i=null,chooser=null;
+
+        if(v.getId()==R.id.direction_i_hall)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.555483,88.306516()&iwloc=A&hl=es"));
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=I-Hall,IIEST Shibpur&destination_place_id=ChIJ9QQEpMl5AjoRpIw0lXsUJps&travelmode=walking"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.555483,88.306516&fov=90&heading=235&pitch=10&sensor=false"));
+            //i.setData(Uri.parse("geo:22.555897,88.3068597?q="+Uri.encode("I-Hall")));
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+
+        }
+        else if(v.getId()==R.id.direction_a_seminar_hall)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.5563189,88.3083137()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+            //i.setData(Uri.parse("geo:22.5563189,88.3083137?q="+Uri.encode("Alumni Seminar Hall")));
+
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=Alumni Seminar Hall&destination_place_id=ChIJ1cIAoot5AjoRITV7kL_WaTk&travelmode=walking"));
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+        else if(v.getId()==R.id.direction_hospital)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.5570627,88.3052268()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+            //i.setData(Uri.parse("geo:22.5570627,88.3052268?q="+Uri.encode("22.5570627,88.3052268(Hospital)")));
+
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=Hospital-IIEST Shibpur&destination_place_id=ChIJocmQ9sl5AjoRz3-PnT6jBgw&travelmode=walking"));
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+        else if(v.getId()==R.id.direction_netaji_bhawan)
+        {
+
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.555965, 88.307685()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+            //i.setData(Uri.parse("geo:22.5563189,88.3083137?q="+Uri.encode("22.5563189,88.3083137(Netaji Bhavan BESUS)")));
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=Netaji Bhavan&destination_place_id=ChIJ8e2zbMl5AjoR_byYI8vTK20&travelmode=walking"));
+
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+        else if(v.getId()==R.id.direction_new_building)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.553944,88.306344()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+            //i.setData(Uri.parse("geo:22.553944, 88.306344?q="+Uri.encode("SCIENCE & TECHNOLOGY BUILDING")));
+
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=SCIENCE & TECHNOLOGY BUILDING&destination_place_id=ChIJG7dpTsh5AjoRuGmhvoF5b0g&travelmode=walking"));
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+        else if(v.getId()==R.id.direction_regis_desk)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.5555323,88.3075095&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+           // i.setData(Uri.parse("geo:22.5556014,88.3074323?q="+Uri.encode("Instruo")));
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=instruo&destination_place_id=ChIJ1cIAoot5AjoRITV7kL_WaTk&travelmode=walking"));
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+        else if(v.getId()==R.id.direction_sengupta_hall)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.5556748,88.3093986()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+            //i.setData(Uri.parse("geo:22.5556748,88.3093986?q="+Uri.encode("Sengupta Hall")));
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=Sengupta Hall&destination_place_id=ChIJ7weQuM55AjoR2OB3qyWeaFE&travelmode=walking"));
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+
+        }
+        else if(v.getId()==R.id.direction_sen_hall_button)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.5563189,88.3083137()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+           // i.setData(Uri.parse("geo:22.5551697,88.3074003?q="+Uri.encode("Sen Hall")));
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=Sen Hall&destination_place_id=ChIJb43ntM55AjoRNSGwx6RMyOo&travelmode=walking"));
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+        else if(v.getId()==R.id.direction_iiest_1gate)
+        {
+            i= new Intent(Intent.ACTION_VIEW);
+            //i.setData(Uri.parse("http://maps.google.com/maps?q=22.5570938,88.3070076()&iwloc=A&hl=es"));
+            //i.setData(Uri.parse("http://maps.googleapis.com/maps/api/streetview?size=500x500&location=22.553944, 88.306344&fov=90&heading=235&pitch=10&sensor=false"));
+           // i.setData(Uri.parse("geo:22.5563189,88.3083137?q="+Uri.encode("IIEST , First Gate")));
+            i.setData(Uri.parse("https://www.google.com/maps/dir/?api=1&destination=IIEST,First Gate&destination_place_id=ChIJ9Wi3Ksp5AjoR5a0J1knFLCk&travelmode=walking"));
+
+
+            chooser=Intent.createChooser(i,"Launch Maps");
+
+            startActivity(chooser);
+        }
+    }
+
 
 
     @Override

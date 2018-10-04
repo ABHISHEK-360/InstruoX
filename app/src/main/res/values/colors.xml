@@ -3,9 +3,17 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="background_white">#ffffff</color>
+
     <color name="background">#ffffff</color>
     <color name="myColor">#1B3DE5</color>
-    <color name="selectItemColor">#e801fa1a</color>
+    <color name="selectItemColor">#c5131fd9</color>
+
+    <color name="instruo_blue">#007bff</color>
+
+    <color name="instruo_orange">#E48632</color>
     <color name="menuItemBack">#d0fa0d01</color>
+    <color name="shadow">#555555</color>
+    <color name="title">#777777</color>
 
 </resources>

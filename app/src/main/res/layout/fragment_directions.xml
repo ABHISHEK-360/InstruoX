@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".DirectionsFragment"
-    android:background="@drawable/background"
+    android:background="@drawable/new_background"
+
     android:id="@+id/directions_fragment">
 
     <LinearLayout
@@ -16,95 +17,130 @@
     <!-- TODO: Update blank fragment layout -->
 
         <Button
-            android:id="@+id/iiest_1gate"
+            android:id="@+id/direction_iiest_1gate"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_margin="10dp"
+            android:onClick="getDirection"
 
             android:background="@drawable/buttonstyle"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
 
-
-            android:capitalize="none"
             android:gravity="center"
             android:text="IIEST,First Gate" />
+
         <Button
-            android:id="@+id/netaji_bhawan"
+            android:id="@+id/direction_netaji_bhawan"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:gravity="center"
             android:layout_margin="10dp"
+            android:onClick="getDirection"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+
 
 
             android:background="@drawable/buttonstyle"
             android:text="Netaji Bhawan" />
+
         <Button
-            android:id="@+id/regis_desk"
+            android:id="@+id/direction_regis_desk"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_margin="10dp"
+            android:onClick="getDirection"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
 
             android:background="@drawable/buttonstyle"
 
 
-            android:capitalize="none"
+
             android:gravity="center"
             android:text="Registration Desk" />
+
         <Button
-            android:id="@+id/i_hall"
+            android:id="@+id/direction_i_hall"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:gravity="center"
             android:layout_margin="10dp"
-
+            android:onClick="getDirection"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
 
             android:background="@drawable/buttonstyle"
-            android:text="I-hall" />
+            android:text="Institute-hall(I-Hall)" />
         <Button
-            android:id="@+id/new_building"
+            android:id="@+id/direction_new_building"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_margin="10dp"
-
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:onClick="getDirection"
             android:background="@drawable/buttonstyle"
 
 
-            android:capitalize="none"
+
             android:gravity="center"
-            android:text="New/S &amp; T  Building" />
+            android:text="New Building/S &amp; T  Building" />
+
         <Button
-            android:id="@+id/hospital"
+            android:id="@+id/direction_hospital"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
             android:layout_margin="10dp"
-
-
             android:background="@drawable/buttonstyle"
+            android:onClick="getDirection"
             android:text="Hospital" />
 
         <Button
-            android:id="@+id/a_seminar_hall"
+            android:id="@+id/direction_a_seminar_hall"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:gravity="center"
             android:layout_margin="10dp"
-
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:onClick="getDirection"
 
             android:background="@drawable/buttonstyle"
             android:text="Alumni Seminar Hall" />
 
         <Button
-            android:id="@+id/sengupta_hall"
+            android:id="@+id/direction_sengupta_hall"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+
+            android:background="@drawable/buttonstyle"
+
+            android:onClick="getDirection"
+
+            android:gravity="center"
+            android:text="Sengupta Hall" />
+
+        <Button
+            android:id="@+id/direction_sen_hall_button"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_margin="10dp"
 
             android:background="@drawable/buttonstyle"
+            android:textSize="20sp"
+            android:textColor="#ffffff"
+            android:onClick="getDirection"
 
-
-            android:capitalize="none"
             android:gravity="center"
-            android:text="Sengupta Hall" />
+            android:text="Sen Hall" />
 
 
     </LinearLayout>

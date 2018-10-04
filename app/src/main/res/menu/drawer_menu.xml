@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
 
-    <group android:checkableBehavior="single">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <group
+
+        android:checkableBehavior="single">
         <item
             android:id="@+id/home_id"
             android:title="Home"
@@ -16,13 +21,14 @@
             android:title="About Instruo"
             android:textColor="#1871ba"
 
-            android:icon="@drawable/about">
+            android:icon="@drawable/about"
+            >
 
         </item>
+
     </group>
 
-    <item
-        android:title="Events' Details">
+    
 
     <group android:checkableBehavior="single">
 
@@ -65,7 +71,7 @@
 
     </group>
 
-    </item>
+
 
     <group android:checkableBehavior="single">
 
@@ -98,8 +104,8 @@
         </item>
 
         <item
-            android:id="@+id/developers_id"
-            android:title="Developers"
+            android:id="@+id/sponsors_id"
+            android:title="Sponsors"
             android:textColor="#1871ba"
 
             android:icon="@drawable/developer">

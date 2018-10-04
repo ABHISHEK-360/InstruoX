@@ -7,8 +7,10 @@
     <string name="instruo">INSTRUO-2018</string>
     <string name="instruo_dates">Coming Soon</string>
     <string name="title_activity_my_profile">MyProfileActivity</string>
+    <string name="about_instruo_text">INSTRUO, the technical fest of IIEST SHIBPUR, was first organised in the year 2009 with the aim of promoting scientific temper and technological innovation among the students. Over the subsequent years it has become a carnival for all those students, who are interested in manoeuvring their technical genes and competing with participants of comparable level of enthusiasm.The fest is a blend of various technical and nontechnical events , series of lectures, seminars and exhibitions which will enrich students of various disciplines with advanced knowledge in their field of interest. Thus, INSTRUO serves as a cradle for creating solutions powered by technology to improve the standard of a common man.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="past_sponsors_text">Our Past Sponsors</string>
 
 </resources>

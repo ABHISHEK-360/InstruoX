@@ -5,12 +5,33 @@
     android:layout_height="match_parent"
     tools:context=".EventWorkshopFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Fragment to display Workshops Details"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/gaming_event_poster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:adjustViewBounds="true"
+
+            android:foreground="?android:attr/selectableItemBackground"
+            android:src="@drawable/gaming_poster" />
+
+
+
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/gaming_event_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fab_margin">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 
 
 </FrameLayout>

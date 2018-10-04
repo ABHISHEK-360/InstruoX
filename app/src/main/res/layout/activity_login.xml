@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#30ffffff"
-    android:backgroundTintMode="src_over"
+
+
 
     tools:context=".LoginActivity">
 
@@ -19,17 +21,18 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+
         app:srcCompat="@drawable/instruo_logo" />
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="205dp"
-        android:layout_height="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_regular"
         android:text="INSTRUO-2018"
         android:textAlignment="center"
         android:textColor="#ffffff"
-        android:textSize="28sp"
+        android:textSize="35sp"
 
         app:layout_constraintBottom_toTopOf="@+id/desc"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +45,7 @@
         android:layout_width="148dp"
         android:layout_height="26dp"
         android:fontFamily="@font/nunito_regular"
-        android:text="The 10TH Edition"
+        android:text="The 10th Edition"
         android:textAlignment="center"
         android:textColor="#ffffff"
 
@@ -59,7 +62,7 @@
         android:layout_width="244dp"
         android:layout_height="46dp"
         android:fontFamily="@font/nunito_regular"
-        android:text="The Largest Techno-Managment Fest of Kolkata"
+        android:text="The Largest Technical Fest of Kolkata"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="16sp"
@@ -77,9 +80,9 @@
         android:background="@drawable/buttonstyle"
         android:onClick="onClick"
 
-        android:drawableLeft="@drawable/common_google_signin_btn_icon_light_normal"
+        android:drawableLeft="@drawable/googleg_standard_color_18"
         android:fontFamily="@font/nunito_regular"
-        android:gravity="left|center_vertical"
+        android:gravity="center"
         android:text="Sign In with Google"
 
         android:textColor="#ffffff"
@@ -107,7 +110,8 @@
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/desc2"
-        app:layout_constraintVertical_bias="0.584" />
+        app:layout_constraintVertical_bias="0.584"
+        />
 
     <Button
         android:id="@+id/Login"

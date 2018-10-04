@@ -12,20 +12,21 @@ import android.view.ViewGroup;
 
 
 
-public class EventAutomatonTabFragment extends Fragment
+public class EventGamingTabFragment extends Fragment
 {
-
+    // TODO: Rename parameter arguments, choose names that match
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
 
-    public EventAutomatonTabFragment() {
+    public EventGamingTabFragment() {
         // Required empty public constructor
     }
 
 
-    public static EventAutomatonTabFragment newInstance(String param1, String param2) {
-        EventAutomatonTabFragment fragment = new EventAutomatonTabFragment();
+
+    public static EventGamingTabFragment newInstance(String param1, String param2) {
+        EventGamingTabFragment fragment = new EventGamingTabFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -36,16 +37,16 @@ public class EventAutomatonTabFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v= inflater.inflate(R.layout.fragment_event_automaton_tab, container, false);
+        View v = inflater.inflate(R.layout.fragment_event_gaming_tab, container, false);
 
-        recyclerView= (RecyclerView)v.findViewById(R.id.robotics_event_recycler);
+        recyclerView= (RecyclerView)v.findViewById(R.id.gaming_event_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         recyclerView.setAdapter(new EventAdapter());
         return v;
