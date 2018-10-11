@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".PersonalDetailsFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@android:color/black"
+
+
+        android:layout_marginBottom="10dp"
+        android:text="Account Details:" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@color/instruo_orange"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="5dp">
+
+    <android.support.design.widget.TextInputEditText
+        android:id="@+id/personal_details_edit_name"
+        android:layout_width="match_parent"
+        android:layout_marginStart="70dp"
+
+
+        android:layout_height="wrap_content"
+        android:maxEms="10"
+        android:hint="Full Name:"
+        android:inputType="textMultiLine"
+        android:enabled="false"/>
+
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/personal_details_edit_email"
+            android:layout_width="match_parent"
+            android:layout_marginStart="70dp"
+
+            android:layout_height="wrap_content"
+            android:maxEms="10"
+            android:hint="Email Id:"
+            android:inputType="textMultiLine"
+            android:enabled="false"/>
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/personal_details_edit_contact"
+            android:layout_width="match_parent"
+            android:layout_marginStart="70dp"
+
+            android:layout_height="wrap_content"
+            android:maxEms="10"
+            android:hint="Phone No:"
+            android:inputType="textMultiLine"
+            android:enabled="false"/>
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/myprofile_button_edit_details"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/buttonstyle"
+
+            android:layout_height="wrap_content"
+            android:text="Edit Details"/>
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:background="@drawable/buttonstyle"
+
+            android:id="@+id/myprofile_button_save_changes"
+
+
+            android:layout_height="wrap_content"
+            android:text="Save Changes"/>
+    </LinearLayout>
+
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/myprofile_progressbar_events"
+        android:visibility="gone"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@android:color/black"
+
+        android:text="Change Password:" />
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@color/instruo_orange"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/personal_details_edit_oldpass"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:maxEms="10"
+            android:hint="Old Password:"
+            android:inputType="textMultiLine"
+            />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/personal_details_edit_newpass"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:maxEms="10"
+            android:hint="New Password:"
+            android:inputType="textMultiLine"
+            />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/personal_details_edit_confnewpass"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:maxEms="10"
+            android:hint="Confirm New Password::"
+            android:inputType="textMultiLine"
+            />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:background="@drawable/buttonstyle"
+        android:layout_margin="5dp"
+        android:id="@+id/myprofile_button_change_pass"
+
+
+        android:layout_height="wrap_content"
+        android:text="Change Password"/>
+
+
+    </LinearLayout>
+
+</ScrollView>

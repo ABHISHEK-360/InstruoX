@@ -10,20 +10,48 @@ import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHolder>
+public class EventAdapter
+        //extends RecyclerView.Adapter<EventAdapter.EventsViewHolder>
 {
-    private String[] member_pic_url;
-    private String[] event_name={"Events List 1","Events List 1"};
-    private String[] event_timing={"To be updated","To be updated"};
-    private String[] event_venue={"TBD","TBD"};
+    //private String[] member_pic_url;
+    private String TITLE;
+    private String TIME;
+    private String VENUE;
 
 
+    public String getTITLE()
+    {
+        return TITLE;
+    }
 
+    public void setTITLE(String TITLE)
+    {
+        this.TITLE = TITLE;
+    }
 
+    public String getTIME()
+    {
+        return TIME;
+    }
 
-    @NonNull
+    public void setTIME(String TIME)
+    {
+        this.TIME = TIME;
+    }
+
+    public String getVENUE()
+    {
+        return VENUE;
+    }
+
+    public void setVENUE(String VENUE)
+    {
+        this.VENUE = VENUE;
+    }
+
+     /*@NonNull
     @Override
-    public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+   public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
         LayoutInflater inf = LayoutInflater.from(parent.getContext());
 
@@ -34,9 +62,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
     @Override
     public void onBindViewHolder(@NonNull EventsViewHolder holder, int position)
     {
-        holder.name_event.setText(event_name[position]);
-        holder.timing.setText(event_timing[position]);
-        holder.venue.setText(event_venue[position]);
+        holder.name_event.setText(TITLE);
+        holder.timing.setText(TIME);
+        holder.venue.setText(VENUE);
 
 
 
@@ -48,13 +76,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
     @Override
     public int getItemCount()
     {
-        return event_name.length;
+        return 1;
     }
 
 
-    public class  EventsViewHolder extends RecyclerView.ViewHolder
+    public static class  EventsViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView name_event,venue,timing;
+        TextView name_event,venue,timing;
         ImageView poster_url;
 
         public EventsViewHolder(View itemView)
@@ -72,6 +100,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventsViewHo
 
 
         }
-    }
+    }*/
 
 }

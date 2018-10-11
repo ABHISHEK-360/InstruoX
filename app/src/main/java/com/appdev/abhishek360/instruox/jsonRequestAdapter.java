@@ -10,8 +10,8 @@ public class jsonRequestAdapter
 
     private String requestAction;
 
-    //private Map<String,String> requestParameteres = new HashMap<>();
-    private String requestParameteres=null;
+    private Map<String,String> requestParameters = new HashMap<>();
+   // private String requestParameteres=null;
 
 
     private Map<String,String> requestData= new HashMap<>();
@@ -27,9 +27,9 @@ public class jsonRequestAdapter
         this.requestAction = requestAction;
     }
 
-    public void setRequestParameteres(String key, String val)
+    public void setRequestParameteres(String key ,String val)
     {
-        //requestParameteres.put(key,val);
+        requestParameters.put(key,val);
     }
 
     public void setRequestData(String key, String val)

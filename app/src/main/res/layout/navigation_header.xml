@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="150dp"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
     android:id="@+id/header_layout"
     android:background="@drawable/gradient_color">
 
@@ -12,21 +13,11 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
-        android:src="@drawable/profilepic"
+        android:src="@drawable/userdefaultpic"
         app:civ_border_color="#E48632"
         app:civ_border_width="3dp" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/SearchPic"
 
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-
-        android:layout_alignTop="@+id/hemail"
-        android:layout_marginStart="67dp"
-        android:clickable="true"
-        app:srcCompat="@drawable/camera" />
 
     <TextView
         android:id="@+id/hname_user"
@@ -34,6 +25,7 @@
         android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:textColor="#ffffff"
+        android:textSize="25sp"
 
         android:layout_alignParentTop="true"
         android:layout_marginEnd="14dp"
@@ -53,6 +45,7 @@
         android:layout_marginEnd="14dp"
         android:layout_marginStart="110dp"
         android:layout_marginTop="86dp"
+        android:textSize="17sp"
         android:text="abhi.kumar310@gmail.com"
         android:textColor="#ffffff" />
 
@@ -63,6 +56,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="0dp"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/instruo_logo" />
 
 </RelativeLayout>

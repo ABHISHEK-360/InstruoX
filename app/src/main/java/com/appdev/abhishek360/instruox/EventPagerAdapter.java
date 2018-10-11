@@ -34,19 +34,7 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter
     public Fragment getItem(int i)
     {
 
-     /**   switch (i)
-        {
-            case 0 :
-                EventTechnicalTabFragment tab1 = new EventTechnicalTabFragment();
-                return tab1;
 
-            case 1:
-                EventAutomatonTabFragment tab2 = new EventAutomatonTabFragment();
-                return tab2;
-
-
-
-        }*/
         return myFragments.get(i);
     }
 
@@ -65,6 +53,6 @@ public class EventPagerAdapter extends FragmentStatePagerAdapter
     @Override
     public int getCount()
     {
-        return 5;
+        return noOfTabs;
     }
 }

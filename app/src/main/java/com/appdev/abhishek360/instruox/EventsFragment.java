@@ -16,7 +16,7 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
 
 
 {
-   ;
+
     private TabLayout tabs;
     int tabCode=0;
 
@@ -24,7 +24,8 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
 
     private OnFragmentInteractionListener mListener;
 
-    public EventsFragment() {
+    public EventsFragment()
+    {
         // Required empty public constructor
     }
 
@@ -57,20 +58,11 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
         tabs = (TabLayout)v.findViewById(R.id.tab_layout);
         tabCode= this.getArguments().getInt("tCode");
 
-     /**   tabs.addTab(tabs.newTab().setText("Technical"));
-        tabs.addTab(tabs.newTab().setText("Automaton"));
-        tabs.addTab(tabs.newTab().setText("Workshops"));
-        tabs.addTab(tabs.newTab().setText("Gaming"));
-        tabs.addTab(tabs.newTab().setText("Exibitions"));
-        tabs.addTab(tabs.newTab().setText("Shows"));
 
-
-        tabs.setTabGravity(TabLayout.GRAVITY_FILL);*/
 
 
         final ViewPager vp = (ViewPager) v.findViewById(R.id.event_pager);
-        //final EventPagerAdapter epAdapter = new EventPagerAdapter(getFragmentManager(),tabs.getTabCount());
-       // vp.setAdapter(epAdapter);
+
         tabs.setupWithViewPager(vp);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
        // vp.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
@@ -81,57 +73,66 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
 
 
 
-
-
         return v;
 
 
     }
+
+
     public void SetUpViewPager(ViewPager viewPager)
     {
-        EventPagerAdapter adapter = new EventPagerAdapter(getFragmentManager(),tabs.getTabCount());
+        EventPagerAdapter adapter = new EventPagerAdapter(getFragmentManager(),6);
+
         adapter.AddFragmentPage(new EventTechnicalTabFragment(),"Technical");
-        adapter.AddFragmentPage(new EventAutomatonTabFragment(),"Robotics");
-        adapter.AddFragmentPage(new EventWorkshopFragment(),"Workshops");
+        adapter.AddFragmentPage(new EventAutomatonTabFragment(),"Automaton");
+        adapter.AddFragmentPage(new EventNonGenericTabFragment(),"Non Generic");
         adapter.AddFragmentPage(new EventGamingTabFragment(),"Gaming");
-        adapter.AddFragmentPage(new EventExibitionsTabFragment(),"Exibitions");
+        adapter.AddFragmentPage(new EventWorkshopFragment(),"Workshops");
 
-
+        adapter.AddFragmentPage(new EventExibitionsTabFragment(),"Exhibitions");
 
         viewPager.setAdapter(adapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
+    public void onButtonPressed(Uri uri)
+    {
+        if (mListener != null)
+        {
             mListener.onFragmentInteraction(uri);
         }
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener)
+        {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
+        } else
+            {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mListener = null;
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onFragmentInteraction(Uri uri)
+    {
 
     }
 
 
-    public interface OnFragmentInteractionListener {
+    public interface OnFragmentInteractionListener
+    {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }

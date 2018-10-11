@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_height="match_parent"
+<ScrollView
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/gradient_color"
     android:layout_width="match_parent"
@@ -10,7 +11,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_margin="10dp">
@@ -20,7 +21,7 @@
         android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/ProfilePic"
+            android:id="@+id/reg_profilePic_imageview"
             android:layout_width="150dp"
             android:layout_height="143dp"
             android:layout_alignParentTop="true"
@@ -32,7 +33,7 @@
 
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/SearchPic"
+            android:id="@+id/reg_earchPic_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -50,12 +51,15 @@
 
     </RelativeLayout>
 
+
+
+
     <EditText
-        android:id="@+id/reg_fullName_edittext"
+        android:id="@+id/reg_userName_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Full Name"
+        android:hint="Desired User Name!"
         android:textColor="@color/background_white"
 
         android:textColorHint="@color/background_white"
@@ -76,33 +80,25 @@
 
         android:inputType="textEmailAddress"
 
-         />
+        />
+
     <EditText
-        android:id="@+id/collage"
+        android:id="@+id/reg_college_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:textColor="@color/background_white"
         android:textColorHint="@color/background_white"
 
-        android:hint="Your Collage(Full Name)"
-        android:inputType="text"/>
-
-    <EditText
-        android:id="@+id/dept"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:textColorHint="@color/background_white"
-
-        android:textColor="@color/background_white"
-
-        android:hint="Your Dept(Full Name)"
+        android:hint="Your College(Full Name)"
         android:inputType="text"/>
 
 
+
+
+
     <EditText
-        android:id="@+id/phone"
+        android:id="@+id/reg_phone_edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -112,6 +108,25 @@
 
         android:hint="Phone Number"
         android:inputType="phone" />
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/reg_progressbar"/>
+
+    <EditText
+        android:id="@+id/reg_fullName_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Full Name"
+        android:textColor="@color/background_white"
+
+        android:textColorHint="@color/background_white"
+
+        android:inputType="textPersonName"
+
+        />
 
         <EditText
             android:id="@+id/reg_password_edittext"

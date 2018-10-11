@@ -27,7 +27,7 @@
         <item name="android:textColorPrimary">@color/background</item>
         <item name="android:textColorSecondary">@color/background</item>
 
-        <item name="android:background">@color/myColor</item>
+
 
     </style>
 

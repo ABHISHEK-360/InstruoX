@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactUsFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Event Related Query:" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:layout_marginTop="5dp"
+            android:textAlignment="viewEnd"
+            android:text="*Check event details for respective event co-ordinator:" />
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/round_corner_shadow"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="@dimen/fab_margin"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+
+
+                <TextView
+
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="@android:color/black"
+                    android:textAlignment="center"
+                    android:text="Shubham Kumar"/>
+
+                <ImageView
+                    android:id="@+id/shubham_call"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:src="@drawable/contact"
+                    android:onClick="callHelp"/>
+
+                <ImageView
+                    android:id="@+id/shubham_email"
+                    android:foreground="?android:attr/selectableItemBackground"
+
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:src="@drawable/email_icon"
+                    android:onClick="emailHelp"/>
+
+
+
+
+    </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Accomodation Related Query:" />
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/round_corner_shadow"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="@dimen/fab_margin"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:textAlignment="center"
+                android:text="To be updated soon"/>
+
+            <ImageView
+                android:id="@+id/_call"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/contact"
+                android:onClick="callHelp"/>
+
+            <ImageView
+                android:id="@+id/_email"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/email_icon"
+                android:onClick="emailHelp"/>
+
+
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Payment Related Query:" />
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/round_corner_shadow"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="@dimen/fab_margin"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:textAlignment="center"
+                android:text="Kushagra Nigam"/>
+
+            <ImageView
+                android:id="@+id/kush_call"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/contact"
+                android:onClick="callHelp"/>
+
+            <ImageView
+                android:id="@+id/kush_email"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/email_icon"
+                android:onClick="emailHelp"/>
+
+
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Website Related Query:" />
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/round_corner_shadow"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="@dimen/fab_margin"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:textAlignment="center"
+                android:text="Vishnu Deo Gupta"/>
+
+            <ImageView
+                android:id="@+id/vishnu_call"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/contact"
+                android:onClick="callHelp"/>
+
+            <ImageView
+                android:id="@+id/vishnu_email"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/email_icon"
+                android:onClick="emailHelp"/>
+
+
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="App Related Query:" />
+
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/round_corner_shadow"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_margin="@dimen/fab_margin"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardElevation="@dimen/cardview_default_elevation"
+
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="@android:color/black"
+                android:textAlignment="center"
+                android:text="@string/myName"/>
+
+            <ImageView
+                android:id="@+id/abhishek_call"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/contact"
+                android:onClick="callHelp"/>
+
+            <ImageView
+                android:id="@+id/abhishek_eamil"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:src="@drawable/email_icon"
+                android:onClick="emailHelp"/>
+
+
+
+
+        </LinearLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+
+
+</ScrollView>
