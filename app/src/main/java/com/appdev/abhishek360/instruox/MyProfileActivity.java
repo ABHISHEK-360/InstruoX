@@ -44,9 +44,11 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -57,6 +59,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import static com.appdev.abhishek360.instruox.LoginActivity.spEventsKey;
 import static com.appdev.abhishek360.instruox.LoginActivity.spFullNameKey;
 import static com.appdev.abhishek360.instruox.LoginActivity.tosty;
 
@@ -65,12 +68,16 @@ public class MyProfileActivity extends AppCompatActivity implements PersonalDeta
     private TabLayout tabs;
     private int tabCode;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor spEditor;
     private OnAboutDataReceivedListener mAboutDataListener;
     private ViewPager vp;
     private ProgressBar progressBar;
     private ArrayList<String> eventsName;
     private ArrayList<String> eventsEntryFee;
     private ArrayList<String> paymentStatus;
+
+    private Set<String> eventsNameSet= new HashSet<>();
+
 
 
     private ArrayList<String> accountDetails=new ArrayList<>();
@@ -85,32 +92,26 @@ public class MyProfileActivity extends AppCompatActivity implements PersonalDeta
         tabCode=bundle.getInt("tabCode");
         setContentView(R.layout.activity_my_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.action_bar);
-        sharedPreferences= getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
-        progressBar=(ProgressBar)findViewById(R.id.myprofile_progressbar);
-
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
+        sharedPreferences= getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+        progressBar=(ProgressBar)findViewById(R.id.myprofile_progressbar);
+
+
+
+
+
         tabs = (TabLayout)findViewById(R.id.tab_layout);
         //tabCode= this.getArguments().getInt("tCode");
 
-        /**   tabs.addTab(tabs.newTab().setText("Technical"));
-         tabs.addTab(tabs.newTab().setText("Automaton"));
-         tabs.addTab(tabs.newTab().setText("Workshops"));
-         tabs.addTab(tabs.newTab().setText("Gaming"));
-         tabs.addTab(tabs.newTab().setText("Exibitions"));
-         tabs.addTab(tabs.newTab().setText("Shows"));
 
-
-         tabs.setTabGravity(TabLayout.GRAVITY_FILL);*/
 
 
          vp = (ViewPager) findViewById(R.id.myprofile_pager);
-        //final EventPagerAdapter epAdapter = new EventPagerAdapter(getFragmentManager(),tabs.getTabCount());
-        // vp.setAdapter(epAdapter);
+
         tabs.setupWithViewPager(vp);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         // vp.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
@@ -250,27 +251,23 @@ public class MyProfileActivity extends AppCompatActivity implements PersonalDeta
 
                                     eventsName.add(jsonEvents.get("name").toString());
                                     eventsEntryFee.add(jsonEvents.get("entryFee").toString());
+                                    eventsNameSet.add(jsonEvents.get("description").toString());
+
 
 
 
                                 }
                                 //List<Object> events= new ArrayList<Object>();
 
+                                spEditor=sharedPreferences.edit();
+                                spEditor.putStringSet(spEventsKey,eventsNameSet);
+
+
                                 progressBar.setVisibility(View.GONE);
                                 SetUpViewPager(vp);
 
                                 //tosty(getApplicationContext(),"Events "+eventsName);
-                                Log.d("Event Details:",""+eventsName);
-
-
-                                //finish();
-
-
-
-
-
-
-
+                                //Log.d("Event Details:",""+eventsName);
 
 
 

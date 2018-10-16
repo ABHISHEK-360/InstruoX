@@ -51,7 +51,8 @@ public class SslConfigurationManager extends Fragment
     private Context  ctx;
 
 
-    public boolean readUserData(final String eventId,final String token,final Context context)
+
+    public boolean updateUserData(final String eventId,final String token,final Context context)
     {
 
 
@@ -125,7 +126,124 @@ public class SslConfigurationManager extends Fragment
                             if (response.get("responseStatus").equals("OK"))
                             {
 
-                                tosty(context.getApplicationContext(),"Registered Successfully ! Please Check Registered Event Page for Payment status. ");
+                                tosty(context.getApplicationContext(),"Registered Successfully ! Please Check Registered Event Page for Payment status.");
+
+                            }
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        //Log.d("Response",""+response);
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.d("Error:",""+error);
+                        //readUserData(token);
+
+                        tosty(context.getApplicationContext(),"Trying Again: Network Error!");
+
+
+                    }
+                }
+
+
+        )
+        {
+            public Map<String, String> getHeaders() throws AuthFailureError
+            {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("authorization", token);
+
+
+                return params;
+            }
+        };
+
+        requestQueue.add(objectRequest);
+
+        return true;
+
+    }
+
+
+    public boolean updateUserData(final jsonRequestAdapter jsonRequestAdapter,final String token,final Context context)
+    {
+
+
+        ctx=context;
+
+
+        HurlStack hurlStack = new HurlStack()
+        {
+            @Override
+            protected HttpURLConnection createConnection(URL url) throws IOException
+            {
+                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
+                try
+                {
+                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
+                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                return httpsURLConnection;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext(),hurlStack);
+
+
+
+
+
+
+        String URL = "https://instruo.in/api/v1/user";
+
+
+
+
+
+        final Gson json = new GsonBuilder().serializeNulls().create();
+
+
+
+        final String jsonRequest = json.toJson(jsonRequestAdapter);
+
+
+
+
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                URL,
+                jsonRequest,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        try
+                        {
+                            if (response.get("responseStatus").equals("FAILED"))
+                            {
+                                tosty(context.getApplicationContext(),"Try Again! Failed To Update! ");
+                                //progresBar.setVisibility(View.GONE);
+
+
+
+                            }
+                            if (response.get("responseStatus").equals("OK"))
+                            {
+
+                                tosty(context.getApplicationContext(),"Profile updated!");
 
                             }
                         }

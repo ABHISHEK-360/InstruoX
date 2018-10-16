@@ -1,18 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_color_sec"
+    android:orientation="vertical"
+
     tools:context=".HomeFragment"
     android:id="@+id/home_fragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home Screen"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/background_horizontal"
+
+            android:padding="20dp"
+            android:src="@drawable/instruo_logo" />
+
+
+        <TextView
+            android:id="@+id/home_textview_tagline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="164dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/buttonstyle_new"
+            android:shadowColor="@color/background_white"
+
+
+            android:fontFamily="@font/mavenpro_bold"
+            android:gravity="center"
+            android:padding="15dp"
+            android:text="@string/instruo_tagline"
+            android:textColor="@color/background_white"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:padding="3dp">
+
+
+    <ImageButton
+        android:id="@+id/home_button_technical"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:onClick="gotoEvents"
+
+        android:adjustViewBounds="true"
+        android:layout_marginEnd="20dp"
+        android:foreground="?android:attr/selectableItemBackground"
+
+
+        android:scaleType="centerCrop"
+        android:src="@drawable/technical_block"
+        tools:layout_editor_absoluteX="45dp"
+        tools:layout_editor_absoluteY="226dp" />
+
+    <ImageButton
+        android:id="@+id/home_button_nontechnical"
+
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+
+        android:onClick="gotoEvents"
+
+        android:foreground="?android:attr/selectableItemBackground"
+
+
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/non_technical_block"
+        tools:layout_editor_absoluteX="218dp"
+        tools:layout_editor_absoluteY="226dp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+
+        android:padding="5dp">
+
+
+
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/home_button_gaming"
+        android:onClick="gotoEvents"
+
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:layout_marginEnd="20dp"
+        android:foreground="?android:attr/selectableItemBackground"
+
+
+        android:scaleType="centerCrop"
+        android:src="@drawable/gaming_block"
+        tools:layout_editor_absoluteX="218dp"
+        tools:layout_editor_absoluteY="401dp" />
+
+    <ImageButton
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:onClick="gotoEvents"
+
+        android:id="@+id/home_button_automaton"
+
+        android:foreground="?android:attr/selectableItemBackground"
+
+
+        android:scaleType="centerCrop"
+        android:src="@drawable/technical_block"
+        tools:layout_editor_absoluteX="45dp"
+        tools:layout_editor_absoluteY="401dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

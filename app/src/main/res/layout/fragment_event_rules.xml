@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventRulesFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:id="@+id/event_rules_round1"
+        android:textColor="@color/myBlack"
+
+        android:text="Rules Coming Soon" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_marginTop="10dp"
+
+        android:textSize="17sp"
+        android:id="@+id/event_rules_round2"
+        android:textColor="@color/myBlack"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_marginTop="10dp"
+
+        android:textSize="17sp"
+        android:id="@+id/event_rules_round3"
+        android:textColor="@color/myBlack"
+        />
+
+    </LinearLayout>
+
+</ScrollView>

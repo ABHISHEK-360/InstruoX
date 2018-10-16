@@ -85,6 +85,9 @@ public class RegisterActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        Bundle bundle=getIntent().getExtras();
+
+
         fullname_edittext= (EditText)findViewById(R.id.reg_fullName_edittext);
         email_edittext= (EditText)findViewById(R.id.reg_email_edittext);
         contact_edittext=(EditText)findViewById(R.id.reg_phone_edittext);
@@ -95,6 +98,19 @@ public class RegisterActivity extends AppCompatActivity
         register_button= (Button) findViewById(R.id.reg_submit_button);
         reg_progressBar=(ProgressBar)findViewById(R.id.reg_progressbar);
         sharedPreferences=getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+
+        try
+        {
+            fullname_str=bundle.getString("name");
+            email_str=bundle.getString("email");
+
+            fullname_edittext.setText(fullname_str);
+            email_edittext.setText(email_str);
+        }
+        catch (Exception e)
+        {
+            Log.d("Register Page:","Normal Login-"+e);
+        }
 
         register_button.setOnClickListener(new View.OnClickListener()
         {

@@ -1,5 +1,7 @@
 package com.appdev.abhishek360.instruox;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,16 +10,96 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class EventAdapter
-        //extends RecyclerView.Adapter<EventAdapter.EventsViewHolder>
+public class EventAdapter implements Parcelable
 {
-    //private String[] member_pic_url;
+
     private String TITLE;
     private String TIME;
     private String VENUE;
+    private String DESC;
+    private Map<String,String> RULES;
+    private String COORDINATORS;
+    private String PRIZE_MONEY;
+    private String REG_FEE;
 
+
+    public EventAdapter()
+    {
+        RULES=new HashMap<>();
+    }
+
+    protected EventAdapter(Parcel in)
+    {
+        TITLE = in.readString();
+        TIME = in.readString();
+        VENUE = in.readString();
+        DESC = in.readString();
+        RULES=new HashMap<>();
+        in.readMap(RULES,null);
+        COORDINATORS = in.readString();
+        PRIZE_MONEY = in.readString();
+        REG_FEE = in.readString();
+    }
+
+    public static final Creator<EventAdapter> CREATOR = new Creator<EventAdapter>()
+    {
+        @Override
+        public EventAdapter createFromParcel(Parcel in)
+        {
+            return new EventAdapter(in);
+        }
+
+        @Override
+        public EventAdapter[] newArray(int size)
+        {
+            return new EventAdapter[size];
+        }
+    };
+
+    public String getDESC() {
+        return DESC;
+    }
+
+    public void setDESC(String DESC) {
+        this.DESC = DESC;
+    }
+
+    public Map<String, String> getRULES() {
+        return RULES;
+    }
+
+    public String getCOORDINATORS() {
+        return COORDINATORS;
+    }
+
+    public void setCOORDINATORS(String COORDINATORS) {
+        this.COORDINATORS = COORDINATORS;
+    }
+
+    public String getPRIZE_MONEY() {
+        return PRIZE_MONEY;
+    }
+
+    public void setPRIZE_MONEY(String PRIZE_MONEY) {
+        this.PRIZE_MONEY = PRIZE_MONEY;
+    }
+
+    public String getREG_FEE() {
+        return REG_FEE;
+    }
+
+    public void setREG_FEE(String REG_FEE) {
+        this.REG_FEE = REG_FEE;
+    }
 
     public String getTITLE()
     {
@@ -49,57 +131,24 @@ public class EventAdapter
         this.VENUE = VENUE;
     }
 
-     /*@NonNull
-    @Override
-   public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-    {
-        LayoutInflater inf = LayoutInflater.from(parent.getContext());
 
-        View view = inf.inflate(R.layout.events_view_holder,parent,false);
-        return new EventsViewHolder(view);
+    @Override
+    public int describeContents()
+    {
+        return 0;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EventsViewHolder holder, int position)
+    public void writeToParcel(Parcel dest, int flags)
     {
-        holder.name_event.setText(TITLE);
-        holder.timing.setText(TIME);
-        holder.venue.setText(VENUE);
-
-
-
-
-
+        dest.writeString(TITLE);
+        dest.writeString(TIME);
+        dest.writeString(VENUE);
+        dest.writeString(DESC);
+        dest.writeMap(RULES);
+        dest.writeString(COORDINATORS);
+        dest.writeString(PRIZE_MONEY);
+        dest.writeString(REG_FEE);
 
     }
-
-    @Override
-    public int getItemCount()
-    {
-        return 1;
-    }
-
-
-    public static class  EventsViewHolder extends RecyclerView.ViewHolder
-    {
-        TextView name_event,venue,timing;
-        ImageView poster_url;
-
-        public EventsViewHolder(View itemView)
-        {
-            super(itemView);
-            name_event=(TextView) itemView.findViewById(R.id.event_view_holder_name);
-            timing=(TextView) itemView.findViewById(R.id.event_view_holder_Timing);
-
-            venue=(TextView) itemView.findViewById(R.id.event_view_holder_Venue);
-
-            poster_url=(ImageView) itemView.findViewById(R.id.event_view_holder_poster);
-
-
-
-
-
-        }
-    }*/
-
 }

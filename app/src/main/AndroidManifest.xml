@@ -5,16 +5,13 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
-
         android:allowBackup="true"
         android:icon="@drawable/ic_new_instruo_logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_new_instruo_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -29,14 +26,19 @@
             android:theme="@style/LoginTheme" />
         <activity
             android:name=".HomeActivity"
-            android:label="@string/instruo"
-
-            />
+            android:label="@string/instruo" />
         <activity
             android:name=".MyProfileActivity"
             android:label="@string/title_activity_my_profile"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".RegisterActivity"></activity>
+
+        <activity android:name=".RegisterActivity" />
+
+        <activity android:name=".EventDetailsActivity"></activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="fb63174d2669398f92e008b9640ad83137128940" />
     </application>
 
 </manifest>

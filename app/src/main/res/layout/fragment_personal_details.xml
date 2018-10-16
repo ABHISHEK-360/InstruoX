@@ -50,7 +50,6 @@
         android:layout_width="match_parent"
         android:layout_marginStart="70dp"
 
-
         android:layout_height="wrap_content"
         android:maxEms="10"
         android:hint="Full Name:"
@@ -171,7 +170,7 @@
             android:layout_height="wrap_content"
             android:maxEms="10"
             android:hint="Old Password:"
-            android:inputType="textMultiLine"
+            android:inputType="textPassword"
             />
 
 
@@ -190,7 +189,7 @@
             android:layout_height="wrap_content"
             android:maxEms="10"
             android:hint="New Password:"
-            android:inputType="textMultiLine"
+            android:inputType="textPassword"
             />
 
 
@@ -208,7 +207,7 @@
             android:layout_height="wrap_content"
             android:maxEms="10"
             android:hint="Confirm New Password::"
-            android:inputType="textMultiLine"
+            android:inputType="textPassword"
             />
 
 

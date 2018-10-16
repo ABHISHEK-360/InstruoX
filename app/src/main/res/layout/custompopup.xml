@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="300dp"
-    android:layout_height="300dp"
-    android:background="@drawable/gradient_color_sec"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_tert"
     android:padding="5dp"
     android:layout_gravity="center">
 
@@ -13,14 +14,12 @@
 
 
         android:src="@drawable/close"
+        android:backgroundTint="@color/instruo_orange"
 
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/username"
-
-        android:layout_marginStart="256dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:focusable="true"
         android:clickable="true" />
 
 
@@ -30,31 +29,43 @@
         android:layout_height="match_parent"
         android:visibility="gone"/>
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
 
-    <EditText
+    <android.support.design.widget.TextInputEditText
         android:id="@+id/username"
-        android:layout_width="288dp"
+        android:layout_width="match_parent"
 
         android:textColor="#ffffff"
         android:textColorHint="@color/background_white"
 
-        android:layout_height="51dp"
-        android:hint="Email or Phone No"
-        android:padding="5dp" />
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="User Name"
+         />
 
-    <EditText
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    <android.support.design.widget.TextInputEditText
         android:id="@+id/Password"
-        android:layout_width="300dp"
-        android:layout_height="49dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:hint="Password"
         android:textColor="#ffffff"
         android:textColorHint="@color/background_white"
 
         android:inputType="textPassword"
+        />
 
-
-        android:padding="5dp" />
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:layout_width="wrap_content"

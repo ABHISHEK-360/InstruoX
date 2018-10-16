@@ -7,26 +7,33 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.List;
+import java.util.Map;
 
 
-
-public class HomeFragment extends Fragment
+public class EventRulesFragment extends Fragment
 {
+
+    private Map<String,String > eventRules_str;
+    private TextView eventRound1_textview,eventRound2_textview,eventRound3_textview;
+    private EventAdapter eventDetails;
 
 
 
     private OnFragmentInteractionListener mListener;
 
-    public HomeFragment()
-    {
+    public EventRulesFragment() {
         // Required empty public constructor
     }
 
 
-    public static HomeFragment newInstance(String param1, String param2)
+    public static EventRulesFragment newInstance(EventAdapter adapter)
     {
-        HomeFragment fragment = new HomeFragment();
+        EventRulesFragment fragment = new EventRulesFragment();
         Bundle args = new Bundle();
+        args.putParcelable(EventDetailsActivity.KEY_EVENT_OBJECT,adapter);
 
         fragment.setArguments(args);
         return fragment;
@@ -35,13 +42,10 @@ public class HomeFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
-
-
         if (getArguments() != null)
         {
-
+            eventDetails=getArguments().getParcelable(EventDetailsActivity.KEY_EVENT_OBJECT);
         }
     }
 
@@ -49,15 +53,28 @@ public class HomeFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        View v=inflater.inflate(R.layout.fragment_event_rules, container, false);
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        eventRound1_textview=v.findViewById(R.id.event_rules_round1);
+        eventRound2_textview=v.findViewById(R.id.event_rules_round2);
+        eventRound3_textview=v.findViewById(R.id.event_rules_round3);
+
+
+        eventRules_str=eventDetails.getRULES();
+        eventRound1_textview.setText(eventRules_str.get("ROUND_1"));
+        eventRound2_textview.setText(eventRules_str.get("ROUND_2"));
+        eventRound3_textview.setText(eventRules_str.get("ROUND_3"));
+
+
+        return v;
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri)
     {
         if (mListener != null)
         {
-            mListener.onHomeFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -84,7 +101,7 @@ public class HomeFragment extends Fragment
 
     public interface OnFragmentInteractionListener
     {
-
-        void onHomeFragmentInteraction(Uri uri);
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

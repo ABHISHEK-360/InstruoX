@@ -7,26 +7,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
-
-public class HomeFragment extends Fragment
+public class EventCoordinatorFragment extends Fragment
 {
-
+    private TextView eventCoordinators;
+    private EventAdapter eventDetails;
 
 
     private OnFragmentInteractionListener mListener;
 
-    public HomeFragment()
+    public EventCoordinatorFragment()
     {
         // Required empty public constructor
     }
 
 
-    public static HomeFragment newInstance(String param1, String param2)
+    public static EventCoordinatorFragment newInstance(EventAdapter eventAdapter)
     {
-        HomeFragment fragment = new HomeFragment();
+        EventCoordinatorFragment fragment = new EventCoordinatorFragment();
         Bundle args = new Bundle();
+        args.putParcelable(EventDetailsActivity.KEY_EVENT_OBJECT,eventAdapter);
 
         fragment.setArguments(args);
         return fragment;
@@ -35,13 +37,10 @@ public class HomeFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
-
-
         if (getArguments() != null)
         {
-
+             eventDetails = getArguments().getParcelable(EventDetailsActivity.KEY_EVENT_OBJECT);
         }
     }
 
@@ -50,14 +49,21 @@ public class HomeFragment extends Fragment
                              Bundle savedInstanceState)
     {
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View v= inflater.inflate(R.layout.fragment_event_coordinator, container, false);
+
+        eventCoordinators=v.findViewById(R.id.event_coordinator_co);
+        eventCoordinators.setText(eventDetails.getCOORDINATORS());
+
+
+
+        return v;
     }
 
     public void onButtonPressed(Uri uri)
     {
         if (mListener != null)
         {
-            mListener.onHomeFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -68,15 +74,15 @@ public class HomeFragment extends Fragment
         if (context instanceof OnFragmentInteractionListener)
         {
             mListener = (OnFragmentInteractionListener) context;
-        } else
-            {
+        } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         super.onDetach();
         mListener = null;
     }
@@ -84,7 +90,7 @@ public class HomeFragment extends Fragment
 
     public interface OnFragmentInteractionListener
     {
-
-        void onHomeFragmentInteraction(Uri uri);
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 }

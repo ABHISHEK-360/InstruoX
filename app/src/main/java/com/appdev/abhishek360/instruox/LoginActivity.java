@@ -120,6 +120,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onClick(View v)
             {
                 Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
+
                 startActivity(registerIntent);
             }
         });
@@ -210,7 +211,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public boolean logIn(final String email, final String pswd)
     {
 
-        Boolean status=false;
+
 
         HurlStack hurlStack = new HurlStack()
         {
@@ -330,7 +331,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public boolean readUserData(final String token)
     {
 
-         boolean status=false;
+
 
         HurlStack hurlStack = new HurlStack()
         {
@@ -526,11 +527,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInAccount account = result.getSignInAccount();
              name = account.getDisplayName();
              email = account.getEmail();
-             imgURL = account.getPhotoUrl().toString();
-            Intent in = new Intent(LoginActivity.this,HomeActivity.class);
+            Intent in = new Intent(LoginActivity.this,RegisterActivity.class);
             in.putExtra("name",name);
             in.putExtra("email",email);
-            in.putExtra("Url",imgURL);
             startActivity(in);
 
 
@@ -574,56 +573,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean>
-    {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password)
-        {
-            mEmail = email;
-            mPassword = password;
-        }
-
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean)
-        {
-            super.onPostExecute(aBoolean);
-            //myDailog.dismiss();
-            if(aBoolean)
-            {
-                Intent in = new Intent(getApplicationContext(),HomeActivity.class);
-                in.putExtra("name",name);
-                in.putExtra("email",email);
-                in.putExtra("Url",imgURL);
-                startActivity(in);
-            }
-
-
-
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params)
-        {
-
-
-            return logIn(mEmail,mPassword);
-        }
-
-
-
-        @Override
-        protected void onCancelled()
-        {
-
-        }
-
-
-
-    }
 
 
     private HostnameVerifier getHostnameVerifier()

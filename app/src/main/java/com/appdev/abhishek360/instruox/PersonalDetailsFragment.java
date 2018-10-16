@@ -1,6 +1,7 @@
 package com.appdev.abhishek360.instruox;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,8 +21,12 @@ public class PersonalDetailsFragment extends Fragment
 {
     private ArrayList<String> personalDetails;
     private EditText fullName,emailId,contactNo;
+    private EditText oldPass,newPass,conNewPass;
     private Button editDetails;
-
+    private Button updatedetails,changePass;
+    private SslConfigurationManager sslConfigurationManager;
+    private SharedPreferences sharedPreferences;
+    private String tokenId;
 
 
 
@@ -65,6 +71,17 @@ public class PersonalDetailsFragment extends Fragment
         emailId=(EditText) v.findViewById(R.id.personal_details_edit_email);
         contactNo=(EditText) v.findViewById(R.id.personal_details_edit_contact);
         editDetails=(Button)v.findViewById(R.id.myprofile_button_edit_details);
+        updatedetails=v.findViewById(R.id.myprofile_button_save_changes);
+        changePass=v.findViewById(R.id.myprofile_button_change_pass);
+        oldPass=v.findViewById(R.id.personal_details_edit_oldpass);
+        newPass=v.findViewById(R.id.personal_details_edit_newpass);
+        conNewPass=v.findViewById(R.id.personal_details_edit_confnewpass);
+        sslConfigurationManager=new SslConfigurationManager();
+
+        sharedPreferences=this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
+        tokenId=sharedPreferences.getString(LoginActivity.spAccessTokenKey,"void");
+
+
 
         fullName.setText(personalDetails.get(0));
         emailId.setText(personalDetails.get(1));
@@ -76,8 +93,57 @@ public class PersonalDetailsFragment extends Fragment
             public void onClick(View v)
             {
                 fullName.setEnabled(true);
-                emailId.setEnabled(true);
+               // emailId.setEnabled(true);
                 contactNo.setEnabled(true);
+            }
+        });
+
+        updatedetails.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+
+                jsonRequestAdapter.setRequestAction("UPDATE");
+                jsonRequestAdapter.setRequestData("userName",fullName.getText().toString());
+                jsonRequestAdapter.setRequestData("contact",contactNo.getText().toString());
+
+                jsonRequestAdapter.setRequestParameteres("filter","id");
+                sslConfigurationManager.updateUserData(jsonRequestAdapter,tokenId,getActivity());
+
+
+
+            }
+        });
+
+        changePass.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+
+                String pass_str = newPass.getText().toString();
+                String conPass_str=conNewPass.getText().toString();
+                if(pass_str.isEmpty()) Toast.makeText(getActivity(),"Enter new Password!",Toast.LENGTH_LONG).show();
+                else if(conPass_str.isEmpty()) Toast.makeText(getActivity(),"Confirm new Password!",Toast.LENGTH_LONG).show();
+                else if(!pass_str.equals(conPass_str)) Toast.makeText(getActivity(),"New Password Not Matched!",Toast.LENGTH_LONG).show();
+                else
+                {
+                    jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+
+                    jsonRequestAdapter.setRequestAction("UPDATE");
+                    jsonRequestAdapter.setRequestData("password",pass_str);
+
+
+                    jsonRequestAdapter.setRequestParameteres("filter","id");
+                    sslConfigurationManager.updateUserData(jsonRequestAdapter,tokenId,getActivity());
+                }
+
+
+
+
+
             }
         });
 

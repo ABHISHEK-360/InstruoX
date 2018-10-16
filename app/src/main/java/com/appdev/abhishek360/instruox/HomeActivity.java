@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,DirectionsFragment.OnFragmentInteractionListener,HomeFragment.OnFragmentInteractionListener,
@@ -70,6 +71,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+
         sharedPreferences=getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
         fragment = new HomeFragment();
         ft = getSupportFragmentManager().beginTransaction();
@@ -97,7 +100,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         name = getIntent().getExtras().getString("name","no_name");
         email = getIntent().getExtras().getString("email");
-        String imgUrl = getIntent().getExtras().getString("Url");
 
 
 
@@ -182,7 +184,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 spEditor.clear();
                 spEditor.apply();
                 Intent logoutIntent = new Intent(HomeActivity.this,LoginActivity.class);
-
                 startActivity(logoutIntent);
                 break;
 
@@ -193,7 +194,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.signIn_home:
-                showPopUP();
+                Intent loginIntent = new Intent(HomeActivity.this,LoginActivity.class);
+                startActivity(loginIntent);
 
 
         }
@@ -201,40 +203,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    private void showPopUP()
-    {
-        myDailog = new Dialog(this);
 
-        myDailog.setContentView(R.layout.custompopup);
-        username = (TextView)findViewById(R.id.username);
-        pass = (TextView)findViewById(R.id.Password);
-        signIn = (Button)findViewById(R.id.signIn);
-        regi = (Button)myDailog.findViewById(R.id.regi);
-
-        FloatingActionButton closeBtn = (FloatingActionButton) myDailog.findViewById(R.id.closeDialog);
-
-
-        closeBtn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                myDailog.dismiss();
-            }
-        });
-
-        myDailog.show();
-
-        regi.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent logingIntent = new Intent(HomeActivity.this,LoginActivity.class);
-                startActivity(logingIntent);
-            }
-        });
-    }
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState)
     {
@@ -255,6 +224,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment =new DirectionsFragment();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
 
                 break;
@@ -264,6 +234,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new TeamFragment();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
                 break;
 
@@ -271,6 +242,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment =new HomeFragment();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
 
                 break;
@@ -280,6 +252,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment =new ContactUsFragment();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
 
                 break;
@@ -288,6 +261,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment =new SponsorsFragment();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
 
                 break;
@@ -297,6 +271,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment =new ScheduleFragment();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
 
                 break;
@@ -306,12 +281,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment =new AboutFragment();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
 
                 break;
 
             case R.id.events_id:
-                fragment= new EventsFragment();
                 fragment= new EventsFragment();
 
                 tabCode = 0;
@@ -319,6 +294,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment.setArguments(bundle);
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
                 ft.commit();
                 break;
 
@@ -332,6 +308,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
 
                 ft.commit();
                 break;
@@ -345,6 +322,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
 
                 ft.commit();
                 break;
@@ -360,6 +338,76 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         return false;
     }
+
+
+
+    public void gotoEvents(View v)
+    {
+        int tabCode=0;
+        Bundle bundle=new Bundle();
+
+        switch (v.getId())
+        {
+            case R.id.home_button_technical:
+                fragment= new EventsFragment();
+
+                tabCode = 0;
+                bundle.putInt("tCode",tabCode);
+                fragment.setArguments(bundle);
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
+                ft.commit();
+                break;
+
+            case R.id.home_button_automaton:
+
+                fragment= new EventsFragment();
+
+                tabCode = 1;
+                bundle.putInt("tCode",tabCode);
+                fragment.setArguments(bundle);
+
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
+
+                ft.commit();
+                break;
+
+            case R.id.home_button_nontechnical:
+                fragment= new EventsFragment();
+
+                tabCode = 2;
+                bundle.putInt("tCode",tabCode);
+                fragment.setArguments(bundle);
+
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
+
+                ft.commit();
+                break;
+
+
+            case R.id.home_button_gaming:
+                fragment= new EventsFragment();
+
+                tabCode = 3;
+                bundle.putInt("tCode",tabCode);
+                fragment.setArguments(bundle);
+
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
+
+                ft.commit();
+                break;
+        }
+
+    }
+
+
 
     public void callHelp(View v)
     {
