@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventResultFragment"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/result_docs_recycler">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/results_default_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:textSize="22sp"
+        android:textColor="@color/myBlack"
+        android:visibility="gone"
+        android:gravity="center"
+        android:text="Currently Results are Not Announced. \n Keep Checking for Updates."/>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

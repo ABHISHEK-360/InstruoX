@@ -3,10 +3,29 @@ package com.appdev.abhishek360.instruox;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 public class SponsorsFragment extends Fragment
@@ -15,10 +34,15 @@ public class SponsorsFragment extends Fragment
 
 
     private OnFragmentInteractionListener mListener;
+    private RecyclerView recyclerView;
+    private FirestoreRecyclerAdapter adapter;
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
 
     public SponsorsFragment()
     {
-        // Required empty public constructor
+
     }
 
 
@@ -47,9 +71,121 @@ public class SponsorsFragment extends Fragment
     {
 
         View v =  inflater.inflate(R.layout.fragment_sponsors, container, false);
+        recyclerView= (RecyclerView)v.findViewById(R.id.sponsors_recycler);
+        //recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(), 2));
+        setupSponsorsAdapter();
 
 
         return v;
+    }
+
+    private void setupSponsorsAdapter()
+    {
+
+
+
+
+        Query q = firebaseFirestore.collection("/INSTRUO_SPONSORS/").orderBy("key");
+
+        FirestoreRecyclerOptions<SponsorsAdapter> res = new FirestoreRecyclerOptions.Builder<SponsorsAdapter>()
+                .setQuery(q, SponsorsAdapter.class).build();
+
+        adapter = new FirestoreRecyclerAdapter<SponsorsAdapter, SponsorsAdapter.SponsorViewHolder>(res)
+        {
+
+
+            @NonNull
+            @Override
+            public SponsorsAdapter.SponsorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+            {
+                LayoutInflater inf = LayoutInflater.from(parent.getContext());
+
+                View view = inf.inflate(R.layout.sponsors_view_holder,parent,false);
+
+                return new SponsorsAdapter.SponsorViewHolder(view);
+            }
+
+            @Override
+            public void onError(@NonNull FirebaseFirestoreException e)
+            {
+                super.onError(e);
+                Log.e("error", e.getMessage());
+                Toast.makeText(getContext(),""+e,Toast.LENGTH_LONG).show();
+
+
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final SponsorsAdapter.SponsorViewHolder holder, int position, @NonNull SponsorsAdapter model)
+            {
+
+                holder.category_sponsors.setText(""+model.getCat());
+
+                try
+                {
+                    storageReference=firebaseStorage.getReference().child("/SPONSORS_LOGO/"+model.getLogo());
+                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.logo_sponsors);
+
+
+                }
+                catch (Exception e)
+                {
+                    Log.d("Event Image:",""+e);
+                    holder.logo_sponsors.setImageResource(R.drawable.loading_icon);
+
+                }
+                /*storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                {
+                    @Override
+                    public void onSuccess(Uri uri)
+                    {
+                        try
+                        {
+
+
+                        }
+                        catch (Exception e)
+                        {
+                            Log.d("Picture Load:",""+e);
+                        }                    }
+                }).addOnFailureListener(new OnFailureListener()
+                {
+                    @Override
+                    public void onFailure(@NonNull Exception e)
+                    {
+                        Log.d("Picture Load:",""+e);
+                        //tosty(getActivity(),""+e);
+                        holder.logo_sponsors.setImageResource(R.drawable.loading_icon);
+                    }
+                });*/
+
+
+
+
+            }
+
+
+
+        };
+
+        adapter.notifyDataSetChanged();
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -82,16 +218,7 @@ public class SponsorsFragment extends Fragment
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener
     {
         // TODO: Update argument type and name

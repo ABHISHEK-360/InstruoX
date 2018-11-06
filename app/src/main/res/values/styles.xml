@@ -22,6 +22,11 @@
 
     </style>
 
+    <style name="MenuItems" parent="AppTheme">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/merriweather_bolditalic</item>
+    </style>
+
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
         <item name="android:textColorPrimary">@color/background</item>

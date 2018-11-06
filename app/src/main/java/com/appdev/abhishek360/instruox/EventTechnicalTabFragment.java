@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,8 +27,10 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -129,7 +133,7 @@ public class EventTechnicalTabFragment extends Fragment
     private void setupEventAdapter()
     {
 
-
+        int lastItemNo=-1;
 
         Query q = db.collection("/EVENTS_INSTRUO/TECHNICAL_EVENTS/EVENTS");
 
@@ -140,7 +144,7 @@ public class EventTechnicalTabFragment extends Fragment
 
         adapter = new FirestoreRecyclerAdapter<EventAdapter, EventViewHolder>(res)
         {
-
+            int lastPosition=-1;
 
             @NonNull
             @Override
@@ -163,15 +167,36 @@ public class EventTechnicalTabFragment extends Fragment
 
             }
 
+            private void setAnimation(View viewToAnimate, int position)
+            {
+                // If the bound view wasn't previously displayed on screen, it's animated
+                if (position > lastPosition)
+                {
+                    Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.juspay_help_screen_enter);
+                    viewToAnimate.startAnimation(animation);
+                    lastPosition = position;
+                }
+
+            }
+
             @Override
             protected void onBindViewHolder(@NonNull final EventViewHolder holder, int position, @NonNull final EventAdapter model)
             {
+                setAnimation(holder.cardView,position);
+
 
 
 
                 holder.name_event.setText(""+model.getTITLE());
                 holder.venue.setText("Venue: "+model.getVENUE());
                 holder.timing.setText("Time: "+model.getTIME());
+
+
+
+                DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
+                final String eventId=snapshot.getId();
+
+
                 holder.cardView.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -179,20 +204,22 @@ public class EventTechnicalTabFragment extends Fragment
                     {
                         Intent eventDetailsIntent = new Intent(getActivity(),EventDetailsActivity.class);
                         eventDetailsIntent.putExtra("tabCode",0);
+                        eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
+
                         eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_OBJECT,model);
+                        eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/TECHNICAL_EVENTS/"+eventId+".png");
+
 
                         startActivity(eventDetailsIntent);
 
                     }
                 });
 
-
-                DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
-                final String eventId=snapshot.getId();
-
                 Set<String> eventSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey,null);
+                final String token = sharedPreferences.getString(LoginActivity.spAccessTokenKey, "void");
 
-                if(eventSet==null)
+
+                if(eventSet==null&&token.equals("void"))
                 {
                     //holder.registerEvent.setEnabled(false);
                     holder.registerEvent.setText("Login!");
@@ -211,7 +238,7 @@ public class EventTechnicalTabFragment extends Fragment
 
 
                 }
-                else if (eventSet.contains(eventId))
+                else if (eventSet!=null&&eventSet.contains(eventId))
                 {
                     holder.registerEvent.setEnabled(false);
                     holder.registerEvent.setText("Registered");
@@ -237,34 +264,22 @@ public class EventTechnicalTabFragment extends Fragment
 
                 }
 
-
-
-                storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/TECHNICAL_EVENTS/"+eventId+".jpeg");
-
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                try
                 {
-                    @Override
-                    public void onSuccess(Uri uri)
-                    {
-                        try
-                        {
-                            Glide.with(getActivity().getApplicationContext()).load(uri.toString()).into(holder.poster_url);
 
+                    storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/TECHNICAL_EVENTS/"+eventId+".png" );
+                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.poster_url);
 
-                        }
-                        catch (Exception e)
-                        {
-                            Log.d("Picture Load:",""+e);
-                        }                    }
-                }).addOnFailureListener(new OnFailureListener()
+                }
+                    catch (Exception e)
                 {
-                    @Override
-                    public void onFailure(@NonNull Exception e)
-                    {
-                        //tosty(getActivity(),""+e);
-                        //holder.poster_url.setImageResource(R.drawable.gaming_poster);
-                    }
-                });
+                    Log.d("Event Image:",""+e);
+                    holder.poster_url.setImageResource(R.drawable.technical_poster_reduced);
+
+                }
+
+
 
             }
 

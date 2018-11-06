@@ -3,13 +3,16 @@ package com.appdev.abhishek360.instruox;
 import android.app.Dialog;
 import android.app.VoiceInteractor;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +38,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mklimek.sslutilsandroid.SslUtils;
@@ -83,7 +89,7 @@ import okhttp3.RequestBody;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener
 {
-    private TextView username,pass;
+    private TextView username,pass,forgotPass;
     private Button signIn,regi,register;
     private static final int REQUEST_CODE=9001;
     private GoogleApiClient googleApiClient;
@@ -96,7 +102,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences.Editor spEditor;
     private Set<String> eventsName;
 
-    public static String spAccessTokenKey="ACCESS_TOKEN", spFullNameKey="FULL_NAME",spEmailKey="EMAIL",spKey="instruoPref",spEventsKey="REG_EVENTS";
+    public static String spAccessTokenKey="ACCESS_TOKEN", spFullNameKey="FULL_NAME",
+            spInstanceIdKey="instanceId",spEmailKey="EMAIL",spKey="instruoPref",spEventsKey="REG_EVENTS";
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -114,6 +121,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         sharedPreferences= getSharedPreferences("instruoPref",MODE_PRIVATE);
 
+        //tosty(this," Instance Id: "+FireBaseInstanceIDService.getToken(this));
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult)
+            {
+                String newToken = instanceIdResult.getToken();
+                Log.e("newToken",newToken);
+                getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE).edit().putString(LoginActivity.spInstanceIdKey, newToken).apply();
+                //tosty(this,"Instance Id: ");
+
+            }
+        });
+
+        /*-------------For Instant Run--------------------
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert!");
+        builder.setCancelable(false);
+        builder.setMessage("Please install our app to Login/Register.\nYou Can 'Skip Login' now only.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                dialog.dismiss();
+                register.setEnabled(false);
+                findViewById(R.id.gSignIn).setEnabled(false);
+                findViewById(R.id.Login).setEnabled(false);
+
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+        -------------------------------------------------------------*/
+
         register.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -128,18 +171,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
+
+
+
     public void showPopUp(View V)
     {
         myDailog.setContentView(R.layout.custompopup);
+
         username = (TextView)myDailog.findViewById(R.id.username);
         pass = (TextView)myDailog.findViewById(R.id.Password);
         signIn = (Button)myDailog.findViewById(R.id.signIn);
         regi = (Button)myDailog.findViewById(R.id.regi);
+        forgotPass=(TextView)myDailog.findViewById(R.id.forgotPass_textview);
         progresBar=(ProgressBar)myDailog.findViewById(R.id.popup_progress_bar);
 
         FloatingActionButton closeBtn = (FloatingActionButton) myDailog.findViewById(R.id.closeDialog);
 
         myDailog.show();
+
+        forgotPass.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+               String email_str=username.getText().toString();
+               resetConfirm(email_str);
+            }
+        });
+
 
         signIn.setOnClickListener(new View.OnClickListener()
         {
@@ -173,6 +232,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 else
                 {
                     progresBar.setVisibility(View.VISIBLE);
+                    signIn.setEnabled(false);
+
                     logIn(u_name,pswd);
 
 
@@ -206,6 +267,154 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
 
 
+    }
+    public void  resetConfirm(final String email)
+    {
+        if(isEmailValid(email))
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Alert!");
+            builder.setMessage("You'll receive an email on :"+email+" to reset your Account password.");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    resetPassword(email);
+                    dialog.dismiss();
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+
+        }
+        else username.setError("Enter Your Registered email here and click forgot Password");
+
+    }
+
+    public void resetPassword(final String email)
+    {
+
+
+
+        HurlStack hurlStack = new HurlStack()
+        {
+            @Override
+            protected HttpURLConnection createConnection(URL url) throws IOException
+            {
+                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
+                try
+                {
+                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
+                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                return httpsURLConnection;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this,hurlStack);
+
+
+
+
+
+
+        String URL = "https://instruo.in/api/v1/auth/forget";
+
+        jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+
+
+        jsonRequestAdapter.setRequestData("email",email);
+
+        final Gson json = new GsonBuilder().serializeNulls().create();
+
+
+
+        final String jsonRequest = json.toJson(jsonRequestAdapter);
+
+        //tosty(this,jsonRequest);
+        //Log.d("JSON: ",jsonRequest);
+
+
+
+        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                URL,
+                jsonRequest,
+                new Response.Listener<JSONObject>()
+                {
+                    @Override
+                    public void onResponse(JSONObject response)
+                    {
+                        try
+                        {
+                            if (response.get("responseStatus").equals("FAILED"))
+                            {
+                                tosty(getApplicationContext(),"Try Again,Failed: "+response.get("responseMessage"));
+
+                            }
+                            if (response.get("responseStatus").equals("OK"))
+                            {
+                                //Map<String,String> responseData = new HashMap<>();
+
+
+                                tosty(getApplicationContext(),"Please Check Your Email. ");
+
+
+
+
+
+
+                            }
+                        }
+                        catch (JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        //Log.d("Response",""+response);
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        Log.d("Error:",""+error);
+                        progresBar.setVisibility(View.GONE);
+
+                        tosty(getApplicationContext(),"Try Again: Wrong Credentials!");
+
+                    }
+                }
+
+
+        );
+
+        requestQueue.add(objectRequest);
+
+
+
+    }
+
+
+    private boolean isEmailValid(String email)
+    {
+        if(email.contains("@")&&email.contains(".")) return true;
+
+        return false ;
     }
 
     public boolean logIn(final String email, final String pswd)
@@ -243,7 +452,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
 
         jsonRequestAdapter.setRequestAction("AUTH");
-        jsonRequestAdapter.setRequestData("username",email);
+
+        if(email.contains("@")&&email.contains("."))jsonRequestAdapter.setRequestData("email",email);
+        else jsonRequestAdapter.setRequestData("username",email);
+
         jsonRequestAdapter.setRequestData("password",pswd);
 
         final Gson json = new GsonBuilder().serializeNulls().create();
@@ -286,9 +498,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 spEditor=sharedPreferences.edit();
                                 spEditor.putString(spAccessTokenKey,accessToken);
                                 spEditor.apply();
-                                Boolean b=false;
 
-                                if(!accessToken.isEmpty()) b= readUserData(accessToken);
+
+                                if(!accessToken.isEmpty()) readUserData(accessToken);
 
 
 
@@ -301,7 +513,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             e.printStackTrace();
                         }
 
-                        //Log.d("Response",""+response);
+                        signIn.setEnabled(true);
+
+
 
                     }
                 },
@@ -314,9 +528,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         progresBar.setVisibility(View.GONE);
 
                         tosty(getApplicationContext(),"Try Again: Wrong Credentials!");
+                        signIn.setEnabled(true);
+
 
                     }
                 }
+
+
+
+
 
 
         );
@@ -395,6 +615,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             {
                                 tosty(getApplicationContext(),"User Data Access Failed: "+response.get("responseMessage"));
                                 progresBar.setVisibility(View.GONE);
+                                signIn.setEnabled(true);
+
 
 
 
@@ -434,7 +656,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 spEditor.putStringSet(spEventsKey,eventsName);
                                 spEditor.apply();
 
-                                finish();
 
 
                                 myDailog.dismiss();
@@ -445,6 +666,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 in.putExtra("email",email);
                                 in.putExtra("Url",imgURL);
                                 startActivity(in);
+                                finish();
 
 
 
@@ -525,8 +747,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (result.isSuccess())
         {
             GoogleSignInAccount account = result.getSignInAccount();
-             name = account.getDisplayName();
-             email = account.getEmail();
+              String name = account.getDisplayName();
+              String email = account.getEmail();
             Intent in = new Intent(LoginActivity.this,RegisterActivity.class);
             in.putExtra("name",name);
             in.putExtra("email",email);

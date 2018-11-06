@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:layout_margin="5dp"
+    android:background="@drawable/round_corner_shadow"
+
+    android:layout_gravity="center">
+
+
+    <ImageButton
+        android:id="@+id/payment_close_dialog"
+        android:src="@drawable/close"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:focusable="true"
+        android:clickable="true" />
+
+        <TextView
+            android:id="@+id/payment_popup_status"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="Status"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+            android:textColor="@color/myBlack"
+            />
+
+    <TextView
+        android:id="@+id/payment_popup_amt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Amount"
+        android:layout_margin="5dp"
+
+        android:textSize="20sp"
+        android:textColor="@color/myBlack"
+
+        />
+
+
+
+
+
+        <TextView
+            android:id="@+id/payment_popup_orderId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order Id"
+            android:textSize="20sp"
+            android:layout_margin="5dp"
+
+            android:textColor="@color/myBlack"
+
+
+            />
+
+    <TextView
+        android:id="@+id/payment_popup_paymentId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment Id"
+        android:textSize="20sp"
+        android:layout_margin="5dp"
+
+        android:textColor="@color/myBlack"
+
+        />
+
+    <TextView
+        android:id="@+id/payment_popup_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:layout_margin="5dp"
+
+        android:textSize="20sp"
+        android:textColor="@color/myBlack"
+
+        />
+
+    <TextView
+        android:id="@+id/payment_popup_eventId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Id"
+        android:layout_margin="5dp"
+
+        android:textSize="20sp"
+        android:textColor="@color/myBlack"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_margin="5dp"
+        android:gravity="right"
+        android:textColor="@color/myBlack"
+        android:text="*Receipt will be sent to registerd email."
+
+        />
+
+
+
+
+
+
+</LinearLayout>

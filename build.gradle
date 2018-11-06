@@ -5,6 +5,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+
         maven {
             url 'https://maven.fabric.io/public'
         }
@@ -23,6 +25,9 @@ buildscript {
 
 allprojects {
     repositories {
+
+        mavenCentral()
+
         google()
         maven {
             url 'https://maven.google.com'
@@ -31,6 +36,10 @@ allprojects {
 
 
         maven { url "https://jitpack.io" }
+
+        maven {
+            url "https://s3-ap-southeast-1.amazonaws.com/godel-release/godel/"
+        }
 
         jcenter()
     }

@@ -2,8 +2,10 @@ package com.appdev.abhishek360.instruox;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,15 +57,37 @@ public class EventRulesFragment extends Fragment
     {
         View v=inflater.inflate(R.layout.fragment_event_rules, container, false);
 
+
+
+
         eventRound1_textview=v.findViewById(R.id.event_rules_round1);
         eventRound2_textview=v.findViewById(R.id.event_rules_round2);
         eventRound3_textview=v.findViewById(R.id.event_rules_round3);
 
 
         eventRules_str=eventDetails.getRULES();
-        eventRound1_textview.setText(eventRules_str.get("ROUND_1"));
-        eventRound2_textview.setText(eventRules_str.get("ROUND_2"));
-        eventRound3_textview.setText(eventRules_str.get("ROUND_3"));
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        {
+            eventRound1_textview.setText(Html.fromHtml(eventRules_str.get("ROUND_1"),Html.FROM_HTML_MODE_COMPACT));
+            eventRound2_textview.setText(Html.fromHtml(eventRules_str.get("ROUND_2"),Html.FROM_HTML_MODE_COMPACT));
+            eventRound3_textview.setText(Html.fromHtml(eventRules_str.get("ROUND_3"),Html.FROM_HTML_MODE_COMPACT));
+
+        }
+        else
+        {
+            eventRound1_textview.setText(Html.fromHtml(eventRules_str.get("ROUND_1")));
+            eventRound2_textview.setText(Html.fromHtml(eventRules_str.get("ROUND_2")));
+            eventRound3_textview.setText(Html.fromHtml(eventRules_str.get("ROUND_3")));
+        }*/
+
+        if(eventRules_str!=null)
+        {
+            eventRound1_textview.setText(eventRules_str.get("ROUND_1"));
+            eventRound2_textview.setText(eventRules_str.get("ROUND_2"));
+            eventRound3_textview.setText(eventRules_str.get("ROUND_3"));
+        }
+
 
 
         return v;

@@ -28,7 +28,7 @@ public class TeamFragment extends Fragment
     public static TeamFragment newInstance(String param1, String param2)
     {
         TeamFragment fragment = new TeamFragment();
-        Bundle args = new Bundle();
+
 
         return fragment;
     }
@@ -51,7 +51,7 @@ public class TeamFragment extends Fragment
 
         recyclerView= (RecyclerView)v.findViewById(R.id.team_member_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        recyclerView.setAdapter(new TeamMemberAdapter());
+        recyclerView.setAdapter(new TeamMemberAdapter(getActivity().getApplicationContext()));
 
 
 

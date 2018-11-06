@@ -1,30 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SponsorsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#c9c6c6"
+        >
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/myBlack"
+            android:text="Present Sponsors"
+            android:textAlignment="center"
+            android:elevation="7dp"
+            android:padding="5dp"
+            android:background="@color/background_white"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_margin="10dp"/>
+
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/sponsors_recycler"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/myBlack"
         android:text="@string/past_sponsors_text"
         android:textAlignment="center"
+        android:elevation="7dp"
+        android:padding="5dp"
+        android:background="@color/background_white"
+        android:textStyle="bold"
         android:textSize="25sp"
         android:layout_margin="10dp"/>
 
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_hp"/>
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_hp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+
+                android:src="@drawable/hd_prv_sponsor_logo"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:background="@color/myBlack"
+                android:layout_margin="5dp"
+                android:src="@drawable/ace_prv_sponsor_logo"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+
+                android:src="@drawable/time_prv_sponsor_logo"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:background="@color/myBlack"
+                android:layout_margin="5dp"
+                android:src="@drawable/nic_prv_sponsor_logo"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+
+                android:src="@drawable/ic_uco_prv_sponsor_logo"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</ScrollView>
+
+
+
+
+</android.support.v4.widget.NestedScrollView>

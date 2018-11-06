@@ -3,7 +3,11 @@ package com.appdev.abhishek360.instruox;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -33,7 +37,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -44,11 +50,14 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.appdev.abhishek360.instruox.LoginActivity.tosty;
 
 public class SslConfigurationManager extends Fragment
 {
     private Context  ctx;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor spEditor;
 
 
 
@@ -115,18 +124,59 @@ public class SslConfigurationManager extends Fragment
                     {
                         try
                         {
-                            if (response.get("responseStatus").equals("FAILED"))
+                            if (response.get("responseStatus").equals("FAILED")&&response.get("responseMessage").equals("Not Authorized2!!!"))
                             {
                                 tosty(context.getApplicationContext(),"Try Again! Failed To Register! ");
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
+                                builder.setTitle("Session Expired!");
+                                builder.setCancelable(false);
+                                builder.setMessage("Please Login Again to Continue!");
+                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        dialog.cancel();
+                                        Intent  in = new Intent(context.getApplicationContext(),LoginActivity.class);
+                                        spEditor=sharedPreferences.edit();
+                                        spEditor.clear();
+                                        spEditor.apply();
+                                        startActivity(in);
+
+                                    }
+                                });
+
+                                AlertDialog alert = builder.create();
+                                alert.show();
+
+
                                 //progresBar.setVisibility(View.GONE);
 
 
 
                             }
-                            if (response.get("responseStatus").equals("OK"))
+                            else  if (response.get("responseStatus").equals("OK"))
                             {
+                                sharedPreferences= ctx.getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+                                spEditor=sharedPreferences.edit();
+                                Set<String> eventNameSet=sharedPreferences.getStringSet(LoginActivity.spEventsKey,new HashSet<String>());
+
+                                    try
+                                    {
+                                        eventNameSet.add(eventId);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Log.d("First Register!",""+e);
+                                        eventNameSet=new HashSet<>();
+                                    }
+
+
+                                spEditor.putStringSet(LoginActivity.spEventsKey,eventNameSet).apply();
+
 
                                 tosty(context.getApplicationContext(),"Registered Successfully ! Please Check Registered Event Page for Payment status.");
+
 
                             }
                         }

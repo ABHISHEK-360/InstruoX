@@ -1,6 +1,8 @@
 package com.appdev.abhishek360.instruox;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,11 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.JsonIOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import instamojo.library.InstamojoPay;
+import instamojo.library.InstapayListener;
+import instamojo.library.Listener;
+
+import static com.appdev.abhishek360.instruox.LoginActivity.tosty;
 
 
 public class RegisteredEventsFragment extends Fragment
@@ -27,6 +42,9 @@ public class RegisteredEventsFragment extends Fragment
     private TextView textView;
     private ArrayList<String> regEventsList;
     private ArrayList<String> entryFee;
+    private Set<String> paymentStatus;
+    //private ArrayList<String> accountDetails;
+    private InstapayListener listener;
 
     private RecyclerView recyclerView;
     private RegEventItemAdapter adapter;
@@ -37,13 +55,15 @@ public class RegisteredEventsFragment extends Fragment
     }
 
 
-    public static RegisteredEventsFragment newInstance(ArrayList<String> events,ArrayList<String> eventEntryFee)
+    public static RegisteredEventsFragment newInstance(ArrayList<String> events, ArrayList<String> eventEntryFee, ArrayList<String> paymentStatus)
     {
         RegisteredEventsFragment fragment = new RegisteredEventsFragment();
         Bundle args = new Bundle();
 
         args.putStringArrayList("events",events);
         args.putStringArrayList("entryFee",eventEntryFee);
+        args.putStringArrayList("paymentStatus",paymentStatus);
+        //args.putStringArrayList("accountDetails",accountDetails);
 
 
         fragment.setArguments(args);
@@ -58,6 +78,8 @@ public class RegisteredEventsFragment extends Fragment
         if (getArguments() != null) {
             regEventsList = getArguments().getStringArrayList("events");
             entryFee= getArguments().getStringArrayList("entryFee");
+            paymentStatus= new HashSet<>( getArguments().getStringArrayList("paymentStatus"));
+            //accountDetails=getArguments().getStringArrayList("accountDetails");
         }
 
     }
@@ -78,6 +100,9 @@ public class RegisteredEventsFragment extends Fragment
 
         adapter.setRegEventName(regEventsList);
         adapter.setRegFee(entryFee);
+        adapter.setPaymentStaus(paymentStatus);
+        //adapter.setAccountDetails(accountDetails);
+        adapter.setActivity(this.getActivity());
 
         recyclerView.setAdapter(adapter);
 
@@ -88,6 +113,7 @@ public class RegisteredEventsFragment extends Fragment
 
         return v;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri)
@@ -110,6 +136,8 @@ public class RegisteredEventsFragment extends Fragment
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach()

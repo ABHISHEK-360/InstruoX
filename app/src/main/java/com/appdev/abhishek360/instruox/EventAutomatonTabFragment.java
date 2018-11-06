@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -25,8 +27,10 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -170,24 +174,6 @@ public class EventAutomatonTabFragment extends Fragment
 
         Query q = db.collection("/EVENTS_INSTRUO/AUTOMATON_EVENTS/EVENTS");
 
-        /*db.collection("/EVENTS_INSTRUO/GAMING_EVENTS/EVENTS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task)
-            {
-                if (task.isSuccessful())
-                {
-
-                    for (QueryDocumentSnapshot document : task.getResult())
-                    {
-                        Log.d("Query Document:", document.getId() + " => " + document.getData());
-                    }
-                    Log.e("Events", task.getResult().toString());
-                    Toast.makeText(getContext(),"Gaming Events:"+task.getResult().toString(),Toast.LENGTH_LONG).show();
-                }
-
-
-            }
-        });*/
 
         FirestoreRecyclerOptions<EventAdapter> res = new FirestoreRecyclerOptions.Builder<EventAdapter>()
                 .setQuery(q, EventAdapter.class).build();
@@ -196,7 +182,7 @@ public class EventAutomatonTabFragment extends Fragment
 
         adapter = new FirestoreRecyclerAdapter<EventAdapter, EventViewHolder>(res)
         {
-
+            int lastPosition=-1;
 
             @NonNull
             @Override
@@ -219,17 +205,34 @@ public class EventAutomatonTabFragment extends Fragment
 
             }
 
+            private void setAnimation(View viewToAnimate, int position)
+            {
+                // If the bound view wasn't previously displayed on screen, it's animated
+                if (position > lastPosition)
+                {
+                    Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.juspay_help_screen_enter);
+                    viewToAnimate.startAnimation(animation);
+                    lastPosition = position;
+                }
+            }
+
             @Override
             protected void onBindViewHolder(@NonNull final EventViewHolder holder, int position, @NonNull final EventAdapter model)
             {
 
 
 
-
+                setAnimation(holder.cardView,position);
 
                 holder.name_event.setText(""+model.getTITLE());
                 holder.venue.setText("Venue: "+model.getVENUE());
                 holder.timing.setText("Time: "+model.getTIME());
+
+
+                DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
+                final String eventId=snapshot.getId();
+
+
                 holder.cardView.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -238,14 +241,14 @@ public class EventAutomatonTabFragment extends Fragment
                         Intent eventDetailsIntent = new Intent(getActivity(),EventDetailsActivity.class);
                         eventDetailsIntent.putExtra("tabCode",0);
                         eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_OBJECT,model);
+                        eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
+
+                        eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
 
                         startActivity(eventDetailsIntent);
 
                     }
                 });
-
-                DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
-                final String eventId=snapshot.getId();
 
                 Set<String> eventSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey,null);
                 final String token = sharedPreferences.getString(LoginActivity.spAccessTokenKey, "void");
@@ -267,7 +270,7 @@ public class EventAutomatonTabFragment extends Fragment
                     });
 
                 }
-                else if (eventSet.contains(eventId))
+                else if (eventSet!=null&&eventSet.contains(eventId))
                 {
                     holder.registerEvent.setEnabled(false);
                     holder.registerEvent.setText("Registered");
@@ -293,17 +296,28 @@ public class EventAutomatonTabFragment extends Fragment
 
                 }
 
+                try
+                {
+                    storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
+                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.poster_url);
 
-                storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
+                }
+                catch (Exception e)
+                {
+                    Log.d("Event Image:",""+e);
+                    holder.poster_url.setImageResource(R.drawable.technical_poster_reduced);
 
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                }
+
+                /*storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
                 {
                     @Override
                     public void onSuccess(Uri uri)
                     {
                         try
                         {
-                            Glide.with(getActivity().getApplicationContext()).load(uri.toString()).into(holder.poster_url);
+                            Glide.with(getActivity().getApplicationContext()).load(uri.toString()).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.poster_url);
 
 
                         }
@@ -316,10 +330,11 @@ public class EventAutomatonTabFragment extends Fragment
                     @Override
                     public void onFailure(@NonNull Exception e)
                     {
+                        Log.d("Picture Load:",""+e);
                         //tosty(getActivity(),""+e);
-                        //holder.poster_url.setImageResource(R.drawable.gaming_poster);
+                        holder.poster_url.setImageResource(R.drawable.technical_poster_reduced);
                     }
-                });
+                });*/
 
             }
 

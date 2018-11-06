@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".ScheduleDayThreeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+
+        android:id="@+id/schedule_day3_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Day-3 Schedules Coming Soon"  />
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

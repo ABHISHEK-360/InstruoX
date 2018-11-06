@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/round_corner_shadow"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="7dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/sponsors_logo_imageview"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="120dp"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/loading_icon"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/myBlack"/>
+
+
+
+
+        <TextView
+            android:id="@+id/sponsors_view_holder_cat"
+            android:layout_width="match_parent"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"
+            android:layout_height="wrap_content"
+            android:text="Sponsor Type"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

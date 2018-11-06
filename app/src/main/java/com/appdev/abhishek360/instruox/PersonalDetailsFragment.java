@@ -1,17 +1,24 @@
 package com.appdev.abhishek360.instruox;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import net.glxn.qrgen.android.QRCode;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -20,13 +27,15 @@ public class PersonalDetailsFragment extends Fragment
 
 {
     private ArrayList<String> personalDetails;
-    private EditText fullName,emailId,contactNo;
+    private EditText fullName,emailId,contactNo,college;
     private EditText oldPass,newPass,conNewPass;
     private Button editDetails;
     private Button updatedetails,changePass;
+    private ImageView qrCode_imageview;
     private SslConfigurationManager sslConfigurationManager;
     private SharedPreferences sharedPreferences;
     private String tokenId;
+    private Dialog myDialog;
 
 
 
@@ -76,6 +85,9 @@ public class PersonalDetailsFragment extends Fragment
         oldPass=v.findViewById(R.id.personal_details_edit_oldpass);
         newPass=v.findViewById(R.id.personal_details_edit_newpass);
         conNewPass=v.findViewById(R.id.personal_details_edit_confnewpass);
+        college=v.findViewById(R.id.personal_details_edit_college);
+        qrCode_imageview=v.findViewById(R.id.personal_details_qr_code);
+        myDialog= new Dialog(this.getContext());
         sslConfigurationManager=new SslConfigurationManager();
 
         sharedPreferences=this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
@@ -83,9 +95,21 @@ public class PersonalDetailsFragment extends Fragment
 
 
 
+
+
         fullName.setText(personalDetails.get(0));
         emailId.setText(personalDetails.get(1));
-        contactNo.setText(personalDetails.get(2));
+        college.setText(personalDetails.get(2));
+        contactNo.setText(personalDetails.get(3));
+
+        final Bitmap myBitmap = QRCode.from("instruoX:"+personalDetails.get(1)).withSize(720,720).bitmap();
+        qrCode_imageview.setImageBitmap(myBitmap);
+
+
+
+
+
+
 
         editDetails.setOnClickListener(new View.OnClickListener()
         {
@@ -153,6 +177,33 @@ public class PersonalDetailsFragment extends Fragment
 
 
         return v;
+    }
+
+
+    public void showPopUp(View V,Bitmap bm)
+    {
+        myDialog.setContentView(R.layout.qrcode_popup);
+        myDialog.show();
+
+        ImageView qrCode = (ImageView) myDialog.findViewById(R.id.popup_qr_code_image);
+        qrCode.setImageBitmap(bm);
+        myDialog.setCancelable(false);
+
+
+        FloatingActionButton closeBtn = (FloatingActionButton) myDialog.findViewById(R.id.close_popup_qr_code);
+
+        closeBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                myDialog.dismiss();
+            }
+        });
+
+
+
+
     }
 
 

@@ -65,6 +65,10 @@ public class EventAdapter implements Parcelable
         }
     };
 
+    public void setRULES(Map<String, String> RULES) {
+        this.RULES = RULES;
+    }
+
     public String getDESC() {
         return DESC;
     }

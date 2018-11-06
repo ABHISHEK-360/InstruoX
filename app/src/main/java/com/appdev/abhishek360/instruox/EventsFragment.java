@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 
 public class EventsFragment extends Fragment implements EventTechnicalTabFragment.OnFragmentInteractionListener,EventAutomatonTabFragment.OnFragmentInteractionListener
@@ -18,6 +19,7 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
 {
 
     private TabLayout tabs;
+    private ImageView imageView;
     int tabCode=0;
 
 
@@ -55,6 +57,7 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
     {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_events, container, false);
+        imageView=v.findViewById(R.id.events_tab_header_image);
         tabs = (TabLayout)v.findViewById(R.id.tab_layout);
         tabCode= this.getArguments().getInt("tCode");
 
@@ -65,11 +68,52 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
 
         tabs.setupWithViewPager(vp);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-       // vp.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
+        vp.setOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
+                switch (position)
+                {
+                    case 0 : imageView.setImageResource(R.drawable.technical_poster);
+                        break;
+
+                    case 1 : imageView.setImageResource(R.drawable.automaton_poster);
+                        break;
+
+                    case 2 : imageView.setImageResource(R.drawable.non_generic_poster);
+                        break;
+
+                    case 3 : imageView.setImageResource(R.drawable.gaming_poster);
+                        break;
+
+                    case 4 : imageView.setImageResource(R.drawable.non_generic_poster);
+                        break;
+
+                    case 5 : imageView.setImageResource(R.drawable.technical_poster);
+                        break;
+
+
+                }
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp));
         SetUpViewPager(vp);
 
+
         vp.setCurrentItem(tabCode);
+
 
 
 
@@ -77,6 +121,8 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
 
 
     }
+
+
 
 
     public void SetUpViewPager(ViewPager viewPager)

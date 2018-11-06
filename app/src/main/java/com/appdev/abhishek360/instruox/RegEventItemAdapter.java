@@ -1,5 +1,6 @@
 package com.appdev.abhishek360.instruox;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,29 +12,46 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Set;
+
+import static com.appdev.abhishek360.instruox.LoginActivity.tosty;
 
 public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapter.RegEventsViewHolder>
 {
     //private String[] member_pic_url;
     private ArrayList<String> regEventName;
     private ArrayList<String> regFee;
-    private String[] paymentStaus;
+    //private ArrayList<String> accountDetails;
+    private Set<String> paymentStaus;
+    private MyProfileActivity activity;
+
+    public void setActivity(Activity activity)
+    {
+        this.activity = (MyProfileActivity) activity;
+    }
 
     public void setRegEventName(ArrayList<String> regEventName)
     {
+        //regEventName.add("Accomodation Fee");
         this.regEventName = regEventName;
+
     }
 
     public void setRegFee(ArrayList<String> regFee)
     {
+        //regFee.add("200");
         this.regFee = regFee;
     }
 
-    public String[] getPaymentStaus() {
+
+
+    public Set<String> getPaymentStaus()
+    {
         return paymentStaus;
     }
 
-    public void setPaymentStaus(String[] paymentStaus) {
+    public void setPaymentStaus(Set<String> paymentStaus)
+    {
         this.paymentStaus = paymentStaus;
     }
 
@@ -48,22 +66,40 @@ public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RegEventsViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull RegEventsViewHolder holder, final int position)
     {
         holder.name_event.setText(regEventName.get(position));
-        if(!regFee.isEmpty()) holder.pay_fee.setText("Pay:- Rs "+regFee.get(position));
-        holder.pay_fee.setOnClickListener(new View.OnClickListener() 
+        ArrayList<String> eventId=activity.getEventId();
+
+        if(!regFee.get(position).isEmpty())
+        {
+            if(paymentStaus.contains(eventId.get(position)))
+            {
+                holder.pay_fee.setText("Paid:- ₹ "+regFee.get(position));
+                holder.pay_fee.setEnabled(false);
+
+            }
+            else
+            {
+                holder.pay_fee.setText("Pay:- ₹ "+regFee.get(position));
+            }
+        }
+        else holder.pay_fee.setEnabled(false);
+
+        holder.pay_fee.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                String regFee_str = regFee.get(position);
+                //if(regFee_str.isEmpty())
 
+                //regFee_str="15";
+
+                activity.payAmt(position,regFee_str);
                 
             }
         });
-
-
-
 
 
 
@@ -86,13 +122,6 @@ public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapte
             super(itemView);
             name_event=(TextView) itemView.findViewById(R.id.myprofile_view_holder_name);
             pay_fee=(Button) itemView.findViewById(R.id.myprofile_view_holder_paynow);
-
-            
-
-            
-
-
-
 
 
         }

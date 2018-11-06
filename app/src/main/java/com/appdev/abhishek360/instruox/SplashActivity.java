@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity
         sharedPreferences = getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
         final String tokenKey=sharedPreferences.getString(LoginActivity.spAccessTokenKey,null);
         final String fullName =sharedPreferences.getString(LoginActivity.spFullNameKey,null);
-        String email =sharedPreferences.getString(LoginActivity.spEmailKey,null);
+        final String email =sharedPreferences.getString(LoginActivity.spEmailKey,null);
 
 
         ((AnimatedVectorDrawable) getWindow().getDecorView().getBackground()).start();
@@ -47,8 +47,7 @@ public class SplashActivity extends AppCompatActivity
                 {
                     Intent in = new Intent(getApplicationContext(),HomeActivity.class);
                     in.putExtra("name",fullName);
-                    in.putExtra("email","test@test.com");
-                    in.putExtra("Url","test.url");
+                    in.putExtra("email",email);
                     startActivity(in);
                     finish();
                 }

@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -25,8 +27,10 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -78,7 +82,7 @@ public class EventNonGenericTabFragment extends Fragment
     private RecyclerView recyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
 
@@ -117,7 +121,7 @@ public class EventNonGenericTabFragment extends Fragment
 
         sharedPreferences=this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
 
-        progressBar=(ProgressBar)v.findViewById(R.id.nongeneric_event_progressbar);
+        //progressBar=(ProgressBar)v.findViewById(R.id.nongeneric_event_progressbar);
         recyclerView= (RecyclerView)v.findViewById(R.id.nongeneric_event_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         setupEventAdapter();
@@ -144,6 +148,7 @@ public class EventNonGenericTabFragment extends Fragment
 
         adapter = new FirestoreRecyclerAdapter<EventAdapter, EventViewHolder>(res)
         {
+            int lastPosition=-1;
 
 
             @NonNull
@@ -167,11 +172,23 @@ public class EventNonGenericTabFragment extends Fragment
 
             }
 
+            private void setAnimation(View viewToAnimate, int position)
+            {
+                // If the bound view wasn't previously displayed on screen, it's animated
+                if (position > lastPosition)
+                {
+                    Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.juspay_help_screen_enter);
+                    viewToAnimate.startAnimation(animation);
+                    lastPosition = position;
+                }
+            }
+
             @Override
             protected void onBindViewHolder(@NonNull final EventViewHolder holder, int position, @NonNull final EventAdapter model)
             {
 
                 //Toast.makeText(getContext(),"Event Model:"+model,Toast.LENGTH_LONG).show();
+                setAnimation(holder.cardView,position);
 
                 DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
                 final String eventId=snapshot.getId();
@@ -187,12 +204,12 @@ public class EventNonGenericTabFragment extends Fragment
                         Intent eventDetailsIntent = new Intent(getActivity(),EventDetailsActivity.class);
                         //eventDetailsIntent.putExtra("tabCode",0);
                         //eventDetailsIntent.putExtra("eventName",model.getTITLE());
-                        eventDetailsIntent.putExtra("eventId",eventId);
+                        //eventDetailsIntent.putExtra("eventId",eventId);
 
                         eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_OBJECT,model);
+                        eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
 
-
-
+                        eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/NON_GENERIC_EVENTS/"+eventId+".png");
 
                         startActivity(eventDetailsIntent);
 
@@ -226,7 +243,7 @@ public class EventNonGenericTabFragment extends Fragment
                     });
 
                 }
-                else if (eventSet.contains(eventId))
+                else if (eventSet!=null&&eventSet.contains(eventId))
                 {
                     holder.registerEvent.setEnabled(false);
                     holder.registerEvent.setText("Registered");
@@ -249,33 +266,20 @@ public class EventNonGenericTabFragment extends Fragment
                     });
 
                 }
-
-                storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/NON_GENERIC_EVENTS/"+eventId+".jpeg");
-
-                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>()
+                try
                 {
-                    @Override
-                    public void onSuccess(Uri uri)
-                    {
-                        try
-                        {
-                            Glide.with(getActivity().getApplicationContext()).load(uri.toString()).into(holder.poster_url);
+                    storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/NON_GENERIC_EVENTS/"+eventId+".png");
+                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.poster_url);
 
-
-                        }
-                        catch (Exception e)
-                        {
-                            Log.d("Picture Load:",""+e);
-                        }                    }
-                }).addOnFailureListener(new OnFailureListener()
+                }
+                    catch (Exception e)
                 {
-                    @Override
-                    public void onFailure(@NonNull Exception e)
-                    {
-                        //tosty(getActivity(),""+e);
-                        //holder.poster_url.setImageResource(R.drawable.gaming_poster);
-                    }
-                });
+                    Log.d("Event Image:",""+e);
+                    holder.poster_url.setImageResource(R.drawable.technical_poster_reduced);
+
+                }
+
 
 
             }
@@ -286,7 +290,7 @@ public class EventNonGenericTabFragment extends Fragment
 
 
         adapter.notifyDataSetChanged();
-        progressBar.setVisibility(View.GONE);
+        //progressBar.setVisibility(View.GONE);
         recyclerView.setAdapter(adapter);
 
     }

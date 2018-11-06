@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,30 +10,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/gaming_event_poster"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:adjustViewBounds="true"
+            android:textSize="15sp"
+            android:textColor="@color/background_white"
+            android:padding="10dp"
+            android:gravity="end"
+            android:text="* This event is exclusively for \nIIEST SHIBPUR STUDENTS"/>
 
-            android:foreground="?android:attr/selectableItemBackground"
-            android:src="@drawable/gaming_poster" />
-
-
-
-        <android.support.v7.widget.RecyclerView
-
-            android:id="@+id/gaming_event_recycler"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/fab_margin">
+            android:textSize="20sp"
+            android:textColor="@color/background_white"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:text="@string/desc_model_making"/>
 
-        </android.support.v7.widget.RecyclerView>
+
+
+
+
+
+
+
 
     </LinearLayout>
 
-</FrameLayout>
+</ScrollView>

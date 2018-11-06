@@ -1,8 +1,10 @@
 package com.appdev.abhishek360.instruox;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -201,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity
         }
         else
         {
-            reg_progressBar.setVisibility(View.VISIBLE);
+
             //imageProgressBar.setVisibility(View.VISIBLE);
             RegisterUser(email_str,password_str,fullname_str,username_str,contact_str,college_str);
         }
@@ -217,6 +219,12 @@ public class RegisterActivity extends AppCompatActivity
 
 
         //SSLContext sslContext= SslUtils.getSslContextForCertificateFile(this,"certificate.crt");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please Wait!");
+        builder.setMessage("Registering...");
+        final AlertDialog alert = builder.create();
+        alert.setCancelable(false);
+        alert.show();
 
         HurlStack hurlStack = new HurlStack()
         {
@@ -287,10 +295,12 @@ public class RegisterActivity extends AppCompatActivity
                             if (response.get("responseStatus").equals("FAILED"))
                             {
                                 tosty(getApplicationContext(),"Registration Failed: "+response.get("responseMessage"));
+                                alert.cancel();
                             }
                             if (response.get("responseStatus").equals("OK"))
                             {
                                 tosty(getApplicationContext(),"Registered Successfully!");
+                                alert.cancel();
                                 logIn(username, pswd);
 
                             }
@@ -330,6 +340,14 @@ public class RegisterActivity extends AppCompatActivity
 
     public void logIn(final String email, final String pswd)
     {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please Wait!");
+        builder.setMessage("Logging In...");
+        final AlertDialog alert = builder.create();
+        alert.setCancelable(false);
+
+        alert.show();
 
 
 
@@ -391,6 +409,7 @@ public class RegisterActivity extends AppCompatActivity
                             if (response.get("responseStatus").equals("FAILED"))
                             {
                                 tosty(getApplicationContext(),"LogIn Failed: "+response.get("responseMessage"));
+                                alert.cancel();
 
                             }
                             if (response.get("responseStatus").equals("OK"))
@@ -399,16 +418,14 @@ public class RegisterActivity extends AppCompatActivity
 
                                 JSONObject jsonData = new JSONObject(""+response).getJSONObject("responseData");
 
-
                                 String accessToken= jsonData.get("accessToken").toString();
-                                tosty(getApplicationContext(),"Logged In Successfully! ");
 
                                 spEditor=sharedPreferences.edit();
                                 spEditor.putString(LoginActivity.spAccessTokenKey,accessToken);
                                 spEditor.apply();
-                                Boolean b=false;
 
-                                if(!accessToken.isEmpty()) b= readUserData(accessToken);
+                                if(!accessToken.isEmpty())  readUserData(accessToken);
+                                alert.cancel();
 
 
 
@@ -447,10 +464,16 @@ public class RegisterActivity extends AppCompatActivity
 
 
 
-    public boolean readUserData(final String token)
+    public void readUserData(final String token)
     {
 
-        boolean status=false;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Please Wait!");
+        builder.setMessage("Fetching Details...");
+        final AlertDialog alert = builder.create();
+        alert.setCancelable(false);
+        alert.show();
 
         HurlStack hurlStack = new HurlStack()
         {
@@ -514,7 +537,8 @@ public class RegisterActivity extends AppCompatActivity
                             {
                                 tosty(getApplicationContext(),"Network Issue: Try Again! ");
                                 Log.d("Network Issue",""+response.get("responseMessage"));
-                                reg_progressBar.setVisibility(View.GONE);
+                                alert.cancel();
+                                //reg_progressBar.setVisibility(View.GONE);
 
 
 
@@ -528,6 +552,7 @@ public class RegisterActivity extends AppCompatActivity
 
                                 fullname_str= jsonData.get("userName").toString();
                                 email_str= jsonData.get("userEmail").toString();
+                                alert.cancel();
 
 
                                 tosty(getApplicationContext(),"Hello! "+fullname_str);
@@ -539,10 +564,6 @@ public class RegisterActivity extends AppCompatActivity
                                 spEditor.apply();
 
                                 finish();
-
-
-
-                                reg_progressBar.setVisibility(View.GONE);
 
                                 Intent in = new Intent(getApplicationContext(),HomeActivity.class);
                                 in.putExtra("name",fullname_str);
@@ -595,15 +616,9 @@ public class RegisterActivity extends AppCompatActivity
 
         requestQueue.add(objectRequest);
 
-        return true;
+
 
     }
-
-
-
-
-
-
 
 
     private HostnameVerifier getHostnameVerifier()

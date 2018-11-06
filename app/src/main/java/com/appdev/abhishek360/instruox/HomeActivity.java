@@ -4,9 +4,11 @@ import android.Manifest;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,8 +18,10 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -33,6 +37,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 
+import net.glxn.qrgen.android.QRCode;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,DirectionsFragment.OnFragmentInteractionListener,HomeFragment.OnFragmentInteractionListener,
@@ -47,21 +53,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 {
-    ActionBarDrawerToggle actionBarDrawerToggle;
-    DrawerLayout drawerLayout;
-    TextView nameView,emailView;
-    TextView username,pass;
-    Button signIn,regi;
-    FloatingActionButton floatingActionButton;
-    NavigationView navigationView;
-    Toolbar toolbar;
-    CircleImageView proPic;
-    ImageView logoView;
-    String name,email;
-    Dialog myDailog;
-    Fragment fragment=null;
-    MenuItem mItem;
-    android.support.v4.app.FragmentTransaction ft;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private DrawerLayout drawerLayout;
+    private TextView nameView,emailView;
+    private TextView username,pass;
+    private Button signIn,regi;
+    private FloatingActionButton floatingActionButton;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    private CircleImageView proPic;
+    private ImageView logoView;
+    private String name,email;
+    private Dialog myDailog;
+    private Fragment fragment=null;
+    private MenuItem mItem;
+    private android.support.v4.app.FragmentTransaction ft;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor spEditor;
@@ -76,7 +82,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences=getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
         fragment = new HomeFragment();
         ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.home_frame,fragment);
+        ft.replace(R.id.home_frame,fragment);
+        myDailog= new Dialog(this);
 
         ft.commit();
 
@@ -93,8 +100,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view)
             {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                       // .setAction("Action", null).show();
+
+                fragment =new ContactUsFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
+
+                ft= getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame,fragment);
+                ft.addToBackStack(null);
+                ft.commit();
+
             }
         });
 
@@ -124,15 +141,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-        proPic = (CircleImageView)header.findViewById(R.id.ProfilePic);
         logoView =(ImageView)header.findViewById(R.id.logoView);
-        proPic.setVisibility(View.GONE);
 
         if(name.equals("alpha")&&email.equals("alpha@base"))
         {
             nameView.setText("INSTRUO-2018");
             emailView.setText("The 10th Edition!");
-            proPic.setImageResource(R.drawable.instruo_logo);
+
+                findViewById(R.id.home_fab_payments).setVisibility(View.GONE);
+                findViewById(R.id.text_payment_textview).setVisibility(View.GONE);
+            findViewById(R.id.home_fab_qrcode).setVisibility(View.GONE);
+            findViewById(R.id.home_textview_qrtext).setVisibility(View.GONE);
+
 
 
         }
@@ -142,11 +162,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             emailView.setText(email);
             //Glide.with(this).load(imgUrl).into(proPic);
 
-            logoView.setVisibility(View.GONE);
-            proPic.setVisibility(View.VISIBLE);
-            proPic.setImageResource(R.drawable.userdefaultpic);
+
 
         }
+
 
 
 
@@ -180,11 +199,35 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.logout__id:
 
-                spEditor=sharedPreferences.edit();
-                spEditor.clear();
-                spEditor.apply();
-                Intent logoutIntent = new Intent(HomeActivity.this,LoginActivity.class);
-                startActivity(logoutIntent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Alert!");
+                builder.setMessage("Are you sure, you want to Logout?");
+                builder.setPositiveButton("Logout", new DialogInterface.OnClickListener()
+                {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        spEditor=sharedPreferences.edit();
+                        spEditor.clear();
+                        spEditor.apply();
+                        Intent logoutIntent = new Intent(HomeActivity.this,LoginActivity.class);
+                        startActivity(logoutIntent);
+
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+
+
                 break;
 
             case R.id.reg_events__id:
@@ -222,6 +265,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         {
             case R.id.directions_id:
                 fragment =new DirectionsFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
@@ -234,12 +279,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 fragment = new TeamFragment();
                 ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft.addToBackStack(null);
+
                 ft.commit();
                 break;
 
             case R.id.home_id:
                 fragment =new HomeFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
+
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
@@ -250,6 +301,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.contacts_id:
                 fragment =new ContactUsFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
@@ -259,9 +312,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.sponsors_id:
                 fragment =new SponsorsFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
+
                 ft.commit();
 
                 break;
@@ -269,6 +325,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.schedule_id:
                 fragment =new ScheduleFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
@@ -279,6 +337,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.about__id:
                 fragment =new AboutFragment();
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
@@ -292,6 +352,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 tabCode = 0;
                 bundle.putInt("tCode",tabCode);
                 fragment.setArguments(bundle);
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
                 ft.addToBackStack(null);
@@ -305,6 +367,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 tabCode = 1;
                 bundle.putInt("tCode",tabCode);
                 fragment.setArguments(bundle);
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
 
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
@@ -319,6 +383,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 tabCode = 4;
                 bundle.putInt("tCode",tabCode);
                 fragment.setArguments(bundle);
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                    getSupportFragmentManager().popBackStackImmediate();
 
                 ft= getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.home_frame,fragment);
@@ -338,6 +404,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         return false;
     }
+
 
 
 
@@ -430,6 +497,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             startActivity(callIntent);
         }
+        else if(id==R.id.ravi_call)
+        {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:7903635648"));
+
+            startActivity(callIntent);
+        }
+        else if(id==R.id.prudhavi_call)
+        {
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:8555884665"));
+
+            startActivity(callIntent);
+        }
         else if(id==R.id.vishnu_call)
         {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -467,6 +548,26 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             intent.setType("message/rfc822");
             intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"abhi.kumar310@gmail.com"});
             intent.putExtra(Intent.EXTRA_SUBJECT, "INSTRUO:Query for  android APP!");
+
+
+            startActivity(Intent.createChooser(intent, "Send Email"));
+        }
+        else if(id==R.id.ravi_email)
+        {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"ravi.kr27iiest@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "INSTRUO:Query for  events!");
+
+
+            startActivity(Intent.createChooser(intent, "Send Email"));
+        }
+        else if(id==R.id.prudhavi_email)
+        {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("message/rfc822");
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"prudhvi@instruo.in"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "INSTRUO:Query for  Accomodation!");
 
 
             startActivity(Intent.createChooser(intent, "Send Email"));
@@ -638,5 +739,76 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void onFragmentInteraction(Uri uri)
     {
 
+    }
+
+    public void navigatePayments(View view)
+    {
+
+            Intent eventsRegIntent = new Intent(HomeActivity.this, MyProfileActivity.class);
+            eventsRegIntent.putExtra("tabCode", 1);
+            startActivity(eventsRegIntent);
+
+
+
+    }
+
+    public void navigateFB(View view)
+    {
+        String fbPage = "https://www.facebook.com/instruo.iiests/";
+        Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(fbPage));
+        //intent.setType("message/rfc822");
+       // intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"kushagrawave525@gmail.com"});
+        //intent.putExtra(Intent.EXTRA_SUBJECT, "INSTRUO:Query for  Website!");
+
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        FragmentManager fragmentManager= getSupportFragmentManager();
+        navigationView.setCheckedItem(R.id.home_id);
+
+
+        if (fragmentManager.getBackStackEntryCount() > 0)
+            fragmentManager.popBackStackImmediate();
+        else super.onBackPressed();
+
+
+
+    }
+
+    public void showPopUp(View V,Bitmap bm)
+    {
+        myDailog.setContentView(R.layout.qrcode_popup);
+        myDailog.show();
+
+        ImageView qrCode = (ImageView) myDailog.findViewById(R.id.popup_qr_code_image);
+        qrCode.setImageBitmap(bm);
+        myDailog.setCancelable(false);
+
+
+        FloatingActionButton closeBtn = (FloatingActionButton) myDailog.findViewById(R.id.close_popup_qr_code);
+
+        closeBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                myDailog.dismiss();
+            }
+        });
+
+
+
+
+    }
+
+    public void generateQR(View view)
+    {
+        final Bitmap myBitmap = QRCode.from("instruoX:"+email).withSize(720,720).bitmap();
+
+        showPopUp(view,myBitmap);
     }
 }

@@ -11,7 +11,8 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
 
 
@@ -32,17 +33,18 @@
         app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
         app:titleEnabled="false">
 
-        <ImageView
+        <pl.droidsonroids.gif.GifImageView
             android:id="@+id/htab_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/gaming_poster"
             android:fitsSystemWindows="true"
             app:layout_collapseParallaxMultiplier="0.75"
             android:layout_marginTop="65dp"
 
+            android:src="@drawable/loading_amin"
 
-            android:scaleType="fitCenter"
+
+            android:scaleType="fitXY"
             app:layout_collapseMode="parallax"/>
 
         <android.support.v7.widget.Toolbar
@@ -154,15 +156,14 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/event_details_pager"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-
-
-            android:layout_marginTop="256dp">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
 
         </android.support.v4.view.ViewPager>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
@@ -190,7 +191,7 @@
                 android:elevation="16dp"
                 android:textColor="#000000"
                 android:textSize="20sp"/>
-        </LinearLayout>
+        </LinearLayout>-->
 
     </android.support.design.widget.CoordinatorLayout>
 

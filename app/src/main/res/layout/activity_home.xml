@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/home_frame">
 
+
+
         </FrameLayout>
 
 
@@ -46,7 +48,9 @@
         app:menu="@menu/drawer_menu"
         app:headerLayout="@layout/navigation_header"
         android:layout_gravity="start"
+        android:background="@drawable/gradient_color_sec"
         app:itemTextColor="@drawable/nav_color"
+        app:itemTextAppearance="@style/MenuItems"
         app:itemBackground="@drawable/nav_back_color"
        >
 
@@ -54,13 +58,106 @@
     </android.support.design.widget.NavigationView>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical">
 
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/home_fab_qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/background_white"
+            android:src="@drawable/qr_code_icon"
+            android:onClick="generateQR"
+            android:foreground="?android:attr/selectableItemBackground"
+            />
+
+        <TextView
+            android:id="@+id/home_textview_qrtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="My QR Code"
+            android:elevation="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/instruo_orange"
+            android:textSize="20sp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/home_fab_fb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/background_white"
+            android:src="@drawable/fb"
+            android:onClick="navigateFB"
+            android:foreground="?android:attr/selectableItemBackground"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Give us a like!"
+            android:elevation="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/instruo_orange"
+            android:textSize="20sp"/>
+
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/home_fab_payments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/background_white"
+            android:src="@drawable/cash"
+            android:onClick="navigatePayments"
+            android:foreground="?android:attr/selectableItemBackground"
+            />
+
+        <TextView
+            android:id="@+id/text_payment_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Payments"
+            android:elevation="16dp"
+            android:textStyle="bold"
+            android:textColor="@color/instruo_orange"
+            android:textSize="20sp"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/background_white"
+
+            android:foreground="?android:attr/selectableItemBackground"
+
+
+            android:src="@drawable/email_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+
+            android:text="Contact Us"
+            android:elevation="16dp"
+            android:textColor="@color/instruo_orange"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+
 
 </android.support.v4.widget.DrawerLayout>

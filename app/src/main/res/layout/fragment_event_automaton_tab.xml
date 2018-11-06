@@ -13,20 +13,12 @@
         android:orientation="vertical"
         >
 
-        <ImageView
-            android:id="@+id/robotics_event_poster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/fab_margin"
-            android:adjustViewBounds="true"
-
-            android:foreground="?android:attr/selectableItemBackground"
-            android:src="@drawable/gaming_poster" />
 
         <ProgressBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/automaton_event_progressbar"/>
+        android:id="@+id/automaton_event_progressbar"
+            android:visibility="gone"/>
 
 
 
@@ -35,7 +27,7 @@
             android:id="@+id/robotics_event_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/fab_margin">
+            android:padding="7dp">
 
         </android.support.v7.widget.RecyclerView>
     </LinearLayout>

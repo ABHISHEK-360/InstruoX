@@ -1,11 +1,15 @@
 package com.appdev.abhishek360.instruox;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.zip.Inflater;
 
@@ -13,11 +17,150 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeamMemberAdapter extends RecyclerView.Adapter<TeamMemberAdapter.TeamMemberViewHolder>
 {
-    private String[] member_pic_url;
-    private String[] member_name={"Kushagra Nigam","Abhishek Kumar"};
-    private String[] member_email={"kushagrawave525@gmail.com","abhi.kumar310@gmail.com"};
-    private String[] member_phone={"8707427223","7979775976"};
-    private String[] member_post={"Finance Head","Android App Devloper"};
+    private Context ctx;
+
+    public TeamMemberAdapter(Context ctx)
+    {
+        this.ctx = ctx;
+    }
+
+    private int[] member_pic_url=
+            {
+
+                    R.drawable.kushagra_nigam,
+                    R.drawable.abhishek_kumar,
+                    R.drawable.gautam_kumar,
+                    R.drawable.ankur_jha,
+                    R.drawable.vishnu_deo_gupta,
+                    R.drawable.amitesh_debnath,
+                    R.drawable.shubham_kumar,
+                    R.drawable.shashwat_jha,
+                    R.drawable.vishal_vishwakarma,
+                    R.drawable.sejal_singh,
+                    R.drawable.ushaswini_tirunagari,
+                    R.drawable.prince_kmar,
+                    R.drawable.sonu_sharma,
+                    R.drawable.devara_prudviraj,
+                    R.drawable.puru_raj,
+                    R.drawable.devang_singh,
+                    R.drawable.soham_zemse,
+                    R.drawable.yatish_suwalka,
+                    R.drawable.jeevan_gabbar,
+                    R.drawable.anurag_singh,
+                    R.drawable.ravi_modi,
+                    R.drawable.mayank_raj,
+                    R.drawable.rock_bhavani,
+
+
+
+            };
+    private String[] member_name=
+            {
+                    "Kushagra Nigam",
+                    "Abhishek Kumar",
+                    "Gautam Kumar",
+                    "Ankur Jha",
+                    "Vishnu Deo Gupta",
+                    "Amitesh Debnath",
+                    "Shubham Kumar",
+                    "Shashwat Jha",
+                    "Vishal Vishwakarma",
+                    "Sejal Singh",
+                    "T. Ushaswini",
+                    "Prince Kumar",
+                    "Sonu Kumar Sharma",
+                    "Devara Prudhvi Raj",
+                    "Puru Raj",
+                    "Devang Singh",
+                    "Soham Zemse",
+                    "Yatish Suwalka",
+                    "Gollapalli Jeevan Venkata sai",
+                    "Anurag Kumar",
+                    "Ravi Kumar",
+                    "Mayank Raj",
+                    "Bhavani Shankar"
+
+            };
+    private String[] member_email=
+            {
+                    "kushagrawave525@gmail.com",
+                "abhi.kumar310@gmail.com",
+                "gautamkr@instruo.in",
+                "aaankurjha4@gmail.com",
+                "vishnu44d@gmail.com",
+                "shiba.ad98@gmail.com",
+                "sk.shubham1997@gmail.com",
+                "shashwatjha.dd2015@cs.iiests.ac.in",
+                "vishal@instruo.in",
+                "sejal@instruo.in",
+                "t.ushaswini@gmail.com",
+                "pkprincekumar16@gmail.com",
+                "sonukrshar21@gmail.com",
+                "prudhvi@instruo.in",
+                "puru@instruo.in",
+                "10.devang@gmail.com",
+                "soham@instruo.in",
+                "yatish@instruo.in",
+                "gjvenkatsai.1999@gmail.com",
+                "agresiveanurag4one@gmail.com",
+                "ravi.kr27iiest@gmail.com",
+                "mayank2497@gmail.com",
+                "rockbhavani8@gmail.com"
+            };
+
+    private String[] member_phone=
+            {
+                    "8707427223",
+                    "7979775976",
+                    "9903199342",
+                    "7209608240",
+                    "8210849023",
+                    "7003323174",
+                    "8240222761",
+                    "8697946077",
+                    "9572825609",
+                    "8789085447",
+                    "8017306209",
+                    "7004713312",
+                    "7001213187",
+                    "8555884665",
+                    "8757680594",
+                    "8948031877",
+                    "8334025944",
+                    "8017387421",
+                    "9182278765",
+                    "7541838959",
+                    "7903635648",
+                    "7980749923",
+                    "8583063856"
+            };
+
+    private String[] member_post=
+            {
+                    "Finance Head",
+                    "Android App Developer",
+                    "Publicity Head",
+                    "Main Coordinator",
+                    "Web Development and Designing",
+                    "Designing Head",
+                    "Publicity Head",
+                    "Main Coordinator",
+                    "Web Developer",
+                    "Content Writer",
+                    "Sponsorship Head",
+                    "Event Coordinator",
+                    "Sponsorship Head",
+                    "Event Coordinator",
+                    "Finance Head",
+                    "Event Coordinator",
+                    "Publicity Coordinator",
+                    "Technical Coordinator",
+                    "Publicity Head",
+                    "Designer",
+                    "Event Coordinator",
+                    "Finance Head",
+                    "Event Coordinator",
+            };
 
 
 
@@ -40,8 +183,12 @@ public class TeamMemberAdapter extends RecyclerView.Adapter<TeamMemberAdapter.Te
         holder.email.setText(member_email[position]);
         holder.phone.setText(member_phone[position]);
 
+        if(member_pic_url[position]!=0)
+        {
+            holder.member_pic_url.setImageResource(member_pic_url[position]);
 
-
+            //Glide.with(ctx).load(member_pic_url[position]).into(holder.member_pic_url);
+        }
 
 
     }

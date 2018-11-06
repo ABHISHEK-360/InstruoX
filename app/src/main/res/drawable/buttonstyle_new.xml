@@ -4,13 +4,13 @@
 
     <gradient
 
-        android:gradientRadius="110dp"
+        android:gradientRadius="100dp"
         android:type="radial"
         android:startColor="#2e3841"
         android:centerColor="#346b7e"
         android:endColor="#1a242e" />
 
-    <corners android:radius="10dp" />
+    <corners android:radius="8dp" />
 
     <stroke
         android:width="5dp"

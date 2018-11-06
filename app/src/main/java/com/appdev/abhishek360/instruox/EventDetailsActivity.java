@@ -9,19 +9,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class EventDetailsActivity extends AppCompatActivity implements EventDescriptionFragment.OnFragmentInteractionListener,EventRulesFragment.OnFragmentInteractionListener
-                                                                            ,EventCoordinatorFragment.OnFragmentInteractionListener
+                                                                            ,EventCoordinatorFragment.OnFragmentInteractionListener,EventResultFragment.OnFragmentInteractionListener
 {
     private TabLayout tabs;
     private int tabCode=0;
     private String eventName_str="Instruo Event",eventTime_str,eventVenue_str,eventDesc_str,eventRules_str,eventCoordinators_str,eventPrize_str,eventFee_str;;
-    private String eventId;
+    private String eventId,posterRef_str;
     private TextView title_textview;
+    private ImageView poster_image;
     private SharedPreferences sharedPreferences;
-    final public static String KEY_EVENT_OBJECT="eventDetails";
+    final public static String KEY_EVENT_OBJECT="eventDetails",KEY_POSTER_REF="posterRef",KEY_EVENT_ID="eventId";
+    private FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
     private EventAdapter eventDetails;
 
     @Override
@@ -34,6 +43,7 @@ public class EventDetailsActivity extends AppCompatActivity implements EventDesc
 
         sharedPreferences=getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
         tabs = (TabLayout)findViewById(R.id.event_details_tab_layout);
+        poster_image=(ImageView)findViewById(R.id.htab_header);
 
         Intent i = getIntent();
         eventDetails = (EventAdapter) i.getParcelableExtra(KEY_EVENT_OBJECT);
@@ -46,7 +56,13 @@ public class EventDetailsActivity extends AppCompatActivity implements EventDesc
         eventPrize_str=eventDetails.getPRIZE_MONEY();
         eventFee_str=eventDetails.getREG_FEE();
 
-        eventId=i.getExtras().getString("eventId");
+        eventId=i.getExtras().getString("eventId","myEvent");
+        posterRef_str=i.getExtras().getString(KEY_POSTER_REF);
+
+        StorageReference storageReference=  firebaseStorage.getReference().child(posterRef_str);
+
+        Glide.with(this).using(new FirebaseImageLoader()).load(storageReference)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(poster_image);
 
         title_textview.setText(eventName_str);
 
@@ -77,18 +93,20 @@ public class EventDetailsActivity extends AppCompatActivity implements EventDesc
         if(token.equals("void"))
             Toast.makeText(this,"Please SignIn to Participate in events!",Toast.LENGTH_LONG).show();
 
-        else  sslConfigurationManager.updateUserData(eventId, token,getApplicationContext());
+        else  sslConfigurationManager.updateUserData(eventId, token,getBaseContext());
 
     }
 
 
     public void SetUpViewPager(ViewPager viewPager)
     {
-        EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(),3);
+        EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(),4);
 
-        adapter.AddFragmentPage(EventDescriptionFragment.newInstance(eventDetails),"Description");
+        adapter.AddFragmentPage(EventDescriptionFragment.newInstance(eventDetails,eventId),"Description");
         adapter.AddFragmentPage(EventRulesFragment.newInstance(eventDetails),"Rules");
         adapter.AddFragmentPage(EventCoordinatorFragment.newInstance(eventDetails),"Event Coordinators");
+        adapter.AddFragmentPage(EventResultFragment.newInstance(eventId),"Results");
+
 
 
         viewPager.setAdapter(adapter);

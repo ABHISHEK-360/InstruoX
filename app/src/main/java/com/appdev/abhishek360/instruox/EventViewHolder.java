@@ -14,6 +14,7 @@ public class  EventViewHolder extends RecyclerView.ViewHolder
     ImageView poster_url;
     CardView cardView;
 
+
     public EventViewHolder(View itemView)
     {
         super(itemView);
