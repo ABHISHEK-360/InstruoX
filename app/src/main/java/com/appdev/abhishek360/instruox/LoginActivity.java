@@ -1,18 +1,16 @@
 package com.appdev.abhishek360.instruox;
 
 import android.app.Dialog;
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,26 +23,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mklimek.sslutilsandroid.SslUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,10 +44,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -64,12 +54,10 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -80,23 +68,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Headers;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener
-{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
     private TextView username,pass,forgotPass;
     private Button signIn,regi,register;
     private static final int REQUEST_CODE=9001;
     private GoogleApiClient googleApiClient;
     private ProgressBar progresBar;
     private String name="alpha",email="alpha@base",imgURL="alpha.com";
-
-
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor spEditor;
@@ -110,8 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     Dialog myDailog;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         myDailog = new Dialog(this);
@@ -131,7 +110,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Log.e("newToken",newToken);
                 getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE).edit().putString(LoginActivity.spInstanceIdKey, newToken).apply();
                 //tosty(this,"Instance Id: ");
-
             }
         });
 
@@ -157,25 +135,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         -------------------------------------------------------------*/
 
-        register.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
-
-                startActivity(registerIntent);
-            }
+        register.setOnClickListener(v -> {
+            Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
+            startActivity(registerIntent);
         });
-
-
-
     }
 
-
-
-    public void showPopUp(View V)
-    {
+    public void showPopUp(View V) {
         myDailog.setContentView(R.layout.custompopup);
 
         username = (TextView)myDailog.findViewById(R.id.username);
@@ -189,59 +155,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         myDailog.show();
 
-        forgotPass.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-               String email_str=username.getText().toString();
-               resetConfirm(email_str);
-            }
+        forgotPass.setOnClickListener(v -> {
+           String email_str=username.getText().toString();
+           resetConfirm(email_str);
         });
 
 
-        signIn.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
+        signIn.setOnClickListener(v -> {
+            String u_name= username.getText().toString();
+            String pswd= pass.getText().toString();
+
+            if(u_name.isEmpty())
             {
-                String u_name= username.getText().toString();
-                String pswd= pass.getText().toString();
+                username.setFocusable(true);
+                username.setError("Enter Username!");
+                return;
 
-                if(u_name.isEmpty())
-                {
-                    username.setFocusable(true);
-                    username.setError("Enter Username!");
-                    return;
+            }
+            else if(pswd.isEmpty())
+            {
+                pass.setFocusable(true);
+                pass.setError("Enter Password!");
+                return;
 
-                }
-                else if(pswd.isEmpty())
-                {
-                    pass.setFocusable(true);
-                    pass.setError("Enter Password!");
-                    return;
+            }
+            else if(pswd.length()<4)
+            {
+                pass.setFocusable(true);
+                pass.setError("Incorrect Password!");
+                return;
 
-                }
-                else if(pswd.length()<4)
-                {
-                    pass.setFocusable(true);
-                    pass.setError("Incorrect Password!");
-                    return;
+            }
+            else
+            {
+                progresBar.setVisibility(View.VISIBLE);
+                signIn.setEnabled(false);
 
-                }
-                else
-                {
-                    progresBar.setVisibility(View.VISIBLE);
-                    signIn.setEnabled(false);
-
-                    logIn(u_name,pswd);
+                logIn(u_name,pswd);
 
 
-                    //UserLoginTask mauth = new UserLoginTask(u_name,pswd);
-                    //Boolean b=false;
-
-
-                }
+                //UserLoginTask mauth = new UserLoginTask(u_name,pswd);
+                //Boolean b=false;
 
             }
         });

@@ -50,14 +50,14 @@
         android:text="**For participation in all Robotics events\nexcept Robowars"/>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
 
         android:id="@+id/myprofile_recycler_reg_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/fab_margin">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.appdev.abhishek360.instruox">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -15,10 +16,6 @@
     <uses-permission-sdk-23 android:name="android.permission.READ_SMS"/>
     <uses-permission-sdk-23 android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission-sdk-23 android:name="android.permission.READ_PHONE_STATE"/>
-
-
-
-
 
     <application
         android:allowBackup="true"
@@ -51,7 +48,6 @@
             </intent-filter>
         </service>
 
-
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -77,12 +73,11 @@
 
         <activity android:name=".RegisterActivity" />
 
-        <activity android:name=".EventDetailsActivity"></activity>
+        <activity android:name=".EventDetailsActivity"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="fb63174d2669398f92e008b9640ad83137128940" />
-
 
         <meta-data android:name="instamojo.orderauth.url"
                     android:value="https://www.instruo.in/api/v1/payment/instamojoauth"/>

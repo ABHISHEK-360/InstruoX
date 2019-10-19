@@ -1,20 +1,16 @@
 package com.appdev.abhishek360.instruox;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Set;
-
-import static com.appdev.abhishek360.instruox.LoginActivity.tosty;
 
 public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapter.RegEventsViewHolder>
 {

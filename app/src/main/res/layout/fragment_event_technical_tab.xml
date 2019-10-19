@@ -13,14 +13,14 @@
         android:orientation="vertical"
         >
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
 
             android:id="@+id/technical_event_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="7dp">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>
 
 
