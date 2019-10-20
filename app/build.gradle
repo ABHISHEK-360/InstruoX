@@ -17,7 +17,7 @@ repositories {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.appdev.abhishek360.instruox"
+        applicationId "com.appdev.abhishek360.instruo"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 311
@@ -46,7 +46,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
@@ -65,11 +65,11 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
 
-    implementation 'androidx.arch.core:core-runtime:2.0.0'
-    implementation 'androidx.arch.core:core-common:2.0.0'
+    implementation 'androidx.arch.core:core-runtime:2.1.0'
+    implementation 'androidx.arch.core:core-common:2.1.0'
 
     implementation 'ai.devsupport.instamojo:instamojolib:0.1.5'
 
