@@ -18,7 +18,7 @@
         android:layout_height="195dp"
         app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 
@@ -29,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_regular"
-        android:text="INSTRUO-2018"
+        android:text="@string/instruo_name"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="35sp"
@@ -45,7 +45,7 @@
         android:layout_width="148dp"
         android:layout_height="26dp"
         android:fontFamily="@font/nunito_regular"
-        android:text="The 10th Edition"
+        android:text="@string/instruo_edition"
         android:textAlignment="center"
         android:textColor="#ffffff"
 
@@ -62,7 +62,7 @@
         android:layout_width="244dp"
         android:layout_height="46dp"
         android:fontFamily="@font/nunito_regular"
-        android:text="The Largest Technical Fest of Kolkata"
+        android:text="@string/instruo_legacy"
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:textSize="16sp"
@@ -136,7 +136,6 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:fontFamily="@font/nunito_regular"
-
         android:text="@string/skiplogin"
         android:onClick="skipLogin"
         android:textColor="#1871ba"

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.FirebaseApp;
+
 import io.fabric.sdk.android.Fabric;
 
 
@@ -22,6 +24,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+        FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_splash);
 
         sharedPreferences = getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);

@@ -20,8 +20,8 @@ android {
         applicationId "com.appdev.abhishek360.instruox"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 211
-        versionName "1.10"
+        versionCode 311
+        versionName "2.00"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

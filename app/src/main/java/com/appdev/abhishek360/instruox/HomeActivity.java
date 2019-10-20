@@ -138,18 +138,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         logoView =(ImageView)header.findViewById(R.id.logoView);
 
-        if(name.equals("alpha")&&email.equals("alpha@base"))
-        {
-            nameView.setText("INSTRUO-2018");
-            emailView.setText("The 10th Edition!");
+        if(name.equals("alpha")&&email.equals("alpha@base")) {
+            nameView.setText(R.string.instruo_name);
+            emailView.setText(R.string.instruo_edition);
 
-                findViewById(R.id.home_fab_payments).setVisibility(View.GONE);
-                findViewById(R.id.text_payment_textview).setVisibility(View.GONE);
+            findViewById(R.id.home_fab_payments).setVisibility(View.GONE);
+            findViewById(R.id.text_payment_textview).setVisibility(View.GONE);
             findViewById(R.id.home_fab_qrcode).setVisibility(View.GONE);
             findViewById(R.id.home_textview_qrtext).setVisibility(View.GONE);
-
-
-
         }
         else
         {
