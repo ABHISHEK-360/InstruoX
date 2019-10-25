@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     
-    tools:context=".EventsFragment"
+    tools:context=".HomeFragments.EventsFragment"
     android:orientation="vertical">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -17,10 +17,8 @@
         android:id="@+id/events_tab_header_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/gaming_poster"
+        android:background="@drawable/technical_poster_reduced"
         android:fitsSystemWindows="true"
-
-
         android:scaleType="centerCrop" />
 
     <com.google.android.material.tabs.TabLayout
@@ -32,8 +30,6 @@
         app:tabSelectedTextColor="@color/instruo_orange"
         app:tabIndicatorColor="@color/instruo_orange"
         app:tabIndicatorHeight="5dp"
-
-
         android:background="@drawable/gradient_color_sec"
         app:tabMode="scrollable">
 
@@ -46,7 +42,6 @@
         android:layout_height="fill_parent"
         android:background="#6c6c6c"
         android:id="@+id/event_pager">
-
 
     </androidx.viewpager.widget.ViewPager>
 

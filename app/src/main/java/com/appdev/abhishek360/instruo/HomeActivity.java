@@ -10,6 +10,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.appdev.abhishek360.instruo.EventTabFragments.AutomatonTabFragment;
+import com.appdev.abhishek360.instruo.EventTabFragments.EventTechnicalTabFragment;
+import com.appdev.abhishek360.instruo.EventTabFragments.WorkshopTabFragment;
+import com.appdev.abhishek360.instruo.EventTabFragments.ExhibitionsTabFragment;
+import com.appdev.abhishek360.instruo.EventTabFragments.GamingTabFragment;
+import com.appdev.abhishek360.instruo.EventTabFragments.NonGenericTabFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.AboutFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.ContactUsFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.DirectionsFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.EventsFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.HomeFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.ScheduleFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.SponsorsFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.TeamFragment;
+import com.appdev.abhishek360.instruo.SchedulesTabFragments.ScheduleDayOneFragment;
+import com.appdev.abhishek360.instruo.SchedulesTabFragments.ScheduleDayThreeFragment;
+import com.appdev.abhishek360.instruo.SchedulesTabFragments.ScheduleDayTwoFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -36,14 +54,14 @@ import net.glxn.qrgen.android.QRCode;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,DirectionsFragment.OnFragmentInteractionListener,HomeFragment.OnFragmentInteractionListener,
-                                                            EventWorkshopFragment.OnFragmentInteractionListener,
-                                                                    EventsFragment.OnFragmentInteractionListener,EventTechnicalTabFragment.OnFragmentInteractionListener,EventAutomatonTabFragment.OnFragmentInteractionListener,
-                                                                            TeamFragment.OnFragmentInteractionListener,AboutFragment.OnFragmentInteractionListener,SponsorsFragment.OnFragmentInteractionListener
-                                                                                ,EventGamingTabFragment.OnFragmentInteractionListener,EventExibitionsTabFragment.OnFragmentInteractionListener
-                                                                                        ,ContactUsFragment.OnFragmentInteractionListener, EventNonGenericTabFragment.OnFragmentInteractionListener
-                                                                                            ,ScheduleFragment.OnFragmentInteractionListener,ScheduleDayOneFragment.OnFragmentInteractionListener
-                                                                                                ,ScheduleDayTwoFragment.OnFragmentInteractionListener,ScheduleDayThreeFragment.OnFragmentInteractionListener
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DirectionsFragment.OnFragmentInteractionListener, HomeFragment.OnFragmentInteractionListener,
+                                                            WorkshopTabFragment.OnFragmentInteractionListener,
+                                                                    EventsFragment.OnFragmentInteractionListener, EventTechnicalTabFragment.OnFragmentInteractionListener, AutomatonTabFragment.OnFragmentInteractionListener,
+                                                                            TeamFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener, SponsorsFragment.OnFragmentInteractionListener
+                                                                                , GamingTabFragment.OnFragmentInteractionListener, ExhibitionsTabFragment.OnFragmentInteractionListener
+                                                                                        , ContactUsFragment.OnFragmentInteractionListener, NonGenericTabFragment.OnFragmentInteractionListener
+                                                                                            , ScheduleFragment.OnFragmentInteractionListener, ScheduleDayOneFragment.OnFragmentInteractionListener
+                                                                                                , ScheduleDayTwoFragment.OnFragmentInteractionListener, ScheduleDayThreeFragment.OnFragmentInteractionListener
 
 
 
@@ -182,7 +200,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         switch (intId)
         {
             case R.id.myprofile_id:
-                Intent myprofileIntent = new Intent(HomeActivity.this,MyProfileActivity.class);
+                Intent myprofileIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
                 myprofileIntent.putExtra("tabCode",0);
 
                 startActivity(myprofileIntent);
@@ -222,7 +240,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.reg_events__id:
-                Intent eventsRegIntent = new Intent(HomeActivity.this,MyProfileActivity.class);
+                Intent eventsRegIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
                 eventsRegIntent.putExtra("tabCode",1);
                 startActivity(eventsRegIntent);
                 break;
@@ -735,7 +753,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void navigatePayments(View view)
     {
 
-            Intent eventsRegIntent = new Intent(HomeActivity.this, MyProfileActivity.class);
+            Intent eventsRegIntent = new Intent(HomeActivity.this, UserProfileActivity.class);
             eventsRegIntent.putExtra("tabCode", 1);
             startActivity(eventsRegIntent);
 

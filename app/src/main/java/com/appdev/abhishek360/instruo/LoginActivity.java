@@ -5,6 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.appdev.abhishek360.instruo.ApiModels.CredModel;
+import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
+import com.appdev.abhishek360.instruo.ApiModels.UserProfileModel;
+import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
+import com.appdev.abhishek360.instruo.Services.ApiServices;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
@@ -64,6 +69,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -74,13 +85,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private GoogleSignInClient googleApiClient;
     private ProgressBar progresBar;
     private String name="alpha",email="alpha@base",imgURL="alpha.com";
-
+    private CompositeDisposable compositeDisposable;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor spEditor;
     private Set<String> eventsName;
+    private ApiServices apiService;
 
     public static String spAccessTokenKey="ACCESS_TOKEN", spFullNameKey="FULL_NAME",
-            spInstanceIdKey="instanceId",spEmailKey="EMAIL",spKey="instruoPref",spEventsKey="REG_EVENTS";
+            spInstanceIdKey="instanceId",spEmailKey="EMAIL",spKey="instruoPref",
+            spEventsKey="REG_EVENTS", spSessionId = "COOKIE_SESSION_ID";
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
@@ -90,24 +103,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        compositeDisposable = new CompositeDisposable();
+        apiService = ApiClientInstance.getRetrofitInstance(getApplicationContext()).create(ApiServices.class);
+
         myDailog = new Dialog(this);
         register = (Button)findViewById(R.id.register) ;
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = GoogleSignIn.getClient(this, gso);
 
-        sharedPreferences= getSharedPreferences("instruoPref",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("instruoPref",MODE_PRIVATE);
 
         //tosty(this," Instance Id: "+FireBaseInstanceIDService.getToken(this));
 
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( this,  new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult)
-            {
-                String newToken = instanceIdResult.getToken();
-                Log.e("newToken",newToken);
-                getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE).edit().putString(LoginActivity.spInstanceIdKey, newToken).apply();
-                //tosty(this,"Instance Id: ");
-            }
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener( this, instanceIdResult -> {
+            String newToken = instanceIdResult.getToken();
+            Log.e("newToken",newToken);
+            getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE).edit().putString(LoginActivity.spInstanceIdKey, newToken).apply();
+            //tosty(this,"Instance Id: ");
         });
 
         /*-------------For Instant Run--------------------
@@ -190,10 +202,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 logIn(u_name,pswd);
 
-
                 //UserLoginTask mauth = new UserLoginTask(u_name,pswd);
                 //Boolean b=false;
-
             }
         });
 
@@ -210,14 +220,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             builder.setPositiveButton("OK", (dialog, which) -> {
                 resetPassword(email);
                 dialog.dismiss();
-
             });
             builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             AlertDialog alert = builder.create();
             alert.show();
         }
-        else username.setError("Enter Your Registered email here and click forgot Password");
-
+        else
+            username.setError("Enter Your Registered email here and click forgot Password");
     }
 
     public void resetPassword(final String email) {
@@ -271,7 +280,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     //Log.d("Response",""+response);
                 },
                 error -> {
@@ -279,10 +287,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     progresBar.setVisibility(View.GONE);
 
                     tosty(getApplicationContext(),"Try Again: Wrong Credentials!");
-
                 }
         );
-
         requestQueue.add(objectRequest);
     }
 
@@ -294,218 +300,267 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return false ;
     }
 
-    public boolean logIn(final String email, final String pswd) {
-        HurlStack hurlStack = new HurlStack()
-        {
-            @Override
-            protected HttpURLConnection createConnection(URL url) throws IOException
-            {
-                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
-                try {
-                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
-                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return httpsURLConnection;
-            }
-        };
+    public void logIn(final String email, final String pswd) {
+        Single<LoginResponse> res = apiService
+                .postLoginCred(new CredModel(email,pswd));
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this,hurlStack);
+        res.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<LoginResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
 
-        String URL = "https://instruo.in/api/v1/auth";
-
-        jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
-
-        jsonRequestAdapter.setRequestAction("AUTH");
-
-        if(email.contains("@")&&email.contains("."))jsonRequestAdapter.setRequestData("email",email);
-        else jsonRequestAdapter.setRequestData("username",email);
-
-        jsonRequestAdapter.setRequestData("password",pswd);
-
-        final Gson json = new GsonBuilder().serializeNulls().create();
-
-        final String jsonRequest = json.toJson(jsonRequestAdapter);
-
-        //tosty(this,jsonRequest);
-        //Log.d("JSON: ",jsonRequest);
-
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                URL,
-                jsonRequest,
-                response -> {
-                    try
-                    {
-                        if (response.get("responseStatus").equals("FAILED"))
-                        {
-                            tosty(getApplicationContext(),"LogIn Failed: "+response.get("responseMessage"));
-
-                        }
-                        if (response.get("responseStatus").equals("OK"))
-                        {
-                            //Map<String,String> responseData = new HashMap<>();
-
-                            JSONObject jsonData = new JSONObject(""+response).getJSONObject("responseData");
-
-
-                            String accessToken= jsonData.get("accessToken").toString();
-                            tosty(getApplicationContext(),"Logged In Successfully! ");
-
-                            spEditor=sharedPreferences.edit();
-                            spEditor.putString(spAccessTokenKey,accessToken);
-                            spEditor.apply();
-
+                    @Override
+                    public void onSuccess(LoginResponse loginResponse) {
+                        Log.d("Login Api Res:", loginResponse.getMsg());
+                        if (loginResponse.getSuccess()) {
+                            String accessToken = loginResponse.getAccessToken();
+                            tosty(getApplicationContext(),loginResponse.getMsg());
 
                             if(!accessToken.isEmpty()) readUserData(accessToken);
-
-
-
-
-
                         }
+                        else {
+                            tosty(getApplicationContext(),"LogIn Failed: "+loginResponse.getMsg());
+                        }
+
+                        progresBar.setVisibility(View.GONE);
+                        signIn.setEnabled(true);
                     }
-                    catch (JSONException e)
-                    {
-                        e.printStackTrace();
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("LOGIN_API_ERROR","Failed", e);
+                        progresBar.setVisibility(View.GONE);
+                        signIn.setEnabled(true);
                     }
+                });
 
-                    signIn.setEnabled(true);
-
-
-
-                },
-                error -> {
-                    Log.d("Error:",""+error);
-                    progresBar.setVisibility(View.GONE);
-
-                    tosty(getApplicationContext(),"Try Again: Wrong Credentials!");
-                    signIn.setEnabled(true);
-
-                }
-        );
-
-        requestQueue.add(objectRequest);
-
-        return true;
+//        HurlStack hurlStack = new HurlStack()
+//        {
+//            @Override
+//            protected HttpURLConnection createConnection(URL url) throws IOException
+//            {
+//                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
+//                try {
+//                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
+//                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+//                }
+//                catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                return httpsURLConnection;
+//            }
+//        };
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(this,hurlStack);
+//
+//        String URL = "https://instruo.in/api/v1/auth";
+//
+//        jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+//
+//        jsonRequestAdapter.setRequestAction("AUTH");
+//
+//        if(email.contains("@")&&email.contains("."))jsonRequestAdapter.setRequestData("email",email);
+//        else jsonRequestAdapter.setRequestData("username",email);
+//
+//        jsonRequestAdapter.setRequestData("password",pswd);
+//
+//        final Gson json = new GsonBuilder().serializeNulls().create();
+//
+//        final String jsonRequest = json.toJson(jsonRequestAdapter);
+//
+//        //tosty(this,jsonRequest);
+//        //Log.d("JSON: ",jsonRequest);
+//
+//        JsonObjectRequest objectRequest = new JsonObjectRequest(
+//                Request.Method.POST,
+//                URL,
+//                jsonRequest,
+//                response -> {
+//                    try {
+//                        if (response.get("responseStatus").equals("FAILED")) {
+//                            tosty(getApplicationContext(),"LogIn Failed: "+response.get("responseMessage"));
+//
+//                        }
+//                        if (response.get("responseStatus").equals("OK")) {
+//                            //Map<String,String> responseData = new HashMap<>();
+//
+//                            JSONObject jsonData = new JSONObject(""+response).getJSONObject("responseData");
+//
+//                            String accessToken= jsonData.get("accessToken").toString();
+//                            tosty(getApplicationContext(),"Logged In Successfully! ");
+//
+//                            spEditor=sharedPreferences.edit();
+//                            spEditor.putString(spAccessTokenKey,accessToken);
+//                            spEditor.apply();
+//
+//
+//                            if(!accessToken.isEmpty()) readUserData(accessToken);
+//
+//                        }
+//                    }
+//                    catch (JSONException e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//
+//                    signIn.setEnabled(true);
+//
+//
+//
+//                },
+//                error -> {
+//                    Log.d("Error:",""+error);
+//                    progresBar.setVisibility(View.GONE);
+//
+//                    tosty(getApplicationContext(),"Try Again: Wrong Credentials!");
+//                    signIn.setEnabled(true);
+//
+//                }
+//        );
+//
+//        requestQueue.add(objectRequest);
     }
 
 
-    public boolean readUserData(final String token) {
-        HurlStack hurlStack = new HurlStack()
-        {
-            @Override
-            protected HttpURLConnection createConnection(URL url) throws IOException
-            {
-                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
-                try {
-                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
-                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return httpsURLConnection;
-            }
-        };
+    public void readUserData(final String token) {
+        Single<UserProfileModel> res = apiService
+                .getUserProfile();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this,hurlStack);
-
-        String URL = "https://instruo.in/api/v1/user";
-
-        jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
-
-        jsonRequestAdapter.setRequestAction("READ");
-        jsonRequestAdapter.setRequestData("username","leo4");
-        jsonRequestAdapter.setRequestData("password","null");
-        jsonRequestAdapter.setRequestParameteres("filter",null);
-
-        final Gson json = new GsonBuilder().serializeNulls().create();
-
-        final String jsonRequest = json.toJson(jsonRequestAdapter);
-
-        //tosty(this,jsonRequest);
-        //Log.d("JSON: ",jsonRequest);
-
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                URL,
-                jsonRequest,
-                response -> {
-                    try
-                    {
-                        if (response.get("responseStatus").equals("FAILED"))
-                        {
-                            tosty(getApplicationContext(),"User Data Access Failed: "+response.get("responseMessage"));
-                            progresBar.setVisibility(View.GONE);
-                            signIn.setEnabled(true);
-                        }
-                        if (response.get("responseStatus").equals("OK")&& (response.get("responseMessage")).equals("USER RETRIEVED SUCCESSFULLY"))
-                        {
-                            JSONObject jsonData = new JSONObject(""+response).getJSONObject("responseData");
-
-
-                            name= jsonData.get("userName").toString();
-                            email= jsonData.get("userEmail").toString();
-
-                            tosty(getApplicationContext(),"Hello! "+name);
-
-                            JSONArray object=jsonData.getJSONArray("events");
-
-                            int noOfRegisterEvents =object.length();
-                            eventsName = new HashSet<>();
-                            for(int i=0;i<noOfRegisterEvents;i++) {
-                                String events=object.getString(i);
-                                JSONObject jsonEvents = new JSONObject(""+events);
-
-                                eventsName.add(jsonEvents.get("description").toString());
-                            }
-
-                            spEditor=sharedPreferences.edit();
-                            spEditor.putString(spFullNameKey,name);
-                            spEditor.putString(spEmailKey,email);
-                            spEditor.putStringSet(spEventsKey,eventsName);
-                            spEditor.apply();
-
-                            myDailog.dismiss();
-                            progresBar.setVisibility(View.GONE);
-
-                            Intent in = new Intent(getApplicationContext(),HomeActivity.class);
-                            in.putExtra("name",name);
-                            in.putExtra("email",email);
-                            in.putExtra("Url",imgURL);
-                            startActivity(in);
-                            finish();
-                        }
-                    }
-                    catch (JSONException e) {
-                        e.printStackTrace();
+        res.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<UserProfileModel>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
                     }
 
-                    //Log.d("Response",""+response);
-                },
-                error -> {
-                    Log.d("Error:",""+error);
-                    progresBar.setVisibility(View.GONE);
+                    @Override
+                    public void onSuccess(UserProfileModel res) {
+                        //Log.d("User Profile Api Res:", res.getMsg());
 
-                    tosty(getApplicationContext(),"Try Again: Network Error!");
-                }
-        )
-        {
-            public Map<String, String> getHeaders() throws AuthFailureError
-            {
-                Map<String, String>  params = new HashMap<String, String>();
-                params.put("authorization", token);
+                        progresBar.setVisibility(View.GONE);
+                        signIn.setEnabled(true);
+                    }
 
-                return params;
-            }
-        };
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("PROFILE_API_ERROR","Failed", e);
+                        progresBar.setVisibility(View.GONE);
+                        signIn.setEnabled(true);
+                    }
+                });
 
-        requestQueue.add(objectRequest);
+//        HurlStack hurlStack = new HurlStack()
+//        {
+//            @Override
+//            protected HttpURLConnection createConnection(URL url) throws IOException
+//            {
+//                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
+//                try {
+//                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
+//                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
+//                }
+//                catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                return httpsURLConnection;
+//            }
+//        };
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(this,hurlStack);
+//
+//        String URL = "https://instruo.in/api/v1/user";
+//
+//        jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+//
+//        jsonRequestAdapter.setRequestAction("READ");
+//        jsonRequestAdapter.setRequestData("username","leo4");
+//        jsonRequestAdapter.setRequestData("password","null");
+//        jsonRequestAdapter.setRequestParameteres("filter",null);
+//
+//        final Gson json = new GsonBuilder().serializeNulls().create();
+//
+//        final String jsonRequest = json.toJson(jsonRequestAdapter);
+//
+//        JsonObjectRequest objectRequest = new JsonObjectRequest(
+//                Request.Method.POST,
+//                URL,
+//                jsonRequest,
+//                response -> {
+//                    try
+//                    {
+//                        if (response.get("responseStatus").equals("FAILED"))
+//                        {
+//                            tosty(getApplicationContext(),"User Data Access Failed: "+response.get("responseMessage"));
+//                            progresBar.setVisibility(View.GONE);
+//                            signIn.setEnabled(true);
+//                        }
+//                        if (response.get("responseStatus").equals("OK")&& (response.get("responseMessage")).equals("USER RETRIEVED SUCCESSFULLY"))
+//                        {
+//                            JSONObject jsonData = new JSONObject(""+response).getJSONObject("responseData");
+//
+//
+//                            name= jsonData.get("userName").toString();
+//                            email= jsonData.get("userEmail").toString();
+//
+//                            tosty(getApplicationContext(),"Hello! "+name);
+//
+//                            JSONArray object=jsonData.getJSONArray("events");
+//
+//                            int noOfRegisterEvents =object.length();
+//                            eventsName = new HashSet<>();
+//                            for(int i=0;i<noOfRegisterEvents;i++) {
+//                                String events=object.getString(i);
+//                                JSONObject jsonEvents = new JSONObject(""+events);
+//
+//                                eventsName.add(jsonEvents.get("description").toString());
+//                            }
+//
+//                            spEditor=sharedPreferences.edit();
+//                            spEditor.putString(spFullNameKey,name);
+//                            spEditor.putString(spEmailKey,email);
+//                            spEditor.putStringSet(spEventsKey,eventsName);
+//                            spEditor.apply();
+//
+//                            myDailog.dismiss();
+//                            progresBar.setVisibility(View.GONE);
+//
+//                            Intent in = new Intent(getApplicationContext(),HomeActivity.class);
+//                            in.putExtra("name",name);
+//                            in.putExtra("email",email);
+//                            in.putExtra("Url",imgURL);
+//                            startActivity(in);
+//                            finish();
+//                        }
+//                    }
+//                    catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    //Log.d("Response",""+response);
+//                },
+//                error -> {
+//                    Log.d("Error:",""+error);
+//                    progresBar.setVisibility(View.GONE);
+//
+//                    tosty(getApplicationContext(),"Try Again: Network Error!");
+//                }
+//        )
+//        {
+//            public Map<String, String> getHeaders() throws AuthFailureError
+//            {
+//                Map<String, String>  params = new HashMap<String, String>();
+//                params.put("authorization", token);
+//
+//                return params;
+//            }
+//        };
+//
+//        requestQueue.add(objectRequest);
 
-        return true;
     }
 
     public void onClick(View V)
@@ -515,7 +570,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.gSignIn:
                 signIN();
                 break;
-
         }
     }
 
@@ -536,8 +590,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             in.putExtra("email",email);
             startActivity(in);
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.d("GOOGGLE_SIGNIN_FAILED", "code="+e.getStatusCode()+" Msg:" + GoogleSignInStatusCodes.getStatusCodeString(e.getStatusCode()));
         }
 
@@ -578,8 +630,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         };
     }
 
-    private TrustManager[] getWrappedTrustManagers(TrustManager[] trustManagers)
-    {
+    private TrustManager[] getWrappedTrustManagers(TrustManager[] trustManagers) {
 
         final X509TrustManager originalTrustManager = (X509TrustManager) trustManagers[0];
         return new TrustManager[]
@@ -653,7 +704,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         sslContext.init(null, wrappedTrustManagers, null);
 
         return sslContext.getSocketFactory();
+    }
 
+    @Override
+    protected void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 
 }

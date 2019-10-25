@@ -52,33 +52,22 @@ import javax.net.ssl.X509TrustManager;
 import static android.content.Context.MODE_PRIVATE;
 import static com.appdev.abhishek360.instruo.LoginActivity.tosty;
 
-public class SslConfigurationManager extends Fragment
-{
+public class SslConfigurationManager extends Fragment {
     private Context  ctx;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor spEditor;
 
-
-
-    public boolean updateUserData(final String eventId,final String token,final Context context)
-    {
-
-
+    public boolean updateUserData(final String eventId,final String token,final Context context) {
         ctx=context;
 
-
-        HurlStack hurlStack = new HurlStack()
-        {
+        HurlStack hurlStack = new HurlStack() {
             @Override
-            protected HttpURLConnection createConnection(URL url) throws IOException
-            {
+            protected HttpURLConnection createConnection(URL url) throws IOException {
                 HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
-                try
-                {
+                try {
                     httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
                     httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return httpsURLConnection;
@@ -86,11 +75,6 @@ public class SslConfigurationManager extends Fragment
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext(),hurlStack);
-
-
-
-
-
 
         String URL = "https://instruo.in/api/v1/user";
 
@@ -100,116 +84,77 @@ public class SslConfigurationManager extends Fragment
         jsonRequestAdapter.setRequestData("eventIdAdd",eventId);
         jsonRequestAdapter.setRequestParameteres("filter",null);
 
-
-
         final Gson json = new GsonBuilder().serializeNulls().create();
 
-
-
         final String jsonRequest = json.toJson(jsonRequestAdapter);
-
-
-
-
 
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 URL,
                 jsonRequest,
-                new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response)
+                response -> {
+                    try
                     {
-                        try
+                        if (response.get("responseStatus").equals("FAILED")&&response.get("responseMessage").equals("Not Authorized2!!!"))
                         {
-                            if (response.get("responseStatus").equals("FAILED")&&response.get("responseMessage").equals("Not Authorized2!!!"))
-                            {
-                                tosty(context.getApplicationContext(),"Try Again! Failed To Register! ");
+                            tosty(context.getApplicationContext(),"Try Again! Failed To Register! ");
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
-                                builder.setTitle("Session Expired!");
-                                builder.setCancelable(false);
-                                builder.setMessage("Please Login Again to Continue!");
-                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                                {
-                                    public void onClick(DialogInterface dialog, int which)
-                                    {
-                                        dialog.cancel();
-                                        Intent  in = new Intent(context.getApplicationContext(),LoginActivity.class);
-                                        spEditor=sharedPreferences.edit();
-                                        spEditor.clear();
-                                        spEditor.apply();
-                                        startActivity(in);
-
-                                    }
-                                });
-
-                                AlertDialog alert = builder.create();
-                                alert.show();
-
-
-                                //progresBar.setVisibility(View.GONE);
-
-
-
-                            }
-                            else  if (response.get("responseStatus").equals("OK"))
-                            {
-                                sharedPreferences= ctx.getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context.getApplicationContext());
+                            builder.setTitle("Session Expired!");
+                            builder.setCancelable(false);
+                            builder.setMessage("Please Login Again to Continue!");
+                            builder.setPositiveButton("OK", (dialog, which) -> {
+                                dialog.cancel();
+                                Intent  in = new Intent(context.getApplicationContext(),LoginActivity.class);
                                 spEditor=sharedPreferences.edit();
-                                Set<String> eventNameSet=sharedPreferences.getStringSet(LoginActivity.spEventsKey,new HashSet<String>());
+                                spEditor.clear();
+                                spEditor.apply();
+                                startActivity(in);
+                            });
 
-                                    try
-                                    {
-                                        eventNameSet.add(eventId);
-                                    }
-                                    catch (Exception e)
-                                    {
-                                        Log.d("First Register!",""+e);
-                                        eventNameSet=new HashSet<>();
-                                    }
+                            AlertDialog alert = builder.create();
+                            alert.show();
 
-
-                                spEditor.putStringSet(LoginActivity.spEventsKey,eventNameSet).apply();
-
-
-                                tosty(context.getApplicationContext(),"Registered Successfully ! Please Check Registered Event Page for Payment status.");
-
-
-                            }
+                            //progresBar.setVisibility(View.GONE);
                         }
-                        catch (JSONException e)
-                        {
-                            e.printStackTrace();
+                        else  if (response.get("responseStatus").equals("OK")) {
+                            sharedPreferences= ctx.getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+                            spEditor=sharedPreferences.edit();
+                            Set<String> eventNameSet=sharedPreferences.getStringSet(LoginActivity.spEventsKey,new HashSet<String>());
+
+                                try {
+                                    eventNameSet.add(eventId);
+                                }
+                                catch (Exception e) {
+                                    Log.d("First Register!",""+e);
+                                    eventNameSet=new HashSet<>();
+                                }
+
+                            spEditor.putStringSet(LoginActivity.spEventsKey,eventNameSet).apply();
+
+                            tosty(context.getApplicationContext(),"Registered Successfully ! Please Check Registered Event Page for Payment status.");
                         }
-
-                        //Log.d("Response",""+response);
-
                     }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
+                    catch (JSONException e)
                     {
-                        Log.d("Error:",""+error);
-                        //readUserData(token);
-
-                        tosty(context.getApplicationContext(),"Trying Again: Network Error!");
-
-
+                        e.printStackTrace();
                     }
+
+                    //Log.d("Response",""+response);
+
+                },
+                error -> {
+                    Log.d("Error:",""+error);
+                    //readUserData(token);
+
+                    tosty(context.getApplicationContext(),"Trying Again: Network Error!");
                 }
-
-
         )
         {
             public Map<String, String> getHeaders() throws AuthFailureError
             {
                 Map<String, String>  params = new HashMap<String, String>();
                 params.put("authorization", token);
-
 
                 return params;
             }
@@ -218,16 +163,12 @@ public class SslConfigurationManager extends Fragment
         requestQueue.add(objectRequest);
 
         return true;
-
     }
 
 
-    public boolean updateUserData(final jsonRequestAdapter jsonRequestAdapter,final String token,final Context context)
-    {
-
+    public boolean updateUserData(final jsonRequestAdapter jsonRequestAdapter,final String token,final Context context) {
 
         ctx=context;
-
 
         HurlStack hurlStack = new HurlStack()
         {
@@ -249,77 +190,48 @@ public class SslConfigurationManager extends Fragment
 
         RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext(),hurlStack);
 
-
-
-
-
-
         String URL = "https://instruo.in/api/v1/user";
-
-
-
-
 
         final Gson json = new GsonBuilder().serializeNulls().create();
 
-
-
         final String jsonRequest = json.toJson(jsonRequestAdapter);
-
-
-
-
 
         JsonObjectRequest objectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 URL,
                 jsonRequest,
-                new Response.Listener<JSONObject>()
-                {
-                    @Override
-                    public void onResponse(JSONObject response)
+                response -> {
+                    try
                     {
-                        try
+                        if (response.get("responseStatus").equals("FAILED"))
                         {
-                            if (response.get("responseStatus").equals("FAILED"))
-                            {
-                                tosty(context.getApplicationContext(),"Try Again! Failed To Update! ");
-                                //progresBar.setVisibility(View.GONE);
+                            tosty(context.getApplicationContext(),"Try Again! Failed To Update! ");
+                            //progresBar.setVisibility(View.GONE);
 
 
 
-                            }
-                            if (response.get("responseStatus").equals("OK"))
-                            {
-
-                                tosty(context.getApplicationContext(),"Profile updated!");
-
-                            }
                         }
-                        catch (JSONException e)
+                        if (response.get("responseStatus").equals("OK"))
                         {
-                            e.printStackTrace();
+
+                            tosty(context.getApplicationContext(),"Profile updated!");
+
                         }
-
-                        //Log.d("Response",""+response);
-
                     }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    //Log.d("Response",""+response);
+
                 },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error)
-                    {
-                        Log.d("Error:",""+error);
-                        //readUserData(token);
+                error -> {
+                    Log.d("Error:",""+error);
+                    //readUserData(token);
 
-                        tosty(context.getApplicationContext(),"Trying Again: Network Error!");
-
-
-                    }
+                    tosty(context.getApplicationContext(),"Trying Again: Network Error!");
                 }
-
-
         )
         {
             public Map<String, String> getHeaders() throws AuthFailureError
@@ -422,16 +334,11 @@ public class SslConfigurationManager extends Fragment
 
     public static HostnameVerifier getHostnameVerifier()
     {
-        return new HostnameVerifier()
-        {
-            @Override
-            public boolean verify(String hostname, SSLSession session)
-            {
-                return true;
-                // verify always returns true, which could cause insecure network traffic due to trusting TLS/SSL server certificates for wrong hostnames
-                //HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
-                //return hv.verify("localhost", session);
-            }
+        return (hostname, session) -> {
+            return true;
+            // verify always returns true, which could cause insecure network traffic due to trusting TLS/SSL server certificates for wrong hostnames
+            //HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+            //return hv.verify("localhost", session);
         };
     }
 

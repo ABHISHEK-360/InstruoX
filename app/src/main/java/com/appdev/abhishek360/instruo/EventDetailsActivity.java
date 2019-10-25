@@ -3,6 +3,13 @@ package com.appdev.abhishek360.instruo;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+
+import com.appdev.abhishek360.instruo.Adapters.EventAdapter;
+import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
+import com.appdev.abhishek360.instruo.EventDetailsFragments.CoordinatorFragment;
+import com.appdev.abhishek360.instruo.EventDetailsFragments.DescriptionFragment;
+import com.appdev.abhishek360.instruo.EventDetailsFragments.ResultFragment;
+import com.appdev.abhishek360.instruo.EventDetailsFragments.RulesFragment;
 import com.google.android.material.tabs.TabLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,8 +26,8 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class EventDetailsActivity extends AppCompatActivity implements EventDescriptionFragment.OnFragmentInteractionListener,EventRulesFragment.OnFragmentInteractionListener
-                                                                            ,EventCoordinatorFragment.OnFragmentInteractionListener,EventResultFragment.OnFragmentInteractionListener
+public class EventDetailsActivity extends AppCompatActivity implements DescriptionFragment.OnFragmentInteractionListener, RulesFragment.OnFragmentInteractionListener
+                                                                            , CoordinatorFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener
 {
     private TabLayout tabs;
     private int tabCode=0;
@@ -102,10 +109,10 @@ public class EventDetailsActivity extends AppCompatActivity implements EventDesc
     {
         EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(),4);
 
-        adapter.AddFragmentPage(EventDescriptionFragment.newInstance(eventDetails,eventId),"Description");
-        adapter.AddFragmentPage(EventRulesFragment.newInstance(eventDetails),"Rules");
-        adapter.AddFragmentPage(EventCoordinatorFragment.newInstance(eventDetails),"Event Coordinators");
-        adapter.AddFragmentPage(EventResultFragment.newInstance(eventId),"Results");
+        adapter.AddFragmentPage(DescriptionFragment.newInstance(eventDetails,eventId),"Description");
+        adapter.AddFragmentPage(RulesFragment.newInstance(eventDetails),"Rules");
+        adapter.AddFragmentPage(CoordinatorFragment.newInstance(eventDetails),"Event Coordinators");
+        adapter.AddFragmentPage(ResultFragment.newInstance(eventId),"Results");
 
 
 

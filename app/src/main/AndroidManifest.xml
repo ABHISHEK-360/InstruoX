@@ -29,7 +29,7 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
         <service
-            android:name="com.appdev.abhishek360.instruo.FireBaseInstanceIDService"
+            android:name="com.appdev.abhishek360.instruo.Services.FireBaseInstanceIDService"
             android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -37,7 +37,7 @@
         </service>
 
         <service
-            android:name="com.appdev.abhishek360.instruo.MyFirebaseMessegingService"
+            android:name="com.appdev.abhishek360.instruo.Services.MyFirebaseMessegingService"
             android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -62,7 +62,7 @@
             android:name="com.appdev.abhishek360.instruo.HomeActivity"
             android:label="@string/instruo" />
         <activity
-            android:name="com.appdev.abhishek360.instruo.MyProfileActivity"
+            android:name="com.appdev.abhishek360.instruo.UserProfileActivity"
             android:label="@string/title_activity_my_profile"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

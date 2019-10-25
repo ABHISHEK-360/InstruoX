@@ -13,12 +13,9 @@ import com.google.firebase.FirebaseApp;
 
 import io.fabric.sdk.android.Fabric;
 
-
 public class SplashActivity extends AppCompatActivity {
-
-    private static int SPLASH_TIME_OUT=2000;
+    private static int SPLASH_TIME_OUT = 2000;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor spEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +25,18 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         sharedPreferences = getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
-        final String tokenKey=sharedPreferences.getString(LoginActivity.spAccessTokenKey,null);
+
+        //final String tokenKey = sharedPreferences.getString(LoginActivity.spAccessTokenKey,null);
+        final String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,null);
         final String fullName =sharedPreferences.getString(LoginActivity.spFullNameKey,null);
         final String email =sharedPreferences.getString(LoginActivity.spEmailKey,null);
 
         ((AnimatedVectorDrawable) getWindow().getDecorView().getBackground()).start();
         new Handler().postDelayed(() -> {
-            if (tokenKey!=null) {
-                Intent in = new Intent(getApplicationContext(),HomeActivity.class);
-                in.putExtra("name",fullName);
-                in.putExtra("email",email);
+            if (sessionId!=null) {
+                Intent in = new Intent(getApplicationContext(), HomeActivity.class);
+                in.putExtra("name", fullName);
+                in.putExtra("email", email);
                 startActivity(in);
                 finish();
             }

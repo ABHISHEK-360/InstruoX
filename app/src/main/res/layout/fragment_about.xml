@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AboutFragment"
+    tools:context=".HomeFragments.AboutFragment"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,41 +13,37 @@
         android:orientation="vertical"
         android:background="#3b393b">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_new_instruo_logo"
-            android:layout_weight="1"/>
-
-        <ImageView
-            android:layout_width="0dp"
-
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:src="@drawable/iiest_logo"
-            />
-
-
-
-    </LinearLayout>
-
-        <FrameLayout
-            android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
-            android:id="@+id/youtube_frame_fragment"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-            android:visibility="visible" >
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_new_instruo_logo"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:layout_width="0dp"
+
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:src="@drawable/iiest_logo"
+                />
 
 
 
-        </FrameLayout>
+        </LinearLayout>
+
+    <FrameLayout
+        android:name="com.google.android.youtube.player.YouTubePlayerSupportFragment"
+        android:id="@+id/youtube_frame_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" >
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"
@@ -69,18 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="@dimen/fab_margin"
-
-
-
         android:background="@color/background_white"/>
 
-
-
     </LinearLayout>
-
-
-
-
-
 
 </ScrollView>
