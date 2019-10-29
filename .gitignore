@@ -24,7 +24,6 @@ com_crashlytics_export_strings.xml
 /.idea/modules.xml
 /.idea/workspace.xml
 
-
 .DS_Store
 .DS_Store?
 ._*
@@ -33,6 +32,7 @@ com_crashlytics_export_strings.xml
 ehthumbs.db
 Thumbs.db
 
+/app/build
 /build
 
 /captures
