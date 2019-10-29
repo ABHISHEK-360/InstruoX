@@ -30,7 +30,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class TeamFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
@@ -119,33 +118,15 @@ public class TeamFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri)
-    {
-        if (mListener != null)
-        {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-
-                throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach()
     {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -158,11 +139,5 @@ public class TeamFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
-
-    public interface OnFragmentInteractionListener
-    {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

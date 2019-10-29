@@ -12,8 +12,6 @@ import com.appdev.abhishek360.instruo.R;
 
 
 public class HomeFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
-
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -39,31 +37,17 @@ public class HomeFragment extends Fragment {
     }
 
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onHomeFragmentInteraction(uri);
-        }
+
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-
-    public interface OnFragmentInteractionListener {
-        void onHomeFragmentInteraction(Uri uri);
-    }
 }

@@ -3,7 +3,6 @@ package com.appdev.abhishek360.instruo.EventTabFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,7 +22,7 @@ import com.appdev.abhishek360.instruo.EventDetailsActivity;
 import com.appdev.abhishek360.instruo.ViewHolders.EventViewHolder;
 import com.appdev.abhishek360.instruo.LoginActivity;
 import com.appdev.abhishek360.instruo.R;
-import com.appdev.abhishek360.instruo.SslConfigurationManager;
+import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -38,9 +37,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Set;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 
 public class AutomatonTabFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private FirebaseFirestore db=FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
@@ -48,6 +48,7 @@ public class AutomatonTabFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
+    private CompositeDisposable compositeDisposable;
 
     public static AutomatonTabFragment newInstance(String param1, String param2) {
         AutomatonTabFragment fragment = new AutomatonTabFragment();
@@ -71,39 +72,14 @@ public class AutomatonTabFragment extends Fragment {
 
         View v= inflater.inflate(R.layout.fragment_event_automaton_tab, container, false);
 
-        progressBar=(ProgressBar)v.findViewById(R.id.automaton_event_progressbar);
-        sharedPreferences= this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
-
-        recyclerView= (RecyclerView)v.findViewById(R.id.robotics_event_recycler);
+        compositeDisposable = new CompositeDisposable();
+        progressBar = (ProgressBar)v.findViewById(R.id.automaton_event_progressbar);
+        sharedPreferences = this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
+        recyclerView = (RecyclerView)v.findViewById(R.id.robotics_event_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         setupEventAdapter();
 
-        //recyclerView.setAdapter(new EventAdapter());
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     private void setupEventAdapter() {
@@ -154,50 +130,43 @@ public class AutomatonTabFragment extends Fragment {
                 holder.getCardView().setOnClickListener(v -> {
                     Intent eventDetailsIntent = new Intent(getActivity(), EventDetailsActivity.class);
                     eventDetailsIntent.putExtra("tabCode",0);
-                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_OBJECT,model);
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
-
+                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_CAT, "AUTOMATON_EVENTS");
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
 
                     startActivity(eventDetailsIntent);
-
                 });
 
                 Set<String> eventSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey,null);
-                final String token = sharedPreferences.getString(LoginActivity.spAccessTokenKey, "void");
+                final String sessionId = sharedPreferences.getString(LoginActivity.spSessionId, "void");
 
-
-                if(eventSet==null&&token.equals("void")) {
+                if(eventSet == null && sessionId.equals("void")) {
                     holder.getRegisterEvent().setText("Login!");
                     holder.getRegisterEvent().setOnClickListener(v -> {
 
                         Intent loginIntent = new Intent(getActivity(),LoginActivity.class);
                         startActivity(loginIntent);
-
                     });
-
                 }
-                else if (eventSet!=null&&eventSet.contains(eventId)) {
+                else if (eventSet != null && eventSet.contains(eventId)) {
                     holder.getRegisterEvent().setEnabled(false);
                     holder.getRegisterEvent().setText("Registered");
                 }
                 else {
-
                     holder.getRegisterEvent().setOnClickListener(v -> {
+                        final ApiRequestManager apiRequestManager = new ApiRequestManager(
+                                getContext().getApplicationContext(),
+                                compositeDisposable
+                        );
 
-                        //Toast.makeText(getContext(),""+eventId,Toast.LENGTH_LONG).show();
-                        //readUserData(eventId, token);
-
-                        final SslConfigurationManager sslConfigurationManager = new SslConfigurationManager();
-
-                        sslConfigurationManager.updateUserData(eventId, token,getContext());
+                        apiRequestManager.updateUserData(eventId);
                     });
                 }
 
                 try {
                     storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
 
-                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                    Glide.with(getContext().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.getPoster_url());
                 }
                 catch (Exception e) {
@@ -212,12 +181,19 @@ public class AutomatonTabFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-
         adapter.startListening();
     }
 
@@ -227,8 +203,11 @@ public class AutomatonTabFragment extends Fragment {
         adapter.stopListening();
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 }

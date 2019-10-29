@@ -48,8 +48,6 @@ public class DescriptionFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
 
-    private OnFragmentInteractionListener mListener;
-
     public static DescriptionFragment newInstance(EventAdapter adapter, String eventId) {
         DescriptionFragment fragment = new DescriptionFragment();
         Bundle args = new Bundle();
@@ -99,22 +97,9 @@ public class DescriptionFragment extends Fragment {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     private void setupDocsAdapter() {
@@ -238,7 +223,6 @@ public class DescriptionFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     public void onStart() {
@@ -250,9 +234,5 @@ public class DescriptionFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

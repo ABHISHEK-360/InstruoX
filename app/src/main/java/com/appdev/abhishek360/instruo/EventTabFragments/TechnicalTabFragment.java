@@ -3,7 +3,6 @@ package com.appdev.abhishek360.instruo.EventTabFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,7 +20,7 @@ import com.appdev.abhishek360.instruo.Adapters.EventAdapter;
 import com.appdev.abhishek360.instruo.EventDetailsActivity;
 import com.appdev.abhishek360.instruo.LoginActivity;
 import com.appdev.abhishek360.instruo.R;
-import com.appdev.abhishek360.instruo.SslConfigurationManager;
+import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
 import com.appdev.abhishek360.instruo.ViewHolders.EventViewHolder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -37,22 +36,20 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Set;
 
+import io.reactivex.disposables.CompositeDisposable;
 
-public class EventTechnicalTabFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
+
+public class TechnicalTabFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
     private SharedPreferences sharedPreferences;
     private FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
     private StorageReference storageReference;
+    private CompositeDisposable compositeDisposable;
 
-    public EventTechnicalTabFragment() {
-        // Required empty public constructor
-    }
-
-    public static EventTechnicalTabFragment newInstance(String param1, String param2) {
-        EventTechnicalTabFragment fragment = new EventTechnicalTabFragment();
+    public static TechnicalTabFragment newInstance(String param1, String param2) {
+        TechnicalTabFragment fragment = new TechnicalTabFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -73,9 +70,10 @@ public class EventTechnicalTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.fragment_event_technical_tab, container, false);
 
-        sharedPreferences=this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
+        compositeDisposable = new CompositeDisposable();
+        sharedPreferences = this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
 
-        recyclerView= (RecyclerView)v.findViewById(R.id.technical_event_recycler);
+        recyclerView = (RecyclerView)v.findViewById(R.id.technical_event_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         setupEventAdapter();
@@ -134,16 +132,16 @@ public class EventTechnicalTabFragment extends Fragment {
                     Intent eventDetailsIntent = new Intent(getActivity(), EventDetailsActivity.class);
                     eventDetailsIntent.putExtra("tabCode",0);
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
-                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_OBJECT,model);
+                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_CAT, "TECHNICAL_EVENTS");
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/TECHNICAL_EVENTS/"+eventId+".png");
 
                     startActivity(eventDetailsIntent);
                 });
 
                 Set<String> eventSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey,null);
-                final String token = sharedPreferences.getString(LoginActivity.spAccessTokenKey, "void");
+                final String sessionId = sharedPreferences.getString(LoginActivity.spSessionId, "void");
 
-                if(eventSet==null&&token.equals("void")) {
+                if(eventSet == null && sessionId.equals("void")) {
                     //holder.registerEvent.setEnabled(false);
                     holder.getRegisterEvent().setText("Login!");
                     holder.getRegisterEvent().setOnClickListener(v -> {
@@ -159,11 +157,13 @@ public class EventTechnicalTabFragment extends Fragment {
                 else {
                     holder.getRegisterEvent().setOnClickListener(v -> {
 
-                        //Toast.makeText(getContext(),""+eventId,Toast.LENGTH_LONG).show();
-                        final String token1 = sharedPreferences.getString(LoginActivity.spAccessTokenKey, "void");
                         //readUserData(eventId, token);
-                        final SslConfigurationManager sslConfigurationManager = new SslConfigurationManager();
-                        sslConfigurationManager.updateUserData(eventId, token1,getContext());
+                        final ApiRequestManager apiRequestManager = new ApiRequestManager(
+                                getContext().getApplicationContext(),
+                                compositeDisposable
+                        );
+
+                        apiRequestManager.updateUserData(eventId);
                     });
                 }
 
@@ -183,29 +183,14 @@ public class EventTechnicalTabFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -220,8 +205,11 @@ public class EventTechnicalTabFragment extends Fragment {
         adapter.stopListening();
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 }

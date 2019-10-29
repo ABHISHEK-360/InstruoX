@@ -25,7 +25,6 @@ import com.google.firebase.firestore.Query;
 
 
 public class ScheduleDayThreeFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
@@ -128,32 +127,13 @@ public class ScheduleDayThreeFragment extends Fragment {
         adapter.stopListening();
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-                throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

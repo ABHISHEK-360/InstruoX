@@ -25,7 +25,6 @@ import com.google.firebase.firestore.Query;
 
 
 public class ScheduleDayOneFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -51,30 +50,16 @@ public class ScheduleDayOneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_schedule_day_one, container, false);
 
-        recyclerView = (RecyclerView)v.findViewById(R.id.schedule_day1_recycler);
+        recyclerView = (RecyclerView) v.findViewById(R.id.schedule_day1_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         setupScheduleAdapter();
 
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-                throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     private void setupScheduleAdapter() {
@@ -83,15 +68,14 @@ public class ScheduleDayOneFragment extends Fragment {
         FirestoreRecyclerOptions<ScheduleAdapter> res = new FirestoreRecyclerOptions.Builder<ScheduleAdapter>()
                 .setQuery(q, ScheduleAdapter.class).build();
 
-        adapter = new FirestoreRecyclerAdapter<ScheduleAdapter, ScheduleAdapter.ScheduleViewHolder>(res)
-        {
+        adapter = new FirestoreRecyclerAdapter<ScheduleAdapter, ScheduleAdapter.ScheduleViewHolder>(res) {
             int lastPosition = -1;
+
             @NonNull
             @Override
             public ScheduleAdapter.ScheduleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 LayoutInflater inf = LayoutInflater.from(parent.getContext());
-
-                View view = inf.inflate(R.layout.schedule_view_holder,parent,false);
+                View view = inf.inflate(R.layout.schedule_view_holder, parent, false);
 
                 return new ScheduleAdapter.ScheduleViewHolder(view);
             }
@@ -100,20 +84,21 @@ public class ScheduleDayOneFragment extends Fragment {
             public void onError(@NonNull FirebaseFirestoreException e) {
                 super.onError(e);
                 Log.e("error", e.getMessage());
-                Toast.makeText(getContext(),""+e,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "" + e, Toast.LENGTH_LONG).show();
             }
 
             private void setAnimation(View viewToAnimate, int position) {
                 if (position > lastPosition) {
-                    int bais = position%2;
-                    Animation animation = AnimationUtils.loadAnimation(getContext(),R.anim.card_slide_left);;
+                    int bais = position % 2;
+                    Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.card_slide_left);
+                    ;
                     switch (bais) {
-                        case 0 :
-                            animation = AnimationUtils.loadAnimation(getContext(),R.anim.card_slide_left);
+                        case 0:
+                            animation = AnimationUtils.loadAnimation(getContext(), R.anim.card_slide_left);
                             break;
 
-                        case 1 :
-                            animation = AnimationUtils.loadAnimation(getContext(),R.anim.card_slide_left);
+                        case 1:
+                            animation = AnimationUtils.loadAnimation(getContext(), R.anim.card_slide_left);
                             break;
                     }
                     viewToAnimate.startAnimation(animation);
@@ -123,10 +108,10 @@ public class ScheduleDayOneFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull ScheduleAdapter.ScheduleViewHolder holder, int position, @NonNull ScheduleAdapter model) {
-                    setAnimation(holder.getScheduleCard(),position);
-                    holder.getNameScheduleTv().setText(""+model.getEvent());
-                    holder.getVenueScheduleTv().setText(""+model.getVenue());
-                    holder.getTimingScheduleTv().setText(""+model.getTiming());
+                setAnimation(holder.getScheduleCard(), position);
+                holder.getNameScheduleTv().setText("" + model.getEvent());
+                holder.getVenueScheduleTv().setText("" + model.getVenue());
+                holder.getTimingScheduleTv().setText("" + model.getTiming());
             }
         };
 
@@ -149,11 +134,5 @@ public class ScheduleDayOneFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }

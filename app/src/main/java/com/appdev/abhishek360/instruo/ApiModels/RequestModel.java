@@ -5,18 +5,8 @@ import java.util.Map;
 
 public class RequestModel {
     private String requestAction;
-
     private Map<String,String> requestParameters = new HashMap<>();
-    // private String requestParameteres=null;
-
-
     private Map<String,String> requestData= new HashMap<>();
-
-
-    //private Map<String,String> requestMetaData= new HashMap<>();
-    private String requestMetaData=null;
-
-
 
     public void setRequestAction(String requestAction)
     {
@@ -33,8 +23,4 @@ public class RequestModel {
         requestData.put(key,val);
     }
 
-    public void setRequestMetaData(String key, String val)
-    {
-        //requestMetaData.put(key,val);
-    }
 }

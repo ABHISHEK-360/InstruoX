@@ -20,6 +20,8 @@ public interface ApiServices {
     Single<LoginResponse> postRegister(@Body RequestModel requestModel);
     @POST("user/forgotPassword")
     Single<LoginResponse> postForgotPassword(@Body RequestModel requestModel);
+    @POST("user/forgotPassword")
+    Single<LoginResponse> postUpdateProfile(@Body RequestModel requestModel);
 
     @GET("user/profile")
     Single<UserProfileModel> getUserProfile();

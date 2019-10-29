@@ -9,7 +9,7 @@ import com.appdev.abhishek360.instruo.EventTabFragments.ExhibitionsTabFragment;
 import com.appdev.abhishek360.instruo.EventTabFragments.GamingTabFragment;
 import com.appdev.abhishek360.instruo.EventTabFragments.NonGenericTabFragment;
 import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
-import com.appdev.abhishek360.instruo.EventTabFragments.EventTechnicalTabFragment;
+import com.appdev.abhishek360.instruo.EventTabFragments.TechnicalTabFragment;
 import com.appdev.abhishek360.instruo.EventTabFragments.WorkshopTabFragment;
 import com.appdev.abhishek360.instruo.R;
 import com.bumptech.glide.Glide;
@@ -29,19 +29,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 
-public class EventsFragment extends Fragment implements EventTechnicalTabFragment.OnFragmentInteractionListener, AutomatonTabFragment.OnFragmentInteractionListener
-                                                            , GamingTabFragment.OnFragmentInteractionListener, ExhibitionsTabFragment.OnFragmentInteractionListener {
+public class EventsFragment extends Fragment {
     private TabLayout tabs;
     private ImageView imageView;
     int tabCode=0;
     private FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
     private StorageReference storageReference;
-
-    private OnFragmentInteractionListener mListener;
-
-    public EventsFragment() {
-        // Required empty public constructor
-    }
 
     public static EventsFragment newInstance(String param1, String param2) {
         EventsFragment fragment = new EventsFragment();
@@ -79,27 +72,27 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0 :
-                        storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
+                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
                         break;
 
                     case 1 :
-                        storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/automaton_poster.jpeg" );
+                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/automaton_poster.jpeg" );
                         break;
 
                     case 2 :
-                        storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/non_generic_poster.jpeg" );
+                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/non_generic_poster.jpeg" );
                         break;
 
                     case 3 :
-                        storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
+                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
                         break;
 
                     case 4 :
-                        storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
+                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
                         break;
 
                     case 5 :
-                        storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
+                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
                         break;
                 }
 
@@ -134,7 +127,7 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
     private void SetUpViewPager(ViewPager viewPager) {
         EventPagerAdapter adapter = new EventPagerAdapter(getFragmentManager(),6);
 
-        adapter.AddFragmentPage(new EventTechnicalTabFragment(),"Technical");
+        adapter.AddFragmentPage(new TechnicalTabFragment(),"Technical");
         adapter.AddFragmentPage(new AutomatonTabFragment(),"Automaton");
         adapter.AddFragmentPage(new NonGenericTabFragment(),"Non Generic");
         adapter.AddFragmentPage(new GamingTabFragment(),"Gaming");
@@ -144,39 +137,13 @@ public class EventsFragment extends Fragment implements EventTechnicalTabFragmen
         viewPager.setAdapter(adapter);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

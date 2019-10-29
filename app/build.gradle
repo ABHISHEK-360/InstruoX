@@ -20,8 +20,8 @@ android {
         applicationId "com.appdev.abhishek360.instruo"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 312
-        versionName "2.0.1"
+        versionCode 313
+        versionName '2.0.2'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -73,8 +73,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
 
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.mcxiaoke.volley:library:1.0.19'
-    implementation 'com.github.mklimek:ssl-utils-android:1.0.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
@@ -98,4 +96,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:21.2.0'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
+
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 }

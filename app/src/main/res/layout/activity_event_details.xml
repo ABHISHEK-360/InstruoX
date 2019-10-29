@@ -8,6 +8,13 @@
     tools:context=".EventDetailsActivity"
     android:orientation="vertical">
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="100dp"
+        android:id="@+id/event_details_progressbar"
+        android:visibility="visible"/>
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

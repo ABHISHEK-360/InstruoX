@@ -3,7 +3,6 @@ package com.appdev.abhishek360.instruo.EventTabFragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,7 +21,7 @@ import com.appdev.abhishek360.instruo.EventDetailsActivity;
 import com.appdev.abhishek360.instruo.ViewHolders.EventViewHolder;
 import com.appdev.abhishek360.instruo.LoginActivity;
 import com.appdev.abhishek360.instruo.R;
-import com.appdev.abhishek360.instruo.SslConfigurationManager;
+import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -37,9 +36,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Set;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 
 public class NonGenericTabFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
@@ -48,6 +48,7 @@ public class NonGenericTabFragment extends Fragment {
     private FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
 
     private SharedPreferences sharedPreferences;
+    private CompositeDisposable compositeDisposable;
 
     public static NonGenericTabFragment newInstance(String param1, String param2) {
         NonGenericTabFragment fragment = new NonGenericTabFragment();
@@ -71,10 +72,11 @@ public class NonGenericTabFragment extends Fragment {
 
         View v =inflater.inflate(R.layout.fragment_event_non_generic_tab, container, false);
 
-        sharedPreferences=this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
+        compositeDisposable = new CompositeDisposable();
+        sharedPreferences = this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
 
         //progressBar=(ProgressBar)v.findViewById(R.id.nongeneric_event_progressbar);
-        recyclerView= (RecyclerView)v.findViewById(R.id.nongeneric_event_recycler);
+        recyclerView = (RecyclerView)v.findViewById(R.id.nongeneric_event_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         setupEventAdapter();
 
@@ -128,40 +130,39 @@ public class NonGenericTabFragment extends Fragment {
                 holder.getTiming().setText("Time: "+model.getTIME());
                 holder.getCardView().setOnClickListener(v -> {
                     Intent eventDetailsIntent = new Intent(getActivity(), EventDetailsActivity.class);
-                    //eventDetailsIntent.putExtra("tabCode",0);
-                    //eventDetailsIntent.putExtra("eventName",model.getTITLE());
-                    //eventDetailsIntent.putExtra("eventId",eventId);
 
-                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_OBJECT,model);
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
-
+                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_CAT, "NON_GENERIC_EVENTS");
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/NON_GENERIC_EVENTS/"+eventId+".png");
 
                     startActivity(eventDetailsIntent);
                 });
 
                 Set<String> eventSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey,null);
-                final String token = sharedPreferences.getString(LoginActivity.spAccessTokenKey, "void");
+                final String sessionId = sharedPreferences.getString(LoginActivity.spSessionId, "void");
 
                 //Toast.makeText(getContext(),""+eventId+"Set:"+eventSet,Toast.LENGTH_LONG).show();
 
-                if(eventSet==null&&token.equals("void")) {
+                if(eventSet == null && sessionId.equals("void")) {
                     holder.getRegisterEvent().setText("Login!");
                     holder.getRegisterEvent().setOnClickListener(v -> {
                         Intent loginIntent = new Intent(getActivity(),LoginActivity.class);
                         startActivity(loginIntent);
                     });
                 }
-                else if (eventSet!=null&&eventSet.contains(eventId)) {
+                else if (eventSet != null && eventSet.contains(eventId)) {
                     holder.getRegisterEvent().setEnabled(false);
                     holder.getRegisterEvent().setText("Registered");
                 }
                 else {
                     holder.getRegisterEvent().setOnClickListener(v -> {
                         //Toast.makeText(getContext(),""+eventId,Toast.LENGTH_LONG).show();
-                        final SslConfigurationManager sslConfigurationManager = new SslConfigurationManager();
+                        final ApiRequestManager apiRequestManager = new ApiRequestManager(
+                                getContext().getApplicationContext(),
+                                compositeDisposable
+                        );
 
-                        sslConfigurationManager.updateUserData(eventId, token,getContext());
+                        apiRequestManager.updateUserData(eventId);
                     });
                 }
                 try {
@@ -183,33 +184,19 @@ public class NonGenericTabFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
         adapter.startListening();
     }
 
@@ -219,8 +206,11 @@ public class NonGenericTabFragment extends Fragment {
         adapter.stopListening();
     }
 
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 }

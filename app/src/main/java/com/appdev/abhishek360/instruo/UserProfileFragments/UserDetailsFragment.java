@@ -7,9 +7,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.appdev.abhishek360.instruo.ApiModels.RequestModel;
 import com.appdev.abhishek360.instruo.LoginActivity;
 import com.appdev.abhishek360.instruo.R;
-import com.appdev.abhishek360.instruo.SslConfigurationManager;
+import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
 import com.appdev.abhishek360.instruo.jsonRequestAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.fragment.app.Fragment;
@@ -25,6 +26,8 @@ import net.glxn.qrgen.android.QRCode;
 
 import java.util.ArrayList;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public class UserDetailsFragment extends Fragment {
     private ArrayList<String> personalDetails;
     private EditText fullName,emailId,contactNo,college;
@@ -32,17 +35,14 @@ public class UserDetailsFragment extends Fragment {
     private Button editDetails;
     private Button updatedetails,changePass;
     private ImageView qrCode_imageview;
-    private SslConfigurationManager sslConfigurationManager;
-    private SharedPreferences sharedPreferences;
-    private String tokenId;
+    private ApiRequestManager apiRequestManager;
     private Dialog myDialog;
-
-    private OnFragmentInteractionListener mListener;
+    private CompositeDisposable compositeDisposable;
 
     public static UserDetailsFragment newInstance(ArrayList<String> accountDetails) {
         UserDetailsFragment fragment = new UserDetailsFragment();
         Bundle args = new Bundle();
-        args.putStringArrayList("accountDetails",accountDetails);
+        args.putStringArrayList("accountDetails", accountDetails);
 
         fragment.setArguments(args);
         return fragment;
@@ -62,22 +62,20 @@ public class UserDetailsFragment extends Fragment {
 
         View v=inflater.inflate(R.layout.fragment_personal_details, container, false);
 
-        fullName=(EditText) v.findViewById(R.id.personal_details_edit_name);
-        emailId=(EditText) v.findViewById(R.id.personal_details_edit_email);
-        contactNo=(EditText) v.findViewById(R.id.personal_details_edit_contact);
-        editDetails=(Button)v.findViewById(R.id.myprofile_button_edit_details);
-        updatedetails=v.findViewById(R.id.myprofile_button_save_changes);
-        changePass=v.findViewById(R.id.myprofile_button_change_pass);
-        oldPass=v.findViewById(R.id.personal_details_edit_oldpass);
-        newPass=v.findViewById(R.id.personal_details_edit_newpass);
-        conNewPass=v.findViewById(R.id.personal_details_edit_confnewpass);
-        college=v.findViewById(R.id.personal_details_edit_college);
-        qrCode_imageview=v.findViewById(R.id.personal_details_qr_code);
-        myDialog= new Dialog(this.getContext());
-        sslConfigurationManager=new SslConfigurationManager();
-
-        sharedPreferences=this.getActivity().getSharedPreferences(LoginActivity.spKey,Context.MODE_PRIVATE);
-        tokenId=sharedPreferences.getString(LoginActivity.spAccessTokenKey,"void");
+        compositeDisposable = new CompositeDisposable();
+        fullName = (EditText) v.findViewById(R.id.personal_details_edit_name);
+        emailId = (EditText) v.findViewById(R.id.personal_details_edit_email);
+        contactNo = (EditText) v.findViewById(R.id.personal_details_edit_contact);
+        editDetails = (Button)v.findViewById(R.id.myprofile_button_edit_details);
+        updatedetails = v.findViewById(R.id.myprofile_button_save_changes);
+        changePass = v.findViewById(R.id.myprofile_button_change_pass);
+        oldPass = v.findViewById(R.id.personal_details_edit_oldpass);
+        newPass = v.findViewById(R.id.personal_details_edit_newpass);
+        conNewPass = v.findViewById(R.id.personal_details_edit_confnewpass);
+        college = v.findViewById(R.id.personal_details_edit_college);
+        qrCode_imageview = v.findViewById(R.id.personal_details_qr_code);
+        myDialog = new Dialog(this.getContext());
+        apiRequestManager = new ApiRequestManager(getContext().getApplicationContext(), compositeDisposable);
 
         fullName.setText(personalDetails.get(0));
         emailId.setText(personalDetails.get(1));
@@ -94,19 +92,18 @@ public class UserDetailsFragment extends Fragment {
         });
 
         updatedetails.setOnClickListener(v12 -> {
-            jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+            RequestModel profileUpdateReq = new RequestModel();
 
-            jsonRequestAdapter.setRequestAction("UPDATE");
-            jsonRequestAdapter.setRequestData("userName",fullName.getText().toString());
-            jsonRequestAdapter.setRequestData("contact",contactNo.getText().toString());
+            profileUpdateReq.setRequestAction("UPDATE");
+            profileUpdateReq.setRequestData("userName",fullName.getText().toString());
+            profileUpdateReq.setRequestData("contact",contactNo.getText().toString());
 
-            jsonRequestAdapter.setRequestParameteres("filter","id");
-            sslConfigurationManager.updateUserData(jsonRequestAdapter,tokenId,getActivity());
+            profileUpdateReq.setRequestParameteres("filter","id");
+            apiRequestManager.updateUserData(profileUpdateReq);
 
         });
 
         changePass.setOnClickListener(v13 -> {
-
             String pass_str = newPass.getText().toString();
             String conPass_str=conNewPass.getText().toString();
             if(pass_str.isEmpty())
@@ -116,13 +113,13 @@ public class UserDetailsFragment extends Fragment {
             else if(!pass_str.equals(conPass_str))
                 Toast.makeText(getActivity(),"New Password Not Matched!",Toast.LENGTH_LONG).show();
             else {
-                jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
+                RequestModel passUpdateReq = new RequestModel();
 
-                jsonRequestAdapter.setRequestAction("UPDATE");
-                jsonRequestAdapter.setRequestData("password",pass_str);
+                passUpdateReq.setRequestAction("UPDATE");
+                passUpdateReq.setRequestData("password",pass_str);
 
-                jsonRequestAdapter.setRequestParameteres("filter","id");
-                sslConfigurationManager.updateUserData(jsonRequestAdapter,tokenId,getActivity());
+                passUpdateReq.setRequestParameteres("filter","id");
+                apiRequestManager.updateUserData(passUpdateReq);
             }
         });
 
@@ -142,32 +139,21 @@ public class UserDetailsFragment extends Fragment {
         closeBtn.setOnClickListener(v -> myDialog.dismiss());
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 }

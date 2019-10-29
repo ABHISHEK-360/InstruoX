@@ -43,8 +43,6 @@ public class ResultFragment extends Fragment {
     private TextView default_text;
     private String eventId;
 
-    private OnFragmentInteractionListener mListener;
-
     public static ResultFragment newInstance(String eventId) {
         ResultFragment fragment = new ResultFragment();
         Bundle args = new Bundle();
@@ -199,28 +197,14 @@ public class ResultFragment extends Fragment {
 
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     public void onStart() {
@@ -232,11 +216,5 @@ public class ResultFragment extends Fragment {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,6 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 public class AboutFragment extends Fragment implements YouTubePlayer.OnInitializedListener {
-    private OnFragmentInteractionListener mListener;
-
     public static AboutFragment newInstance(String param1, String param2) {
         AboutFragment fragment = new AboutFragment();
         Bundle args = new Bundle();
@@ -65,31 +65,6 @@ public class AboutFragment extends Fragment implements YouTubePlayer.OnInitializ
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if(!b) {
@@ -100,11 +75,17 @@ public class AboutFragment extends Fragment implements YouTubePlayer.OnInitializ
 
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
-
+        Log.e("YOUTUBE_PLAY_INIT_ERROR","FAILED"+youTubeInitializationResult);
     }
 
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 }

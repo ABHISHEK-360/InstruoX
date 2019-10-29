@@ -35,8 +35,6 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             if (sessionId!=null) {
                 Intent in = new Intent(getApplicationContext(), HomeActivity.class);
-                in.putExtra("name", fullName);
-                in.putExtra("email", email);
                 startActivity(in);
                 finish();
             }

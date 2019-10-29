@@ -22,8 +22,6 @@ public class RulesFragment extends Fragment {
     private TextView eventRound1_textview,eventRound2_textview,eventRound3_textview;
     private EventAdapter eventDetails;
 
-    private OnFragmentInteractionListener mListener;
-
     public static RulesFragment newInstance(EventAdapter adapter) {
         RulesFragment fragment = new RulesFragment();
         Bundle args = new Bundle();
@@ -61,33 +59,13 @@ public class RulesFragment extends Fragment {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

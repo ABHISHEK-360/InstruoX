@@ -11,12 +11,6 @@ import android.view.ViewGroup;
 import com.appdev.abhishek360.instruo.R;
 
 public class ExhibitionsTabFragment extends Fragment {
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
     public static ExhibitionsTabFragment newInstance(String param1, String param2) {
         ExhibitionsTabFragment fragment = new ExhibitionsTabFragment();
         Bundle args = new Bundle();
@@ -40,32 +34,13 @@ public class ExhibitionsTabFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_event_exibitions_tab, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }

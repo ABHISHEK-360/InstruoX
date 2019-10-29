@@ -1,8 +1,8 @@
 package com.appdev.abhishek360.instruo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 
 import com.appdev.abhishek360.instruo.Adapters.EventAdapter;
 import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
@@ -10,124 +10,163 @@ import com.appdev.abhishek360.instruo.EventDetailsFragments.CoordinatorFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.DescriptionFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.ResultFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.RulesFragment;
+import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class EventDetailsActivity extends AppCompatActivity implements DescriptionFragment.OnFragmentInteractionListener, RulesFragment.OnFragmentInteractionListener
-                                                                            , CoordinatorFragment.OnFragmentInteractionListener, ResultFragment.OnFragmentInteractionListener
-{
+import io.reactivex.disposables.CompositeDisposable;
+
+public class EventDetailsActivity extends AppCompatActivity {
     private TabLayout tabs;
     private int tabCode=0;
-    private String eventName_str="Instruo Event",eventTime_str,eventVenue_str,eventDesc_str,eventRules_str,eventCoordinators_str,eventPrize_str,eventFee_str;;
-    private String eventId,posterRef_str;
+    private String eventName_str="Instruo Event";
+    private String eventId, posterRef_str, eventCat;
     private TextView title_textview;
     private ImageView poster_image;
     private SharedPreferences sharedPreferences;
-    final public static String KEY_EVENT_OBJECT="eventDetails",KEY_POSTER_REF="posterRef",KEY_EVENT_ID="eventId";
+    final public static String KEY_EVENT_OBJECT = "eventDetails", KEY_POSTER_REF = "posterRef", KEY_EVENT_ID = "eventId", KEY_EVENT_CAT = "eventCat";
     private FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
     private EventAdapter eventDetails;
+    private CompositeDisposable compositeDisposable;
+    private FirebaseFirestore db;
+    private ViewPager vp;
+    private ProgressBar progressBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
 
-        title_textview=(TextView)findViewById(R.id.event_details_title);
-
-        sharedPreferences=getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+        db = FirebaseFirestore.getInstance();
+        compositeDisposable = new CompositeDisposable();
+        title_textview = (TextView)findViewById(R.id.event_details_title);
+        sharedPreferences = getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
         tabs = (TabLayout)findViewById(R.id.event_details_tab_layout);
-        poster_image=(ImageView)findViewById(R.id.htab_header);
+        poster_image = (ImageView)findViewById(R.id.htab_header);
+        progressBar = findViewById(R.id.event_details_progressbar);
 
         Intent i = getIntent();
-        eventDetails = (EventAdapter) i.getParcelableExtra(KEY_EVENT_OBJECT);
-        //Bundle bundle= getIntent().getExtras();
+        eventDetails = new EventAdapter();
+        //eventDetails = (EventAdapter) i.getParcelableExtra(KEY_EVENT_OBJECT);
+        eventId = i.getStringExtra(KEY_EVENT_ID);
+        eventCat = i.getStringExtra(KEY_EVENT_CAT);
+        getEventDetails(eventId);
 
-        eventName_str=eventDetails.getTITLE();
-        eventTime_str=eventDetails.getTIME();
-
-        eventCoordinators_str=eventDetails.getCOORDINATORS();
-        eventPrize_str=eventDetails.getPRIZE_MONEY();
-        eventFee_str=eventDetails.getREG_FEE();
-
-        eventId=i.getExtras().getString("eventId","myEvent");
-        posterRef_str=i.getExtras().getString(KEY_POSTER_REF);
+        eventId = i.getExtras().getString("eventId","myEvent");
+        posterRef_str = i.getExtras().getString(KEY_POSTER_REF);
 
         StorageReference storageReference=  firebaseStorage.getReference().child(posterRef_str);
 
         Glide.with(this).using(new FirebaseImageLoader()).load(storageReference)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(poster_image);
 
-        title_textview.setText(eventName_str);
-
-        //tabCode= this.getArguments().getInt("tCode");
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.event_details_action_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        final ViewPager vp = (ViewPager)findViewById(R.id.event_details_pager);
+        vp = (ViewPager)findViewById(R.id.event_details_pager);
 
         tabs.setupWithViewPager(vp);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         // vp.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp));
-        SetUpViewPager(vp);
 
         vp.setCurrentItem(tabCode);
     }
 
-    public void registerEvent(View v)
-    {
-        final SslConfigurationManager sslConfigurationManager = new SslConfigurationManager();
-        String token=sharedPreferences.getString(LoginActivity.spAccessTokenKey,"void");
+    private void renderEventHeaders(){
+        eventName_str = eventDetails.getTITLE();
+        title_textview.setText(eventName_str);
+    }
 
-        if(token.equals("void"))
-            Toast.makeText(this,"Please SignIn to Participate in events!",Toast.LENGTH_LONG).show();
+    public void registerEvent(View v) {
+        final ApiRequestManager apiRequestManager = new ApiRequestManager(getApplicationContext(), compositeDisposable);
+        String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,"void");
 
-        else  sslConfigurationManager.updateUserData(eventId, token,getBaseContext());
+        if(sessionId.equals("void"))
+            Toast.makeText(this,"Please, Sign up to Participate in Events!", Toast.LENGTH_LONG).show();
+
+        else
+            apiRequestManager.updateUserData(eventId);
+    }
+
+    private void getEventDetails(String eventId){
+        db.collection("/EVENTS_INSTRUO/"+eventCat+"/EVENTS").document(eventId)
+            .get()
+            .addOnSuccessListener( document -> {
+                    if(document.exists()) {
+                        eventDetails = document.toObject(EventAdapter.class);
+                        progressBar.setVisibility(View.GONE);
+                        renderEventHeaders();
+                        SetUpViewPager(vp);
+                        Log.d("EVENT_DETAILS_RES", document.getData().toString());
+                    }
+                    else{
+                        Log.d("EVENT_DETAILS_FAILED", "event not found!");
+                        tosty("Try Again!, Failed to load details.");
+                        finish();
+                    }
+
+            })
+            .addOnFailureListener( error -> {
+                Log.e("EVENT_DETAILS_ERROR",""+error);
+                tosty("Try Again!, Failed to load details.");
+                finish();
+            });
 
     }
 
 
-    public void SetUpViewPager(ViewPager viewPager)
-    {
-        EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(),4);
-
-        adapter.AddFragmentPage(DescriptionFragment.newInstance(eventDetails,eventId),"Description");
-        adapter.AddFragmentPage(RulesFragment.newInstance(eventDetails),"Rules");
-        adapter.AddFragmentPage(CoordinatorFragment.newInstance(eventDetails),"Event Coordinators");
-        adapter.AddFragmentPage(ResultFragment.newInstance(eventId),"Results");
-
-
+    public void SetUpViewPager(ViewPager viewPager) {
+        EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(), 4);
+        adapter.AddFragmentPage(DescriptionFragment.newInstance(eventDetails, eventId),"Description");
+        adapter.AddFragmentPage(RulesFragment.newInstance(eventDetails), "Rules");
+        adapter.AddFragmentPage(CoordinatorFragment.newInstance(eventDetails), "Event Coordinators");
+        adapter.AddFragmentPage(ResultFragment.newInstance(eventId), "Results");
 
         viewPager.setAdapter(adapter);
     }
 
-    public boolean onSupportNavigateUp()
-    {
+    public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri)
-    {
+    private void tosty(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    protected void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 }

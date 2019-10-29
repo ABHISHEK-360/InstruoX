@@ -28,7 +28,6 @@ public class ScheduleDayTwoFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirestoreRecyclerAdapter adapter;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private OnFragmentInteractionListener mListener;
 
     public static ScheduleDayTwoFragment newInstance(String param1, String param2){
         ScheduleDayTwoFragment fragment = new ScheduleDayTwoFragment();
@@ -125,31 +124,13 @@ public class ScheduleDayTwoFragment extends Fragment {
         adapter.stopListening();
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        }
-        else {
-                throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
-    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
     }
 }
