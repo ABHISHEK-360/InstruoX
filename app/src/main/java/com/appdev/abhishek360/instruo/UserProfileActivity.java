@@ -225,37 +225,37 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
                 .getUserProfile();
 
         res.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<UserProfileModel>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<UserProfileModel>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
 
-                    @Override
-                    public void onSuccess(UserProfileModel res) {
-                        Log.d("USER_EVENTS_API_RES", res.getName());
+                @Override
+                public void onSuccess(UserProfileModel res) {
+                    Log.d("USER_EVENTS_API_RES", res.getName());
 
-                        accountDetails.add(res.getName());
-                        accountDetails.add(res.getEmail());
-                        accountDetails.add(res.getCollege());
-                        accountDetails.add(res.getContact());
+                    accountDetails.add(res.getName());
+                    accountDetails.add(res.getEmail());
+                    accountDetails.add(res.getCollege());
+                    accountDetails.add(res.getContact());
 
-                        spEditor = sharedPreferences.edit();
-                        spEditor.putString(spFullNameKey, res.getName());
-                        spEditor.putString(spEmailKey, res.getEmail());
-                        spEditor.apply();
+                    spEditor = sharedPreferences.edit();
+                    spEditor.putString(spFullNameKey, res.getName());
+                    spEditor.putString(spEmailKey, res.getEmail());
+                    spEditor.apply();
 
-                        progressBar.setVisibility(View.GONE);
-                        SetUpViewPager(vp);
-                    }
+                    progressBar.setVisibility(View.GONE);
+                    SetUpViewPager(vp);
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("USER_EVENTS_API_ERROR", "Failed", e);
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
+                @Override
+                public void onError(Throwable e) {
+                    Log.e("USER_EVENTS_API_ERROR", "Failed", e);
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
 
 //        HurlStack hurlStack = new HurlStack()
 //        {

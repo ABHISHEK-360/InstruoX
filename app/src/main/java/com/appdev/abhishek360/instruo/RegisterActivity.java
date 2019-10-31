@@ -14,9 +14,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
-import com.appdev.abhishek360.instruo.ApiModels.RequestModel;
 import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
 import com.appdev.abhishek360.instruo.Services.ApiServices;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
@@ -24,6 +29,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
+import retrofit2.Converter;
+import retrofit2.HttpException;
+import retrofit2.Response;
 
 import static com.appdev.abhishek360.instruo.LoginActivity.tosty;
 
@@ -139,14 +148,12 @@ public class RegisterActivity extends AppCompatActivity {
         alert.setCancelable(false);
         alert.show();
 
-        RequestModel registerRequest = new RequestModel();
-
-        registerRequest.setRequestData("username", username);
-        registerRequest.setRequestData("name", name);
-        registerRequest.setRequestData("college", college);
-        registerRequest.setRequestData("contact", contact);
-        registerRequest.setRequestData("email", email);
-        registerRequest.setRequestData("password", pswd);
+        Map<String, String> registerRequest = new HashMap<>();
+        registerRequest.put("name", name);
+        registerRequest.put("college", college);
+        registerRequest.put("contact", contact);
+        registerRequest.put("email", email);
+        registerRequest.put("password", pswd);
 
         Single<LoginResponse> res = apiService
                 .postRegister(registerRequest);
@@ -175,6 +182,26 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onError(Throwable e) {
                         Log.e("REGISTER_API_ERROR:", "Failed", e);
+                        if (e instanceof HttpException) {
+                            int errorCode = ((HttpException) e).code();
+                            Response res = ((HttpException) e).response();
+                            ResponseBody body = res.errorBody();
+                            Gson gson = new Gson();
+                            TypeAdapter<LoginResponse> adapter = gson.getAdapter(LoginResponse.class);
+
+                            String msg = "";
+                            try {
+                                LoginResponse errorParser = adapter.fromJson(body.string());
+                                msg = errorParser.getMsg();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+
+                            if (errorCode == 400) {
+                                tosty(RegisterActivity.this,"Register Error: " + msg);
+                            }
+                        }
+                        //tosty(RegisterActivity.this, "Failed, Try Again");
                         reg_progressBar.setVisibility(View.GONE);
                         alert.cancel();
                     }

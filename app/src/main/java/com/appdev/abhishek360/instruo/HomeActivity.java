@@ -140,10 +140,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if(name.equals("alpha")&&email.equals("alpha@base")) {
+        if(sessionId == null) {
             inflater.inflate(R.menu.dot_menu_or, menu);
         }
-        else inflater.inflate(R.menu.dot_menu,menu);
+        else
+            inflater.inflate(R.menu.dot_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -130,7 +130,7 @@ public class AutomatonTabFragment extends Fragment {
                 holder.getCardView().setOnClickListener(v -> {
                     Intent eventDetailsIntent = new Intent(getActivity(), EventDetailsActivity.class);
                     eventDetailsIntent.putExtra("tabCode",0);
-                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID,eventId);
+                    eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_ID, eventId);
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_EVENT_CAT, "AUTOMATON_EVENTS");
                     eventDetailsIntent.putExtra(EventDetailsActivity.KEY_POSTER_REF,"/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
 
@@ -159,7 +159,7 @@ public class AutomatonTabFragment extends Fragment {
                                 compositeDisposable
                         );
 
-                        apiRequestManager.updateUserData(eventId);
+                        apiRequestManager.registerEvent(eventId);
                     });
                 }
 

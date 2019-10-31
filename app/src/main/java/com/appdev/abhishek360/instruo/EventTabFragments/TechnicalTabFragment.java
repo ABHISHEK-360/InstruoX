@@ -163,7 +163,7 @@ public class TechnicalTabFragment extends Fragment {
                                 compositeDisposable
                         );
 
-                        apiRequestManager.updateUserData(eventId);
+                        apiRequestManager.registerEvent(eventId);
                     });
                 }
 

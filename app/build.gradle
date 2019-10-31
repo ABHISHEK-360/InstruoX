@@ -20,23 +20,26 @@ android {
         applicationId "com.appdev.abhishek360.instruo"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 313
-        versionName '2.0.2'
+        versionCode 315
+        versionName '2.0.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         debug {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "YouTubeApiKey", YOUTUBE_API_KEY
             buildConfigField 'String', "TrailerVideoCode", YOUTUBE_TRAILER_VIDEO_CODE
         }
         release {
             minifyEnabled true
             shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "YouTubeApiKey", YOUTUBE_API_KEY
             buildConfigField 'String', "TrailerVideoCode", YOUTUBE_TRAILER_VIDEO_CODE
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -90,10 +93,10 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:4.1.0'
     implementation 'com.firebaseui:firebase-ui-storage:1.2.0'
 
-    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-core:17.2.1'
     implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.1'
     implementation "com.google.firebase:firebase-messaging:20.0.0"
-    implementation 'com.google.firebase:firebase-firestore:21.2.0'
+    implementation 'com.google.firebase:firebase-firestore:21.2.1'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.google.firebase:firebase-auth:19.1.0'
 

@@ -15,9 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appdev.abhishek360.instruo.ApiModels.CredModel;
 import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
-import com.appdev.abhishek360.instruo.ApiModels.RequestModel;
 import com.appdev.abhishek360.instruo.ApiModels.UserProfileModel;
 import com.appdev.abhishek360.instruo.Services.AlertService;
 import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
@@ -32,6 +30,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Single;
@@ -194,9 +195,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void resetPassword(final String email) {
-
-        RequestModel registerRequest = new RequestModel();
-        registerRequest.setRequestData("email", email);
+        Map<String, String> registerRequest = new HashMap<>();
+        registerRequest.put("email", email);
 
         Single<LoginResponse> res = apiService
                 .postForgotPassword(registerRequest);
@@ -236,8 +236,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void logIn(final String email, final String pswd) {
+        Map<String, String> loginRequest = new HashMap<>();
+        loginRequest.put("email", email);
+        loginRequest.put("password", pswd);
+
         Single<LoginResponse> res = apiService
-                .postLoginCred(new CredModel(email, pswd));
+                .postLoginCred(loginRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -250,10 +254,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResponse loginResponse) {
                         if (loginResponse.getSuccess()) {
-                            String accessToken = loginResponse.getAccessToken();
                             tosty(getApplicationContext(), loginResponse.getMsg());
 
-                            if (!accessToken.isEmpty()) readUserData(accessToken);
+                            readUserData();
                         } else {
                             tosty(getApplicationContext(), "LogIn Failed: " + loginResponse.getMsg());
                             progressBar.setVisibility(View.GONE);
@@ -277,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void readUserData(final String token) {
+    public void readUserData() {
         Single<UserProfileModel> res = apiService
                 .getUserProfile();
 
@@ -296,6 +299,41 @@ public class LoginActivity extends AppCompatActivity {
                         spEditor.putString(spEmailKey, res.getEmail());
                         spEditor.apply();
 
+                        readRegEvents();
+
+//                        progressBar.setVisibility(View.GONE);
+//                        myDailog.cancel();
+//
+//                        Intent in = new Intent(LoginActivity.this, HomeActivity.class);
+//                        startActivity(in);
+//                        finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("PROFILE_API_ERROR", "Failed", e);
+                        progressBar.setVisibility(View.GONE);
+                        signIn.setEnabled(true);
+                    }
+                });
+    }
+
+    public void readRegEvents() {
+        Single<ArrayList> res = apiService
+                .getRegEvents();
+
+        res.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ArrayList>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ArrayList res) {
+                        Log.d("REG_EVENTS_RES", "" + res);
+
                         progressBar.setVisibility(View.GONE);
                         myDailog.cancel();
 
@@ -306,7 +344,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("PROFILE_API_ERROR", "Failed", e);
+                        Log.e("REG_EVENTS_ERROR", "Failed", e);
                         progressBar.setVisibility(View.GONE);
                         signIn.setEnabled(true);
                     }

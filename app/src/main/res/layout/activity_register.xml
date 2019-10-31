@@ -1,227 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@drawable/gradient_color"
-    android:layout_width="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RegisterActivity"
+    >
 
-    tools:context=".RegisterActivity">
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_margin="10dp">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/reg_profilePic_imageview"
-            android:layout_width="150dp"
-            android:layout_height="180dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_new_instruo_logo"
-             />
-    </RelativeLayout>
-
-
-
-    <TextView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/background"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:textSize="24sp"
-        android:padding="10dp"
-        android:fontFamily="@font/nunito_regular"
+        android:orientation="vertical">
 
-        android:text="INSTRUO-2018"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        >
-
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/reg_userName_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Desired User Name!"
-        android:textColorHint="@color/background_white"
-
-        android:textColor="@color/background_white"
-
-        android:inputType="textPersonName"
-
-         />
-
-    </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:id="@+id/reg_profilePic_imageview"
+                android:layout_width="150dp"
+                android:layout_height="180dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_new_instruo_logo" />
+        </RelativeLayout>
 
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        >
-
-
-
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/reg_email_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Email Id"
-        android:textColor="@color/background_white"
-        android:textColorHint="@color/background_white"
-
-        android:inputType="textEmailAddress"
-
-        />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/reg_college_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:textColor="@color/background_white"
-        android:textColorHint="@color/background_white"
-
-        android:hint="Your College(Full Name)"
-        android:inputType="text"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/reg_phone_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:maxLength="10"
-        android:textColorHint="@color/background_white"
-
-        android:textColor="@color/background_white"
-
-        android:hint="Phone Number"
-        android:inputType="phone" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <ProgressBar
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:id="@+id/reg_progressbar"/>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/reg_fullName_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Full Name"
-        android:textColor="@color/background_white"
-
-        android:textColorHint="@color/background_white"
-
-        android:inputType="textPersonName"
-
-        />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/reg_password_edittext"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/background_white"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/instruo_name"
+            android:textColor="@color/background"
+            android:textSize="24sp" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_userName_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Desired User Name!"
+                android:inputType="textPersonName"
+
+                android:textColor="@color/background_white"
+
+                android:textColorHint="@color/background_white"
+
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_email_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email Id"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/background_white"
+                android:textColorHint="@color/background_white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_college_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Your College(Full Name)"
+                android:inputType="text"
+                android:textColor="@color/background_white"
+                android:textColorHint="@color/background_white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_phone_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:maxLength="10"
+
+                android:textColor="@color/background_white"
+                android:textColorHint="@color/background_white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ProgressBar
+            android:id="@+id/reg_progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_fullName_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:textColor="@color/background_white"
+                android:textColorHint="@color/background_white"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:textColor="@color/background_white"
+                android:textColorHint="@color/background_white" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id = "@+id/reg_confpassword_edittext"
+                android:layout_width = "match_parent"
+                android:layout_height = "wrap_content"
+                android:ems = "10"
+                android:hint = "Confirm Password"
+                android:inputType = "textPassword"
+                android:maxLength = "20"
+                android:textColor = "@color/background_white"
+                android:textColorHint = "@color/background_white"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/reg_submit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/buttonstyle"
+            android:text="Submit Details"
             android:textColor="@color/background_white"
+            />
 
-            android:ems="10"
-            android:maxLength="20"
-
-            android:hint="Password"
-            android:inputType="textPassword"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
-
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/reg_confpassword_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/background_white"
-        android:textColorHint="@color/background_white"
-
-        android:ems="10"
-        android:maxLength="20"
-        android:hint="Confirm Password"
-        android:inputType="textPassword"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-
-
-    <Button
-        android:id="@+id/reg_submit_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/background_white"
-
-        android:background="@drawable/buttonstyle"
-        android:text="Submit Details"
-        android:layout_marginBottom="20dp"
-
-         />
-
-
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

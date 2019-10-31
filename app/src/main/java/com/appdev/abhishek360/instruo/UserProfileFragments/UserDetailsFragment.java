@@ -2,16 +2,11 @@ package com.appdev.abhishek360.instruo.UserProfileFragments;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
-import com.appdev.abhishek360.instruo.ApiModels.RequestModel;
-import com.appdev.abhishek360.instruo.LoginActivity;
 import com.appdev.abhishek360.instruo.R;
 import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
-import com.appdev.abhishek360.instruo.jsonRequestAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,6 +20,8 @@ import android.widget.Toast;
 import net.glxn.qrgen.android.QRCode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -66,7 +63,7 @@ public class UserDetailsFragment extends Fragment {
         fullName = (EditText) v.findViewById(R.id.personal_details_edit_name);
         emailId = (EditText) v.findViewById(R.id.personal_details_edit_email);
         contactNo = (EditText) v.findViewById(R.id.personal_details_edit_contact);
-        editDetails = (Button)v.findViewById(R.id.myprofile_button_edit_details);
+        editDetails = (Button) v.findViewById(R.id.myprofile_button_edit_details);
         updatedetails = v.findViewById(R.id.myprofile_button_save_changes);
         changePass = v.findViewById(R.id.myprofile_button_change_pass);
         oldPass = v.findViewById(R.id.personal_details_edit_oldpass);
@@ -82,7 +79,7 @@ public class UserDetailsFragment extends Fragment {
         college.setText(personalDetails.get(2));
         contactNo.setText(personalDetails.get(3));
 
-        final Bitmap myBitmap = QRCode.from("instruoX:"+personalDetails.get(1)).withSize(720,720).bitmap();
+        final Bitmap myBitmap = QRCode.from("instruoX:" + personalDetails.get(1)).withSize(720,720).bitmap();
         qrCode_imageview.setImageBitmap(myBitmap);
 
         editDetails.setOnClickListener(v1 -> {
@@ -92,34 +89,30 @@ public class UserDetailsFragment extends Fragment {
         });
 
         updatedetails.setOnClickListener(v12 -> {
-            RequestModel profileUpdateReq = new RequestModel();
+            Map<String, String> updateRequest = new HashMap<>();
+            updateRequest.put("name", fullName.getText().toString());
+            updateRequest.put("college", college.getText().toString());
 
-            profileUpdateReq.setRequestAction("UPDATE");
-            profileUpdateReq.setRequestData("userName",fullName.getText().toString());
-            profileUpdateReq.setRequestData("contact",contactNo.getText().toString());
-
-            profileUpdateReq.setRequestParameteres("filter","id");
-            apiRequestManager.updateUserData(profileUpdateReq);
-
+            apiRequestManager.updateUserData(updateRequest);
         });
 
         changePass.setOnClickListener(v13 -> {
-            String pass_str = newPass.getText().toString();
-            String conPass_str=conNewPass.getText().toString();
+            String pass_old = oldPass.getText().toString();
+            String pass_str =  newPass.getText().toString();
+            String conPass_str = conNewPass.getText().toString();
+
             if(pass_str.isEmpty())
-                Toast.makeText(getActivity(),"Enter new Password!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Enter new Password!", Toast.LENGTH_LONG).show();
             else if(conPass_str.isEmpty())
-                Toast.makeText(getActivity(),"Confirm new Password!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"Confirm new Password!", Toast.LENGTH_LONG).show();
             else if(!pass_str.equals(conPass_str))
-                Toast.makeText(getActivity(),"New Password Not Matched!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"New Password Not Matched!", Toast.LENGTH_LONG).show();
             else {
-                RequestModel passUpdateReq = new RequestModel();
+                Map<String, String> updatePassRequest = new HashMap<>();
+                updatePassRequest.put("password_old", pass_old);
+                updatePassRequest.put("password_new", pass_str);
 
-                passUpdateReq.setRequestAction("UPDATE");
-                passUpdateReq.setRequestData("password",pass_str);
-
-                passUpdateReq.setRequestParameteres("filter","id");
-                apiRequestManager.updateUserData(passUpdateReq);
+                apiRequestManager.updateUserPass(updatePassRequest);
             }
         });
 

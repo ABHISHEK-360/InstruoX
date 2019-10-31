@@ -161,7 +161,7 @@ public class GamingTabFragment extends Fragment {
                         //Toast.makeText(getContext(),""+eventId,Toast.LENGTH_LONG).show();
                         final ApiRequestManager apiRequestManager = new ApiRequestManager(getContext().getApplicationContext(), compositeDisposable);
 
-                        apiRequestManager.updateUserData(eventId);
+                        apiRequestManager.registerEvent(eventId);
                     });
                 }
 

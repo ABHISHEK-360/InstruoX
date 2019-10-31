@@ -1,6 +1,5 @@
 package com.appdev.abhishek360.instruo;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -11,12 +10,8 @@ import com.appdev.abhishek360.instruo.EventDetailsFragments.DescriptionFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.ResultFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.RulesFragment;
 import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,10 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -113,7 +105,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             Toast.makeText(this,"Please, Sign up to Participate in Events!", Toast.LENGTH_LONG).show();
 
         else
-            apiRequestManager.updateUserData(eventId);
+            apiRequestManager.registerEvent(eventId);
     }
 
     private void getEventDetails(String eventId){
@@ -125,7 +117,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         renderEventHeaders();
                         SetUpViewPager(vp);
-                        Log.d("EVENT_DETAILS_RES", document.getData().toString());
                     }
                     else{
                         Log.d("EVENT_DETAILS_FAILED", "event not found!");

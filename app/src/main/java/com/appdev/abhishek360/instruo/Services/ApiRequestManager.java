@@ -1,17 +1,16 @@
 package com.appdev.abhishek360.instruo.Services;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 
 import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
-import com.appdev.abhishek360.instruo.ApiModels.RequestModel;
 import com.appdev.abhishek360.instruo.LoginActivity;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import io.reactivex.Single;
@@ -39,12 +38,12 @@ public class ApiRequestManager {
                 .create(ApiServices.class);
     }
 
-    public boolean updateUserData(final String eventId) {
-        RequestModel updateRequest = new RequestModel();
-        updateRequest.setRequestData("eventIdAdd",eventId);
+    public boolean registerEvent(final String eventId) {
+        Map<String, String> registerRequest = new HashMap<>();
+        registerRequest.put("event_key", eventId);
 
         Single<LoginResponse> res = apiService
-                .postUpdateProfile(updateRequest);
+                .postRegEvent(registerRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -59,44 +58,28 @@ public class ApiRequestManager {
                         Log.d("REG_EVENT_API_RES:", loginResponse.getMsg());
                         if (loginResponse.getSuccess()) {
                             sharedPreferences = ApiRequestManager.this.ctx.getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
-                            spEditor=sharedPreferences.edit();
+                            spEditor = sharedPreferences.edit();
                             Set<String> eventNameSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey, new HashSet<String>());
 
                             try {
                                 eventNameSet.add(eventId);
                             }
                             catch (Exception e) {
-                                Log.d("Event Register!",""+e);
+                                Log.d("REG_EVENT_API_ERROR",""+e);
                                 eventNameSet = new HashSet<>();
                             }
 
-                            spEditor.putStringSet(LoginActivity.spEventsKey,eventNameSet).apply();
+                            spEditor.putStringSet(LoginActivity.spEventsKey, eventNameSet).apply();
                             tosty(ctx,"Registered Successfully ! Please Check Registered Event Page for Payment status.");
                         }
                         else {
                             tosty(ctx,"Try Again! Failed To Register! ");
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                            builder.setTitle("Session Expired!");
-                            builder.setCancelable(false);
-                            builder.setMessage("Please Login Again to Continue!");
-                            builder.setPositiveButton("OK", (dialog, which) -> {
-                                dialog.cancel();
-                                Intent  in = new Intent(ctx,LoginActivity.class);
-                                spEditor=sharedPreferences.edit();
-                                spEditor.clear();
-                                spEditor.apply();
-                                ctx.startActivity(in);
-                            });
-
-                            AlertDialog alert = builder.create();
-                            alert.show();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        tosty(ctx,"Trying Again: Network Error!");
+                        tosty(ctx,"Try Again: Network Error!");
                         Log.e("REG_EVENT_API_ERROR:","Failed", e);
                     }
                 });
@@ -105,9 +88,9 @@ public class ApiRequestManager {
     }
 
 
-    public boolean updateUserData(final RequestModel updateRequest) {
+    public boolean updateUserData(final Map<String, String> updateRequest) {
         Single<LoginResponse> res = apiService
-                .postUpdateProfile(updateRequest);
+                .putUserProfile(updateRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -134,6 +117,39 @@ public class ApiRequestManager {
                         Log.e("UPDATE_USER_API_ERROR:","Failed", e);
                     }
                 });
+
+        return true;
+    }
+
+    public boolean updateUserPass(final Map<String, String> updateRequest) {
+        Single<LoginResponse> res = apiService
+                .putUpdatePass(updateRequest);
+
+        res.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<LoginResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onSuccess(LoginResponse loginResponse) {
+                    Log.d("UPDATE_PASS_API_RES:", loginResponse.getMsg());
+                    if (loginResponse.getSuccess()) {
+                        tosty(ctx,"Try Again! Failed To Update Password! ");
+                    }
+                    else {
+                        tosty(ctx,"Password updated!");
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    tosty(ctx,"Trying Again: Network Error!");
+                    Log.e("UPDATE_PASS_API_ERROR:","Failed", e);
+                }
+            });
 
         return true;
     }
