@@ -155,7 +155,7 @@ public class AutomatonTabFragment extends Fragment {
                 else {
                     holder.getRegisterEvent().setOnClickListener(v -> {
                         final ApiRequestManager apiRequestManager = new ApiRequestManager(
-                                getContext().getApplicationContext(),
+                                getActivity(),
                                 compositeDisposable
                         );
 

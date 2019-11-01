@@ -57,7 +57,7 @@ public class ApiRequestManager {
                     public void onSuccess(LoginResponse loginResponse) {
                         Log.d("REG_EVENT_API_RES:", loginResponse.getMsg());
                         if (loginResponse.getSuccess()) {
-                            sharedPreferences = ApiRequestManager.this.ctx.getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+                            sharedPreferences = ApiRequestManager.this.ctx.getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE);
                             spEditor = sharedPreferences.edit();
                             Set<String> eventNameSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey, new HashSet<String>());
 

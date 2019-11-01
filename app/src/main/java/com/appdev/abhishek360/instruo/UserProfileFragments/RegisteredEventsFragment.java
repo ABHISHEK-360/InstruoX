@@ -15,6 +15,7 @@ import com.appdev.abhishek360.instruo.Adapters.RegEventItemAdapter;
 import com.appdev.abhishek360.instruo.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,22 +23,20 @@ import instamojo.library.InstapayListener;
 
 
 public class RegisteredEventsFragment extends Fragment {
-    private TextView textView;
     private ArrayList<String> regEventsList;
     private ArrayList<String> entryFee;
-    private Set<String> paymentStatus;
+    private ArrayList<Integer> paymentStatus;
     //private ArrayList<String> accountDetails;
     private InstapayListener listener;
     private RecyclerView recyclerView;
     private RegEventItemAdapter adapter;
 
-    public static RegisteredEventsFragment newInstance(ArrayList<String> events, ArrayList<String> eventEntryFee, ArrayList<String> paymentStatus) {
+    public static RegisteredEventsFragment newInstance(ArrayList<String> events, ArrayList<String> eventEntryFee, ArrayList<Integer> paymentStatus) {
         RegisteredEventsFragment fragment = new RegisteredEventsFragment();
         Bundle args = new Bundle();
-
-        args.putStringArrayList("events",events);
-        args.putStringArrayList("entryFee",eventEntryFee);
-        args.putStringArrayList("paymentStatus",paymentStatus);
+        args.putStringArrayList("events", events);
+        args.putStringArrayList("entryFee", eventEntryFee);
+        args.putIntegerArrayList("paymentStatus", paymentStatus);
 
         fragment.setArguments(args);
         return fragment;
@@ -47,11 +46,11 @@ public class RegisteredEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if (getArguments() != null) {
-//            regEventsList = getArguments().getStringArrayList("events");
-//            entryFee = getArguments().getStringArrayList("entryFee");
-//            paymentStatus = new HashSet<>( getArguments().getStringArrayList("paymentStatus"));
-//        }
+        if (getArguments() != null) {
+            regEventsList = getArguments().getStringArrayList("events");
+            entryFee = getArguments().getStringArrayList("entryFee");
+            paymentStatus = getArguments().getIntegerArrayList("paymentStatus");
+        }
     }
 
     @Override
@@ -65,15 +64,13 @@ public class RegisteredEventsFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
-        //String[] str=(String[]) regEventsList.to();
-//        adapter.setRegEventName(regEventsList);
-//        adapter.setRegFee(entryFee);
-//        adapter.setPaymentStaus(paymentStatus);
-//        //adapter.setAccountDetails(accountDetails);
-//        adapter.setActivity(this.getActivity());
-//
-//        recyclerView.setAdapter(adapter);
-        //textView.setText(""+regEventsList);
+        adapter.setRegEventName(regEventsList);
+        adapter.setRegFee(entryFee);
+        adapter.setPaymentStaus(paymentStatus);
+        //adapter.setAccountDetails(accountDetails);
+        adapter.setActivity(this.getActivity());
+
+        recyclerView.setAdapter(adapter);
 
         return v;
     }

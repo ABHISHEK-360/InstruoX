@@ -99,9 +99,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     public void registerEvent(View v) {
         final ApiRequestManager apiRequestManager = new ApiRequestManager(getApplicationContext(), compositeDisposable);
-        String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,"void");
+        String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,null);
 
-        if(sessionId.equals("void"))
+        if(sessionId!=null)
             Toast.makeText(this,"Please, Sign up to Participate in Events!", Toast.LENGTH_LONG).show();
 
         else

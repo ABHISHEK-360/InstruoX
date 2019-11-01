@@ -20,17 +20,17 @@ android {
         applicationId "com.appdev.abhishek360.instruo"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 315
-        versionName '2.0.4'
+        versionCode 316
+        versionName '2.0.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         debug {
-            minifyEnabled false
-            shrinkResources false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "YouTubeApiKey", YOUTUBE_API_KEY
             buildConfigField 'String', "TrailerVideoCode", YOUTUBE_TRAILER_VIDEO_CODE
         }

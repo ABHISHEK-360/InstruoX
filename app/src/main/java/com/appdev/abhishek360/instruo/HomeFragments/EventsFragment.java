@@ -12,6 +12,9 @@ import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
 import com.appdev.abhishek360.instruo.EventTabFragments.TechnicalTabFragment;
 import com.appdev.abhishek360.instruo.EventTabFragments.WorkshopTabFragment;
 import com.appdev.abhishek360.instruo.R;
+import com.appdev.abhishek360.instruo.Services.AlertService;
+import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
+import com.appdev.abhishek360.instruo.Services.ApiServices;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -28,13 +31,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class EventsFragment extends Fragment {
     private TabLayout tabs;
     private ImageView imageView;
-    int tabCode=0;
-    private FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
+    int tabCode = 0;
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private StorageReference storageReference;
+    private ApiServices apiService;
+    private AlertService alertService;
+    private CompositeDisposable compositeDisposable;
+    private ViewPager vp;
 
     public static EventsFragment newInstance(String param1, String param2) {
         EventsFragment fragment = new EventsFragment();
@@ -62,7 +79,13 @@ public class EventsFragment extends Fragment {
         tabs = (TabLayout)v.findViewById(R.id.tab_layout);
         tabCode= this.getArguments().getInt("tCode");
 
-        final ViewPager vp = (ViewPager) v.findViewById(R.id.event_pager);
+        vp = (ViewPager) v.findViewById(R.id.event_pager);
+
+        compositeDisposable = new CompositeDisposable();
+        alertService = new AlertService(getActivity());
+        apiService = ApiClientInstance
+                .getRetrofitInstance(getActivity())
+                .create(ApiServices.class);
 
         tabs.setupWithViewPager(vp);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
@@ -97,7 +120,7 @@ public class EventsFragment extends Fragment {
                 }
 
                 try {
-                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                    Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageView);
                 }
                 catch (Exception e) {
@@ -121,7 +144,34 @@ public class EventsFragment extends Fragment {
 
         vp.setCurrentItem(tabCode);
 
+        loadRegEvents();
         return v;
+    }
+
+    public void loadRegEvents(){
+        Single<ArrayList<HashMap<String, String>>> res = apiService
+                .getRegEvents();
+
+        res.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ArrayList<HashMap<String, String>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ArrayList<HashMap<String, String>> res) {
+
+                        SetUpViewPager(vp);
+                        vp.setCurrentItem(tabCode);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("USER_EVENTS_API_ERROR", "Failed", e);
+                    }
+                });
     }
 
     private void SetUpViewPager(ViewPager viewPager) {

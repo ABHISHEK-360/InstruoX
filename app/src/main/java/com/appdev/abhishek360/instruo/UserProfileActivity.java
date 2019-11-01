@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
 import com.appdev.abhishek360.instruo.ApiModels.UserProfileModel;
+import com.appdev.abhishek360.instruo.Services.AlertService;
 import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
 import com.appdev.abhishek360.instruo.Services.ApiServices;
 import com.appdev.abhishek360.instruo.Services.NetworkConnectionListener;
@@ -56,14 +57,16 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
     private OnAboutDataReceivedListener mAboutDataListener;
     private ViewPager vp;
     private ProgressBar progressBar;
-    private ArrayList<String> eventsName;
-    private ArrayList<String> eventId;
+
     private TextView paymentStatus_textview, paymentId_textview, paymentAmt_textview, orderId_textview, email_textview, eventId_textview;
 
-    private ArrayList<String> eventsEntryFee;
-    private ArrayList<String> paymentStatus;
+    private ArrayList<String> regEventId = new ArrayList<>();
+    private ArrayList<String> regEvents =  new ArrayList<>();
+    private ArrayList<String> regEventsFee =  new ArrayList<>();
+    private ArrayList<Integer> paymentStatus = new ArrayList<>();
     private Set<String> eventsNameSet = new HashSet<>();
     private InstapayListener listener;
+    private AlertService alertService;
     private final String WEBHOOK_KEY = "http://webhook.instruo.in/api/v1/payment/instamojohook";
 
     private Dialog dialog;
@@ -80,7 +83,6 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         gamingEvents.add("chess");
         gamingEvents.add("csgo");
         gamingEvents.add("fifa");
-        gamingEvents.add("nfs");
     }
 
     private static Set<String> myCollege = new HashSet<>();
@@ -157,6 +159,7 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         compositeDisposable = new CompositeDisposable();
+        alertService = new AlertService(this);
         apiService = ApiClientInstance
                 .getRetrofitInstance(getApplicationContext())
                 .create(ApiServices.class);
@@ -203,8 +206,6 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         closeBtn.setOnClickListener(v -> {
             dialog.dismiss();
             Intent in = new Intent(getApplicationContext(), HomeActivity.class);
-            in.putExtra("name", accountDetails.get(0));
-            in.putExtra("email", accountDetails.get(1));
             startActivity(in);
             finish();
         });
@@ -213,14 +214,63 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
     public void SetUpViewPager(ViewPager viewPager) {
         EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(), 2);
         adapter.AddFragmentPage(UserDetailsFragment.newInstance(accountDetails), "Account Details");
-        adapter.AddFragmentPage(RegisteredEventsFragment.newInstance(eventsName, eventsEntryFee, paymentStatus), "Registered Events");
+        adapter.AddFragmentPage(RegisteredEventsFragment.newInstance(regEvents, regEventsFee, paymentStatus), "Registered Events");
         adapter.notifyDataSetChanged();
 
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(tabCode);
     }
 
-    public boolean readUserData() {
+    public void loadRegEvents(){
+        Single<ArrayList<HashMap<String, String>>> res = apiService
+                .getRegEvents();
+
+        res.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ArrayList<HashMap<String, String>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ArrayList<HashMap<String, String>> res) {
+                        for (HashMap<String, String> object : res){
+                            regEvents.add(object.get("name"));
+                            regEventId.add(object.get("event_key"));
+                            if(object.get("registration_fee")!=null) regEventsFee.add(object.get("registration_fee"));
+                            else regEventsFee.add("800");
+                            paymentStatus.add(0);
+                        }
+
+                        regEvents.add("Accommodation Fee");
+                        regEventsFee.add("200");
+                        regEventId.add("accommodation_fee");
+                        paymentStatus.add(0);
+
+                        regEvents.add("Buy Coupon*");
+                        regEventsFee.add("600");
+                        regEventId.add("coupon_600");
+                        paymentStatus.add(0);
+
+                        regEvents.add("Buy Coupon**");
+                        regEventsFee.add("1000");
+                        regEventId.add("coupon_1000");
+                        paymentStatus.add(0);
+
+                        progressBar.setVisibility(View.GONE);
+                        SetUpViewPager(vp);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("USER_EVENTS_API_ERROR", "Failed", e);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    public void readUserData() {
         Single<UserProfileModel> res = apiService
                 .getUserProfile();
 
@@ -234,8 +284,6 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
 
                 @Override
                 public void onSuccess(UserProfileModel res) {
-                    Log.d("USER_EVENTS_API_RES", res.getName());
-
                     accountDetails.add(res.getName());
                     accountDetails.add(res.getEmail());
                     accountDetails.add(res.getCollege());
@@ -246,13 +294,12 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
                     spEditor.putString(spEmailKey, res.getEmail());
                     spEditor.apply();
 
-                    progressBar.setVisibility(View.GONE);
-                    SetUpViewPager(vp);
+                    loadRegEvents();
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                    Log.e("USER_EVENTS_API_ERROR", "Failed", e);
+                    Log.e("USER_PROFILE_API_ERROR", "Failed", e);
                     progressBar.setVisibility(View.GONE);
                 }
             });
@@ -348,23 +395,23 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
 //                                int noOfRegisterEvents =object.length();
 //                                int noOfPayments=objectPayments.length();
 //                                eventsName = new ArrayList<>();
-//                                eventId= new ArrayList<>();
-//                                eventsEntryFee= new ArrayList<>();
+//                                regEventId= new ArrayList<>();
+//                                regEventsFee= new ArrayList<>();
 //                                paymentStatus= new ArrayList<>();
 //
 //                                eventsName.add("Accommodation Fee");
-//                                eventsEntryFee.add("200");
-//                                eventId.add("accommodation_fee");
+//                                regEventsFee.add("200");
+//                                regEventId.add("accommodation_fee");
 //                                eventsNameSet.add("accommodation_fee");
 //
 //                                eventsName.add("Buy Coupon*");
-//                                eventsEntryFee.add("500");
-//                                eventId.add("coupon_500");
+//                                regEventsFee.add("500");
+//                                regEventId.add("coupon_500");
 //                                eventsNameSet.add("coupon_500");
 //
 //                                eventsName.add("Buy Coupon**");
-//                                eventsEntryFee.add("1000");
-//                                eventId.add("coupon_1000");
+//                                regEventsFee.add("1000");
+//                                regEventId.add("coupon_1000");
 //                                eventsNameSet.add("coupon_1000");
 //
 //                                for(int i=0;i<noOfRegisterEvents;i++) {
@@ -372,8 +419,8 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
 //                                    JSONObject jsonEvents = new JSONObject(""+events);
 //
 //                                    eventsName.add(jsonEvents.get("name").toString());
-//                                    eventsEntryFee.add(""+KEY_EVENTS_FEE.get(jsonEvents.get("description").toString()));
-//                                    eventId.add(jsonEvents.get("description").toString());
+//                                    regEventsFee.add(""+KEY_EVENTS_FEE.get(jsonEvents.get("description").toString()));
+//                                    regEventId.add(jsonEvents.get("description").toString());
 //
 //                                    eventsNameSet.add(jsonEvents.get("description").toString());
 //                                }
@@ -437,25 +484,23 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
 //        };
 //
 //        requestQueue.add(objectRequest);
-
-        return true;
     }
 
     public void payAmt(final int index, final String regFee_str) {
-        //String purpose = "Paying "+regFee_str+"for "+eventsName.get(index)+","+eventId.get(index);
+        //String purpose = "Paying "+regFee_str+"for "+eventsName.get(index)+","+regEventId.get(index);
         //tosty(getApplicationContext(),purpose);
 
         eventIndex = index;
 
-        if (validateCollege(accountDetails.get(2), eventId.get(index))) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Free Registration!");
-            builder.setMessage("Participation for IIEST Shibpur students is free except Gaming Events.");
-            builder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
-
-            AlertDialog alert = builder.create();
-            alert.show();
-
+        if (validateCollege(accountDetails.get(2), regEventId.get(index))) {
+            alertService.showAlert("Free Registration!", "Participation for IIEST Shibpur students is free except Gaming Events.");
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("Free Registration!");
+//            builder.setMessage("Participation for IIEST Shibpur students is free except Gaming Events.");
+//            builder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
+//
+//            AlertDialog alert = builder.create();
+//            alert.show();
             return;
         }
 
@@ -463,7 +508,7 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         builder.setTitle("Payment Alert!");
         builder.setMessage("Pay Registration Fee Rs." + regFee_str);
         builder.setPositiveButton("Pay", (dialog, which) -> {
-            callInstamojoPay(accountDetails.get(1), accountDetails.get(3), regFee_str, eventId.get(index), accountDetails.get(0));
+            callInstamojoPay(accountDetails.get(1), accountDetails.get(3), regFee_str, regEventId.get(index), accountDetails.get(0));
             dialog.cancel();
         });
 
@@ -474,15 +519,14 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
 
     private boolean validateCollege(String college, String eventId) {
         if (myCollege.contains(college.toLowerCase())) {
-            if (gamingEvents.contains(eventId)) return false;
-            else return true;
+            return !gamingEvents.contains(eventId);
         }
 
         return false;
     }
 
-    public ArrayList<String> getEventId() {
-        return eventId;
+    public ArrayList<String> getRegEventId() {
+        return regEventId;
     }
 
     private void callInstamojoPay(String email, String phone, String amount, String purpose, String buyername) {
@@ -536,7 +580,7 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("" + payDetail[0]);
         builder.setCancelable(false);
-        builder.setMessage("" + payDetail[1] + "\n" + payDetail[3] + "\nAmount= " + eventsEntryFee.get(eventIndex) + "\nEventName= " + eventsName.get(eventIndex) + "\nEmail= " + accountDetails.get(1) + "\n\n   *Receipt will be sent to registered Email.");
+        builder.setMessage("" + payDetail[1] + "\n" + payDetail[3] + "\nAmount= " + regEventsFee.get(eventIndex) + "\nEventName= " + regEvents.get(eventIndex) + "\nEmail= " + accountDetails.get(1) + "\n\n   *Receipt will be sent to registered Email.");
         builder.setPositiveButton("OK", (dialog, which) -> {
             dialog.cancel();
             Intent in = new Intent(getApplicationContext(), HomeActivity.class);

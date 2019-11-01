@@ -319,20 +319,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void readRegEvents() {
-        Single<ArrayList> res = apiService
+        Single<ArrayList<HashMap<String, String>>> res = apiService
                 .getRegEvents();
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ArrayList>() {
+                .subscribe(new SingleObserver<ArrayList<HashMap<String, String>>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(ArrayList res) {
-                        Log.d("REG_EVENTS_RES", "" + res);
+                    public void onSuccess(ArrayList<HashMap<String, String>> res) {
+                        Log.d("REG_EVENTS_RES", "" + res.getClass());
 
                         progressBar.setVisibility(View.GONE);
                         myDailog.cancel();

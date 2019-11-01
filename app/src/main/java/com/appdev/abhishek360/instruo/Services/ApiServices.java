@@ -4,6 +4,7 @@ import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
 import com.appdev.abhishek360.instruo.ApiModels.UserProfileModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Single;
@@ -27,7 +28,7 @@ public interface ApiServices {
     @GET("user/logout")
     Single<UserProfileModel> getLogout();
     @GET("user/events")
-    Single<ArrayList> getRegEvents();
+    Single<ArrayList<HashMap<String,String>>> getRegEvents();
 
     @PUT("user/profile")
     Single<LoginResponse> putUserProfile(@Body Map<String,String> requestModel);

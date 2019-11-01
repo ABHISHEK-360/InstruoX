@@ -14,8 +14,8 @@ import com.google.firebase.FirebaseApp;
 import io.fabric.sdk.android.Fabric;
 
 public class SplashActivity extends AppCompatActivity {
-    private static int SPLASH_TIME_OUT = 2000;
-    private SharedPreferences sharedPreferences;
+    private int SPLASH_TIME_OUT = 2000;
+    private static SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         setContentView(R.layout.activity_splash);
 
-        sharedPreferences = getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE);
 
         //final String tokenKey = sharedPreferences.getString(LoginActivity.spAccessTokenKey,null);
         final String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,null);
@@ -44,6 +44,10 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         },SPLASH_TIME_OUT);
+    }
+
+    public static SharedPreferences getAppPreferences(){
+        return sharedPreferences;
     }
 }
 

@@ -221,7 +221,7 @@ public class ApiClientInstance{
                 public void notAuthorized() {
                     Log.e("SESSION_EXPIRED", "Please, Login Again!");
                     alertService.showToast("SESSION_EXPIRED: Please, Login Again!");
-                    spEditor=sharedPreferences.edit();
+                    spEditor = sharedPreferences.edit();
                     spEditor.clear();
                     spEditor.apply();
                     Intent i = new Intent(ctx, LoginActivity.class);
@@ -229,6 +229,7 @@ public class ApiClientInstance{
 //                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     ctx.startActivity(i);
                 }
+
             });
             builder.hostnameVerifier((hostname, session) -> true);
             return builder;
