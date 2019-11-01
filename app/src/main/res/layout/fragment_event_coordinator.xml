@@ -10,10 +10,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="left"
-        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
         android:textColor="@color/myBlack"
-        android:textSize="17sp"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:id="@+id/event_coordinator_co"
         android:text="To Be Update!" />
 

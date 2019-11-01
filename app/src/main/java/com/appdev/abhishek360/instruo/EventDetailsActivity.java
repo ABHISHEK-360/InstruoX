@@ -10,6 +10,7 @@ import com.appdev.abhishek360.instruo.EventDetailsFragments.DescriptionFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.ResultFragment;
 import com.appdev.abhishek360.instruo.EventDetailsFragments.RulesFragment;
 import com.appdev.abhishek360.instruo.Services.ApiRequestManager;
+import com.appdev.abhishek360.instruo.Services.PreferencesManager;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
@@ -35,13 +36,16 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class EventDetailsActivity extends AppCompatActivity {
     private TabLayout tabs;
-    private int tabCode=0;
-    private String eventName_str="Instruo Event";
+    private int tabCode = 0;
+    private String eventName_str = "Instruo Event";
     private String eventId, posterRef_str, eventCat;
     private TextView title_textview;
     private ImageView poster_image;
     private SharedPreferences sharedPreferences;
-    final public static String KEY_EVENT_OBJECT = "eventDetails", KEY_POSTER_REF = "posterRef", KEY_EVENT_ID = "eventId", KEY_EVENT_CAT = "eventCat";
+    final public static String KEY_EVENT_OBJECT = "eventDetails",
+            KEY_POSTER_REF = "posterRef",
+            KEY_EVENT_ID = "eventId",
+            KEY_EVENT_CAT = "eventCat";
     private FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
     private EventAdapter eventDetails;
     private CompositeDisposable compositeDisposable;
@@ -98,12 +102,11 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     public void registerEvent(View v) {
-        final ApiRequestManager apiRequestManager = new ApiRequestManager(getApplicationContext(), compositeDisposable);
-        String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,null);
+        final ApiRequestManager apiRequestManager = new ApiRequestManager(this, compositeDisposable);
+        String sessionId = PreferencesManager.getPreferences(LoginActivity.spSessionId);
 
-        if(sessionId!=null)
+        if(sessionId == null)
             Toast.makeText(this,"Please, Sign up to Participate in Events!", Toast.LENGTH_LONG).show();
-
         else
             apiRequestManager.registerEvent(eventId);
     }
@@ -130,9 +133,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 tosty("Try Again!, Failed to load details.");
                 finish();
             });
-
     }
-
 
     public void SetUpViewPager(ViewPager viewPager) {
         EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(), 4);

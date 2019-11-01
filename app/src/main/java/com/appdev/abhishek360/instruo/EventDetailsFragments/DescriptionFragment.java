@@ -38,14 +38,18 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 
 
 public class DescriptionFragment extends Fragment {
-    private String eventTime_str,eventVenue_str,eventDesc_str,eventPrize_str,eventFee_str,eventId,eventType;
-    private TextView eventDesc_textview,eventPrize_textview,eventFee_textview;
+    private String eventTime_str, eventVenue_str,
+            eventDesc_str, eventPrize_str,
+            eventFee_str,eventId,eventType;
+    private TextView eventDesc_textview,
+            eventPrize_textview,
+            eventFee_textview;
     private EventAdapter eventDetails;
     private RecyclerView docsRecycler;
     private TextView default_text;
-    private FirebaseStorage firebaseStorage=FirebaseStorage.getInstance();
-    private StorageReference storageReference=firebaseStorage.getReference();
-    private FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    private StorageReference storageReference = firebaseStorage.getReference();
+    private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private FirestoreRecyclerAdapter adapter;
 
     public static DescriptionFragment newInstance(EventAdapter adapter, String eventId) {
@@ -141,7 +145,7 @@ public class DescriptionFragment extends Fragment {
                 }
 
                 holder.getDownloadDoc().setOnClickListener(v -> {
-                    storageReference=firebaseStorage.getReference().child("/EVENTS_DOCS/"+eventId+"/"+model.getDocsname());
+                    storageReference = firebaseStorage.getReference().child("/EVENTS_DOCS/" + eventId + "/" + model.getDocsname());
                     Toast.makeText(getActivity(),"/EVENTS_DOCS/"+eventId+"/"+model.getDocsname(),Toast.LENGTH_LONG).show();
 
                     storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -155,9 +159,7 @@ public class DescriptionFragment extends Fragment {
                         Log.d("File Not Found ",""+e);
                     });
                 });
-
             }
-
         };
 
         adapter.notifyDataSetChanged();
@@ -208,9 +210,8 @@ public class DescriptionFragment extends Fragment {
                 if(grantResults[0]== PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this.getActivity(),"Tap Again to download",Toast.LENGTH_LONG).show();
 
-                    Log.v("Write_permission","Permission: "+permissions[0]+ "was "+grantResults[0]);
+                    Log.v("Write_permission","Permission: " + permissions[0] + "was " + grantResults[0]);
                     //resume tasks needing this permission
-
                 }
                 else {
                     Toast.makeText(this.getActivity(),"Grant Permission to Download.",Toast.LENGTH_LONG).show();

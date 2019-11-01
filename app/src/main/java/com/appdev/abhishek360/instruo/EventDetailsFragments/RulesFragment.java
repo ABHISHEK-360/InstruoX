@@ -19,7 +19,9 @@ import java.util.Map;
 
 public class RulesFragment extends Fragment {
     private Map<String,String > eventRules_str;
-    private TextView eventRound1_textview,eventRound2_textview,eventRound3_textview;
+    private TextView eventRound1TV,
+            eventRound2TV,
+            eventRound3TV;
     private EventAdapter eventDetails;
 
     public static RulesFragment newInstance(EventAdapter adapter) {
@@ -35,7 +37,7 @@ public class RulesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            eventDetails=getArguments().getParcelable(EventDetailsActivity.KEY_EVENT_OBJECT);
+            eventDetails = getArguments().getParcelable(EventDetailsActivity.KEY_EVENT_OBJECT);
         }
     }
 
@@ -44,16 +46,16 @@ public class RulesFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_event_rules, container, false);
 
-        eventRound1_textview=v.findViewById(R.id.event_rules_round1);
-        eventRound2_textview=v.findViewById(R.id.event_rules_round2);
-        eventRound3_textview=v.findViewById(R.id.event_rules_round3);
+        eventRound1TV = v.findViewById(R.id.event_rules_round1);
+        eventRound2TV = v.findViewById(R.id.event_rules_round2);
+        eventRound3TV = v.findViewById(R.id.event_rules_round3);
 
         eventRules_str=eventDetails.getRULES();
 
         if(eventRules_str!=null) {
-            eventRound1_textview.setText(eventRules_str.get("ROUND_1"));
-            eventRound2_textview.setText(eventRules_str.get("ROUND_2"));
-            eventRound3_textview.setText(eventRules_str.get("ROUND_3"));
+            eventRound1TV.setText(eventRules_str.get("ROUND_1"));
+            eventRound2TV.setText(eventRules_str.get("ROUND_2"));
+            eventRound3TV.setText(eventRules_str.get("ROUND_3"));
         }
 
         return v;

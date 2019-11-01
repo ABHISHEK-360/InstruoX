@@ -164,10 +164,10 @@ public class AutomatonTabFragment extends Fragment {
                 }
 
                 try {
-                    storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/AUTOMATON_EVENTS/"+eventId+".jpeg");
+                    storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/AUTOMATON_EVENTS/" + eventId + ".jpeg");
 
-                    Glide.with(getContext().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.getPoster_url());
+                    Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE).into(holder.getPoster_url());
                 }
                 catch (Exception e) {
                     Log.d("Event Image:",""+e);

@@ -41,7 +41,7 @@ public class CoordinatorFragment extends Fragment {
 
         View v= inflater.inflate(R.layout.fragment_event_coordinator, container, false);
 
-        eventCoordinators=v.findViewById(R.id.event_coordinator_co);
+        eventCoordinators = v.findViewById(R.id.event_coordinator_co);
         eventCoordinators.setText(eventDetails.getCOORDINATORS());
 
         return v;

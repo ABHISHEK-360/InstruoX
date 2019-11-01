@@ -20,17 +20,17 @@ android {
         applicationId "com.appdev.abhishek360.instruo"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 316
-        versionName '2.0.5'
+        versionCode 317
+        versionName '2.0.6'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
         debug {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField 'String', "YouTubeApiKey", YOUTUBE_API_KEY
             buildConfigField 'String', "TrailerVideoCode", YOUTUBE_TRAILER_VIDEO_CODE
         }
@@ -59,10 +59,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
