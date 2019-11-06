@@ -42,9 +42,9 @@ public class  EventViewHolder extends RecyclerView.ViewHolder {
     public EventViewHolder(View itemView) {
         super(itemView);
         name_event = (TextView) itemView.findViewById(R.id.event_view_holder_name);
-        timing = (TextView) itemView.findViewById(R.id.event_view_holder_Timing);
+        //timing = (TextView) itemView.findViewById(R.id.event_view_holder_Timing);
         registerEvent = (Button)itemView.findViewById(R.id.event_view_holder_register_button);
-        venue = (TextView) itemView.findViewById(R.id.event_view_holder_Venue);
+        //venue = (TextView) itemView.findViewById(R.id.event_view_holder_Venue);
         cardView = (CardView)itemView.findViewById(R.id.events_card_view);
         poster_url = (ImageView) itemView.findViewById(R.id.event_view_holder_poster);
     }

@@ -9,40 +9,42 @@
     tools:context=".HomeFragments.EventsFragment"
     android:orientation="vertical">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/events_tab_header_image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/technical_poster_reduced"
-        android:fitsSystemWindows="true"
-        android:scaleType="centerCrop" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tab_layout"
-        android:layout_gravity="bottom"
-        app:tabTextColor="@color/background"
-        app:tabSelectedTextColor="@color/instruo_orange"
-        app:tabIndicatorColor="@color/instruo_orange"
-        app:tabIndicatorHeight="5dp"
-        android:background="@drawable/gradient_color_sec"
-        app:tabMode="scrollable">
-
-    </com.google.android.material.tabs.TabLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="#6c6c6c"
         android:id="@+id/event_pager">
 
     </androidx.viewpager.widget.ViewPager>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+<!--    <ImageView-->
+<!--        android:id="@+id/events_tab_header_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:background="@drawable/technical_poster_reduced"-->
+<!--        android:fitsSystemWindows="true"-->
+<!--        android:scaleType="centerCrop" />-->
+
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:id = "@+id/tab_layout"
+        android:layout_alignParentBottom = "true"
+        android:layout_gravity = "bottom"
+        app:tabTextColor = "@color/background"
+        app:tabSelectedTextColor = "@color/instruo_orange"
+        app:tabIndicatorColor = "@color/instruo_orange"
+        app:tabIndicatorHeight = "5dp"
+        android:background = "@drawable/gradient_color_sec"
+        app:tabMode = "scrollable">
+
+    </com.google.android.material.tabs.TabLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

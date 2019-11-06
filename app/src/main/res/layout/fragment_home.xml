@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     tools:context=".HomeFragments.HomeFragment"
     android:id="@+id/home_fragment">
 
@@ -15,45 +14,42 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/home_image_view_anim"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/web_particle"
+            android:background="@drawable/gradient_animation"
             android:padding="40dp"
-            android:src="@drawable/ic_new_instruo_logo" />
-
+            android:src="@drawable/ic_new_instruo_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/home_textview_tagline"
-            android:layout_width="match_parent"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="164dp"
+            android:layout_marginTop="168dp"
             android:layout_marginEnd="15dp"
             android:background="@drawable/buttonstyle_new"
-            android:shadowColor="@color/background_white"
-
-
             android:fontFamily="@font/mavenpro_bold"
             android:gravity="center"
-            android:padding="15dp"
+            android:padding="10dp"
+            android:shadowColor="@color/background_white"
             android:text="@string/instruo_tagline"
             android:textColor="@color/background_white"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.476"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+            app:layout_constraintTop_toTopOf="@+id/home_image_view_anim" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -155,61 +151,96 @@
 
     </LinearLayout>
 
-       <!-- <android.support.constraint.ConstraintLayout
+       <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
+           <ImageView
+               android:id="@+id/imageView2"
+               android:layout_width="match_parent"
+               android:layout_height="110dp"
+               android:layout_marginTop="50dp"
+               android:background="@drawable/gradient_color"
+               android:padding="40dp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
 
+           <TextView
+               android:id="@+id/home_textview_taglin"
+               android:layout_width="360dp"
+               android:layout_height="wrap_content"
+               android:layout_alignParentBottom="true"
+               android:layout_marginTop="16dp"
+               android:background="@drawable/buttonstyle_new"
+               android:fontFamily="@font/mavenpro_bold"
+               android:gravity="center"
+               android:paddingStart="20dp"
+               android:paddingEnd="20dp"
+               android:paddingTop="10dp"
+               android:paddingBottom="10dp"
+               android:shadowColor="@color/background_white"
+               android:text="@string/college_name"
+               android:textColor="@color/background_white"
+               android:textSize="16sp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintHorizontal_bias="0.49"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintVertical_bias="0.054" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                tools:layout_editor_absoluteX="40dp"
-                tools:layout_editor_absoluteY="114dp">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentBottom="true"
+               android:fontFamily="@font/mavenpro_bold"
+               android:gravity="start"
+               android:padding="5dp"
+               android:shadowColor="@color/background_white"
+               android:text="Reach Us:-"
+               android:textColor="@color/background_white"
+               android:textSize="13sp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintVertical_bias="0.658" />
 
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentBottom="true"
+               android:layout_marginStart="24dp"
+               android:layout_marginBottom="16dp"
+               android:autoLink="web"
+               android:fontFamily="@font/mavenpro_bold"
+               android:gravity="start"
+               android:padding="5dp"
+               android:shadowColor="@color/background_white"
+               android:text="@string/instruo_website"
+               android:textColor="@color/background_white"
+               android:textSize="12sp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintStart_toStartOf="parent" />
 
-                <ImageView
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_alignParentBottom="true"
+               android:layout_marginBottom="4dp"
+               android:fontFamily="@font/mavenpro_bold"
+               android:gravity="start"
+               android:padding="5dp"
+               android:shadowColor="@color/background_white"
+               android:text="@string/college_address"
+               android:textColor="@color/background_white"
+               android:textSize="10sp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent" />
 
-                    android:layout_width="74dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="16dp"
-                    android:paddingTop="10dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/college_name"
-                    android:textColor="@drawable/whiteback"
-                    android:textSize="20sp" />
-
-            </LinearLayout>
-
-
-
-
-            <TextView
-                android:id="@+id/home_textview_taglin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:background="@drawable/buttonstyle_new"
-                android:fontFamily="@font/mavenpro_bold"
-
-
-                android:gravity="center"
-                android:padding="15dp"
-                android:shadowColor="@color/background_white"
-                android:text="@string/instruo_tagline"
-                android:textColor="@color/background_white"
-                android:textSize="30sp" />
-
-
-        </android.support.constraint.ConstraintLayout> -->
+       </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

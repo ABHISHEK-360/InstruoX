@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.appdev.abhishek360.instruo">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -37,7 +36,7 @@
         </service>
 
         <service
-            android:name="com.appdev.abhishek360.instruo.Services.MyFirebaseMessegingService"
+            android:name="com.appdev.abhishek360.instruo.Services.MyFirebaseMessagingService"
             android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -60,7 +59,7 @@
 
         <activity
             android:name="com.appdev.abhishek360.instruo.HomeActivity"
-            android:label="@string/instruo" />
+            android:label="@string/instruo_name" />
         <activity
             android:name="com.appdev.abhishek360.instruo.UserProfileActivity"
             android:label="@string/title_activity_my_profile"

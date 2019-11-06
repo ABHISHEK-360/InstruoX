@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".EventTabFragments.WorkshopTabFragment">
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_tert"
+    tools:context=".HomeFragments.WorkshopFragment"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
         >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/workshops_recycler"
+            android:layout_marginTop="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="7dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@color/background_white"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,9 +38,14 @@
             android:textColor="@color/background_white"
             android:padding="10dp"
             android:textAlignment="center"
-            android:text="@string/workshop_description"/>
+            android:text="@string/workshop_description"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="@dimen/fab_margin"
+            android:background="@color/background_white"/>
 
     </LinearLayout>
-
-
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

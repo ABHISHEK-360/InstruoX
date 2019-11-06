@@ -10,12 +10,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.appdev.abhishek360.instruo.EventTabFragments.AutomatonTabFragment;
-import com.appdev.abhishek360.instruo.EventTabFragments.TechnicalTabFragment;
-import com.appdev.abhishek360.instruo.EventTabFragments.WorkshopTabFragment;
-import com.appdev.abhishek360.instruo.EventTabFragments.ExhibitionsTabFragment;
-import com.appdev.abhishek360.instruo.EventTabFragments.GamingTabFragment;
-import com.appdev.abhishek360.instruo.EventTabFragments.NonGenericTabFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.AboutFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.ContactUsFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.DirectionsFragment;
@@ -24,9 +18,7 @@ import com.appdev.abhishek360.instruo.HomeFragments.HomeFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.ScheduleFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.SponsorsFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.TeamFragment;
-import com.appdev.abhishek360.instruo.SchedulesTabFragments.ScheduleDayOneFragment;
-import com.appdev.abhishek360.instruo.SchedulesTabFragments.ScheduleDayThreeFragment;
-import com.appdev.abhishek360.instruo.SchedulesTabFragments.ScheduleDayTwoFragment;
+import com.appdev.abhishek360.instruo.HomeFragments.WorkshopFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -43,7 +35,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -317,16 +308,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.workshops_id:
-                fragment= new EventsFragment();
+                fragment= new WorkshopFragment();
 
-                tabCode = 4;
-                bundle.putInt("tCode",tabCode);
-                fragment.setArguments(bundle);
+//                tabCode = 4;
+//                bundle.putInt("tCode",tabCode);
+//                fragment.setArguments(bundle);
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                     getSupportFragmentManager().popBackStackImmediate();
 
-                ft= getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.home_frame,fragment);
+                ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.home_frame, fragment);
                 ft.addToBackStack(null);
                 ft.commit();
 

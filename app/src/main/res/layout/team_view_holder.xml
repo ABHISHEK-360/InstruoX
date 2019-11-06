@@ -1,40 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:background="@drawable/round_corner_shadow"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/round_corner_shadow"
     android:foreground="?android:attr/selectableItemBackground"
-    android:layout_margin="@dimen/fab_margin"
     app:cardCornerRadius="@dimen/cardview_default_radius"
-    app:cardElevation="@dimen/cardview_default_elevation"
-
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-
-    >
-
+    app:cardElevation="@dimen/cardview_default_elevation">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
-
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/team_view_holder_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:textStyle="bold"
-            android:textSize="23sp"
-            android:textColor="@android:color/black"
+            android:text="Designation"
             android:textAlignment="center"
-            android:text="Designation"/>
+            android:textColor="@android:color/black"
+            android:textSize="23sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/instruo_orange"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,50 +44,44 @@
                 android:id="@+id/team_view_holder_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:civ_border_width="5dp"
+                android:src="@drawable/userdefaultpic"
                 app:civ_border_color="@color/colorPrimaryDark"
-                android:src="@drawable/userdefaultpic"/>
+                app:civ_border_width="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="5dp">
 
                 <TextView
                     android:id="@+id/team_view_holder_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="17sp"
-                    android:textColor="@android:color/black"
+                    android:text="Name"
                     android:textAlignment="center"
-                    android:text="Name"/>
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/team_view_holder_email"
                     android:layout_width="match_parent"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textColor="@android:color/black"
-
                     android:layout_height="wrap_content"
-                    android:text="Email"/>
+                    android:text="Email"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/team_view_holder_phone"
                     android:layout_width="match_parent"
-                    android:textAlignment="center"
-                    android:textSize="17sp"
-                    android:textColor="@android:color/black"
-
                     android:layout_height="wrap_content"
-                    android:text="Phone"/>
-
-
+                    android:text="Phone"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp" />
 
             </LinearLayout>
 

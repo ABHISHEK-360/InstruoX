@@ -229,7 +229,6 @@ public class ApiClientInstance{
 //                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     ctx.startActivity(i);
                 }
-
             });
             builder.hostnameVerifier((hostname, session) -> true);
             return builder;

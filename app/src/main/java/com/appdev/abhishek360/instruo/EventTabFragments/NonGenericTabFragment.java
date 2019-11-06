@@ -126,8 +126,9 @@ public class NonGenericTabFragment extends Fragment {
                 final String eventId=snapshot.getId();
 
                 holder.getName_event().setText(""+model.getTITLE());
-                holder.getVenue().setText("Venue: "+model.getVENUE());
-                holder.getTiming().setText("Time: "+model.getTIME());
+                //holder.getVenue().setText("Venue: "+model.getVENUE());
+                //holder.getTiming().setText("Time: "+model.getTIME());
+
                 holder.getCardView().setOnClickListener(v -> {
                     Intent eventDetailsIntent = new Intent(getActivity(), EventDetailsActivity.class);
 

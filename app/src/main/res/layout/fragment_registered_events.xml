@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,21 +7,27 @@
     tools:context=".UserProfileFragments.RegisteredEventsFragment"
     android:orientation="vertical">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myprofile_recycler_reg_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/fab_margin">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
     <LinearLayout
+        android:paddingLeft="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-
-    <TextView
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:textColor="@android:color/black"
-
-        android:layout_marginBottom="10dp"
-        android:text="Registered events:" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="10dp"
+            android:text="@string/instruo_terms_conds" />
 
         <View
             android:layout_width="0dp"
@@ -31,8 +36,6 @@
             android:layout_gravity="center"
             android:layout_margin="@dimen/fab_margin"
             android:background="@color/instruo_orange"/>
-
-
     </LinearLayout>
 
     <TextView
@@ -40,27 +43,13 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:padding="5dp"
-        android:text="*For participation in all events except \nGaming and Robotics"/>
+        android:text="@string/coupon_600_ins"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:padding="5dp"
-        android:text="**For participation in all Robotics events\nexcept Robowars"/>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-
-        android:id="@+id/myprofile_recycler_reg_event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/fab_margin">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-
-
+        android:text="@string/coupon_1000_ins"/>
 
 </LinearLayout>

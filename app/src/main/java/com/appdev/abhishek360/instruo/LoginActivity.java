@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +15,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
+import com.appdev.abhishek360.instruo.ApiModels.SimpleResponse;
 import com.appdev.abhishek360.instruo.ApiModels.UserProfileModel;
 import com.appdev.abhishek360.instruo.Services.AlertService;
 import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     private ApiServices apiService;
     private CompositeDisposable compositeDisposable;
     private AlertService alertService;
+    private AnimationDrawable animationDrawable;
 
     public static String spAccessTokenKey = "ACCESS_TOKEN", spFullNameKey = "FULL_NAME",
             spInstanceIdKey = "instanceId", spEmailKey = "EMAIL", spKey = "instruoPref",
@@ -84,6 +87,13 @@ public class LoginActivity extends AppCompatActivity {
         googleApiClient = GoogleSignIn.getClient(this, gso);
 
         sharedPreferences = getSharedPreferences("instruoPref", MODE_PRIVATE);
+
+        ConstraintLayout loginLayout = (ConstraintLayout) findViewById(R.id.login_layout);
+
+        animationDrawable = (AnimationDrawable) loginLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(1000);
+        animationDrawable.setExitFadeDuration(2000);
+        animationDrawable.start();
 
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
@@ -198,23 +208,23 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> registerRequest = new HashMap<>();
         registerRequest.put("email", email);
 
-        Single<LoginResponse> res = apiService
+        Single<SimpleResponse> res = apiService
                 .postForgotPassword(registerRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<LoginResponse>() {
+                .subscribe(new SingleObserver<SimpleResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(LoginResponse loginResponse) {
-                        if (loginResponse.getSuccess()) {
-                            tosty(getApplicationContext(), loginResponse.getMsg() + "\nPlease, Check your email!");
+                    public void onSuccess(SimpleResponse simpleResponse) {
+                        if (simpleResponse.getSuccess()) {
+                            tosty(getApplicationContext(), simpleResponse.getMsg() + "\nPlease, Check your email!");
                         } else {
-                            tosty(getApplicationContext(), "Register Failed: " + loginResponse.getMsg());
+                            tosty(getApplicationContext(), "Register Failed: " + simpleResponse.getMsg());
                         }
 
                         progressBar.setVisibility(View.GONE);
@@ -240,25 +250,25 @@ public class LoginActivity extends AppCompatActivity {
         loginRequest.put("email", email);
         loginRequest.put("password", pswd);
 
-        Single<LoginResponse> res = apiService
+        Single<SimpleResponse> res = apiService
                 .postLoginCred(loginRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<LoginResponse>() {
+                .subscribe(new SingleObserver<SimpleResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(LoginResponse loginResponse) {
-                        if (loginResponse.getSuccess()) {
-                            tosty(getApplicationContext(), loginResponse.getMsg());
+                    public void onSuccess(SimpleResponse simpleResponse) {
+                        if (simpleResponse.getSuccess()) {
+                            tosty(getApplicationContext(), simpleResponse.getMsg());
 
                             readUserData();
                         } else {
-                            tosty(getApplicationContext(), "LogIn Failed: " + loginResponse.getMsg());
+                            tosty(getApplicationContext(), "LogIn Failed: " + simpleResponse.getMsg());
                             progressBar.setVisibility(View.GONE);
                             signIn.setEnabled(true);
                         }
@@ -352,11 +362,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClick(View V) {
-        switch (V.getId()) {
-            case R.id.gSignIn:
-                signIN();
-                break;
-        }
+//        switch (V.getId()) {
+//            case R.id.gSignIn:
+//                tosty(this, "Feature not Available.");
+//                //signIN();
+//                break;
+//        }
     }
 
     private void signIN() {
@@ -405,6 +416,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onDestroy() {
         if (!compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
+        }
+
+        if(animationDrawable!=null){
+            animationDrawable.stop();
         }
         if (myDailog != null) {
             myDailog.cancel();

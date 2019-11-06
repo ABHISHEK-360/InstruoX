@@ -12,11 +12,7 @@
         android:orientation="vertical"
         >
 
-
-
-
         <androidx.recyclerview.widget.RecyclerView
-
             android:id="@+id/gaming_event_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

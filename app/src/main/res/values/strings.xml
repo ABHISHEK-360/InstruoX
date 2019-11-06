@@ -4,8 +4,7 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="drawer_open">drawer open</string>
     <string name="drawer_close">drawer close</string>
-    <string name="instruo">INSTRUO-2018</string>
-    <string name="instruo_dates">Coming Soon</string>
+    <string name="instruo_dates">8th-10th Nov, 2019</string>
     <string name="title_activity_my_profile">MyProfileActivity</string>
     <string name="about_instruo_text">INSTRUO, the technical fest of IIEST SHIBPUR, was first organised in the year 2009 with the aim of promoting scientific temper and technological innovation among the students. Over the subsequent years it has become a carnival for all those students, who are interested in maneuvering their technical genes and competing with participants of comparable level of enthusiasm.The fest is a blend of various technical and nontechnical events , series of lectures, seminars and exhibitions which will enrich students of various disciplines with advanced knowledge in their field of interest. Thus, INSTRUO serves as a cradle for creating solutions powered by technology to improve the standard of a common man.</string>
 
@@ -14,11 +13,21 @@
     <string name="past_sponsors_text">Our Past Sponsors</string>
     <string name="myName">Abhishek Kumar</string>
     <string name="instruo_tagline">Driving Innovation</string>
-    <string name="workshop_description">Instruo 2018, the tenth edition of the annual tech fest of IIEST Shibpur proudly presents a two day workshop on Ethical Hacking in association with Aspirevision Tech Education Pvt. Ltd., the authorised training partner of Microsoft on 1st and 2nd September, 2018. The aforesaid workshop aims to inculcate the awareness amongst the participants about the need to protect oneself from hackers by giving them a fair bit of knowledge about Ethical Hacking. The attendees will be guided and trained by the two well acclaimed trainers.</string>
-    <string name="desc_model_making">Creativity and Innovation faces no hindrance from factors like resources, comfort zone, weather etcand therefore to foster up your creativity INSTRUO comes up with its first MODEL EXHIBITION event during INSTRUO 2018 where your functional working models will be judged by eminent personalities from various industrial and technical backgrounds. So now it’s your turn to fasten your seat belts and let your ideas and notions take off on the journey of on-ground realisation. Do take note that the selected models for final exhibition may get partial financial support with the prior approval of their respective departments and the convener of INSTRUO 2018.</string>
+    <string name="workshop_description">Workshops are conducted as pre Instruo events and  aims to inculcate awareness amongst the participants about the technologies prevalent in the respective industry  apart from theoretical knowledge. The attendees will be guided and trained by the two well acclaimed trainers.</string>
+    <string name="desc_model_making">Creativity and Innovation faces no hindrance from factors like resources, comfort zone, weather etcand therefore to foster up your creativity INSTRUO comes up with its first MODEL EXHIBITION event during INSTRUO 2019 where your functional working models will be judged by eminent personalities from various industrial and technical backgrounds. So now it’s your turn to fasten your seat belts and let your ideas and notions take off on the journey of on-ground realisation. Do take note that the selected models for final exhibition may get partial financial support with the prior approval of their respective departments and the convener of INSTRUO 2019.</string>
     <string name="college_name">Indian Institute of Engineering Science and Technology, Shibpur</string>
+    <string name="college_address">
+        IIEST, Shibpur\n
+        P.O.:- Botanical Garden, Howrah - 711103\n
+        West Bengal, India
+    </string>
+    <string name="instruo_website">https://instruo.in</string>
     <string name="instruo_name">INSTRUO-2019</string>
+    <string name="instruo_reg_msg"> Experience Innovation? Register with us!</string>
     <string name="instruo_edition">The 11th Edition</string>
     <string name="instruo_legacy">The Largest Technical Fest of Kolkata</string>
+    <string name="instruo_terms_conds"><![CDATA[Terms & Conditions:]]></string>
+    <string name="coupon_600_ins">*For participation in all events except  Gaming and Robotics</string>
+    <string name="coupon_1000_ins">**For participation in all Robotics events.</string>
 
 </resources>

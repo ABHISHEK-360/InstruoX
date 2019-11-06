@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
+import com.appdev.abhishek360.instruo.ApiModels.SimpleResponse;
 import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
 import com.appdev.abhishek360.instruo.Services.ApiServices;
 import com.google.gson.Gson;
@@ -30,7 +30,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import retrofit2.Converter;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
@@ -62,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
         email_edittext = (EditText) findViewById(R.id.reg_email_edittext);
         contact_edittext = (EditText) findViewById(R.id.reg_phone_edittext);
         college_edittext = (EditText) findViewById(R.id.reg_college_edittext);
-        username_edittext = (EditText) findViewById(R.id.reg_userName_edittext);
+//        username_edittext = (EditText) findViewById(R.id.reg_userName_edittext);
         confpass_edittext = (EditText) findViewById(R.id.reg_confpassword_edittext);
         password_edittext = (EditText) findViewById(R.id.reg_password_edittext);
         register_button = (Button) findViewById(R.id.reg_submit_button);
@@ -85,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
         emailStr = email_edittext.getText().toString();
         String contact = contact_edittext.getText().toString();
         String college = college_edittext.getText().toString();
-        String username = username_edittext.getText().toString();
+        //String username = username_edittext.getText().toString();
         String password = password_edittext.getText().toString();
         String confpass = confpass_edittext.getText().toString();
 
@@ -111,8 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
             contact_edittext.setError("Please,Enter a vaild  Phone No. without +91");
             contact_edittext.requestFocus();
             return;
-        } else {
-            //phone=Integer.parseInt(phoneing);
         }
 
         if (password.isEmpty()) {
@@ -135,12 +132,12 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         } else {
             //imageProgressBar.setVisibility(View.VISIBLE);
-            RegisterUser(emailStr, password, fullnameStr, username, contact, college);
+            RegisterUser(emailStr, password, fullnameStr, contact, college);
         }
 
     }
 
-    public void RegisterUser(final String email, final String pswd, final String name, final String username, final String contact, final String college) {
+    public void RegisterUser(final String email, final String pswd, final String name, final String contact, final String college) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Please Wait!");
         builder.setMessage("Registering...");
@@ -155,24 +152,25 @@ public class RegisterActivity extends AppCompatActivity {
         registerRequest.put("email", email);
         registerRequest.put("password", pswd);
 
-        Single<LoginResponse> res = apiService
+        Single<SimpleResponse> res = apiService
                 .postRegister(registerRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<LoginResponse>() {
+                .subscribe(new SingleObserver<SimpleResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(LoginResponse loginResponse) {
-                        Log.d("REGISTER_API_RES:", loginResponse.getMsg());
-                        if (loginResponse.getSuccess()) {
-                            tosty(getApplicationContext(), loginResponse.getMsg() + "\nPlease, Login with your Credentials");
+                    public void onSuccess(SimpleResponse simpleResponse) {
+                        Log.d("REGISTER_API_RES:", simpleResponse.getMsg());
+                        if (simpleResponse.getSuccess()) {
+                            tosty(getApplicationContext(), simpleResponse.getMsg() + "\nPlease, Login with your Credentials");
+                            finish();
                         } else {
-                            tosty(getApplicationContext(), "Register Failed: " + loginResponse.getMsg());
+                            tosty(getApplicationContext(), "Register Failed: " + simpleResponse.getMsg());
                         }
 
                         reg_progressBar.setVisibility(View.GONE);
@@ -187,11 +185,11 @@ public class RegisterActivity extends AppCompatActivity {
                             Response res = ((HttpException) e).response();
                             ResponseBody body = res.errorBody();
                             Gson gson = new Gson();
-                            TypeAdapter<LoginResponse> adapter = gson.getAdapter(LoginResponse.class);
+                            TypeAdapter<SimpleResponse> adapter = gson.getAdapter(SimpleResponse.class);
 
                             String msg = "";
                             try {
-                                LoginResponse errorParser = adapter.fromJson(body.string());
+                                SimpleResponse errorParser = adapter.fromJson(body.string());
                                 msg = errorParser.getMsg();
                             } catch (IOException ex) {
                                 ex.printStackTrace();

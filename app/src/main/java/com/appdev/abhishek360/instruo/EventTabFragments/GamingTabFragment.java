@@ -126,8 +126,8 @@ public class GamingTabFragment extends Fragment {
                 setAnimation(holder.getCardView(),position);
 
                 holder.getName_event().setText(""+model.getTITLE());
-                holder.getVenue().setText("Venue: "+model.getVENUE());
-                holder.getTiming().setText("Time: "+model.getTIME());
+                //holder.getVenue().setText("Venue: "+model.getVENUE());
+                //holder.getTiming().setText("Time: "+model.getTIME());
 
                 DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
                 final String eventId = snapshot.getId();
@@ -166,9 +166,9 @@ public class GamingTabFragment extends Fragment {
                 }
 
                 try {
-                    storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/GAMING_EVENTS/"+eventId+".jpg");
+                    storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/GAMING_EVENTS/"+eventId+".jpg");
 
-                    Glide.with(getActivity().getApplicationContext()).using(new FirebaseImageLoader()).load(storageReference)
+                    Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference)
                             .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.getPoster_url());
                 }
                 catch (Exception e) {

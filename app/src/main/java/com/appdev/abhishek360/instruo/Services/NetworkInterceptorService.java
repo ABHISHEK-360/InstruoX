@@ -55,9 +55,13 @@ public abstract class NetworkInterceptorService implements Interceptor {
         HttpUrl url = response.request().url();
 
         if(url.encodedPath().endsWith("user/events") && response.code() == 200 && request.method().equals("GET")){
-            if (response.body() != null) {
-                saveRegEvents(response.body());
+
+            Response res = response;
+            if (res.body() != null) {
+                saveRegEvents(res.body());
             }
+
+            return chain.proceed(request);
         }
 
         if (response.code() == 500) {
@@ -70,6 +74,8 @@ public abstract class NetworkInterceptorService implements Interceptor {
             return response;
         }
 
-        return chain.proceed(request);
+        return response;
+
+        //return chain.proceed(request);
     }
 }

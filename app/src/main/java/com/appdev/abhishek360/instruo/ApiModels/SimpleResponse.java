@@ -3,7 +3,7 @@ package com.appdev.abhishek360.instruo.ApiModels;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LoginResponse {
+public class SimpleResponse {
     @Expose
     @SerializedName("success")
     private boolean success = true;

@@ -17,7 +17,7 @@ public class UserProfileModel {
     @SerializedName("college")
     private String college;
     @Expose
-    @SerializedName("contact_number")
+    @SerializedName("contact")
     private String contact;
 
     public String getContact() {

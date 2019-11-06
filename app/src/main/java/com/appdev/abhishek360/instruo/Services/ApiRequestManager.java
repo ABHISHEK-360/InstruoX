@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import android.util.Log;
 
-import com.appdev.abhishek360.instruo.ApiModels.LoginResponse;
+import com.appdev.abhishek360.instruo.ApiModels.SimpleResponse;
 import com.appdev.abhishek360.instruo.LoginActivity;
 
 import java.util.HashMap;
@@ -42,21 +42,21 @@ public class ApiRequestManager {
         Map<String, String> registerRequest = new HashMap<>();
         registerRequest.put("event_key", eventId);
 
-        Single<LoginResponse> res = apiService
+        Single<SimpleResponse> res = apiService
                 .postRegEvent(registerRequest);
 
         res.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<LoginResponse>() {
+                .subscribe(new SingleObserver<SimpleResponse>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         compositeDisposable.add(d);
                     }
 
                     @Override
-                    public void onSuccess(LoginResponse loginResponse) {
-                        Log.d("REG_EVENT_API_RES:", loginResponse.getMsg());
-                        if (loginResponse.getSuccess()) {
+                    public void onSuccess(SimpleResponse simpleResponse) {
+                        Log.d("REG_EVENT_API_RES:", simpleResponse.getMsg());
+                        if (simpleResponse.getSuccess()) {
                             sharedPreferences = ApiRequestManager.this.ctx.getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE);
                             spEditor = sharedPreferences.edit();
                             Set<String> eventNameSet = sharedPreferences.getStringSet(LoginActivity.spEventsKey, new HashSet<String>());
@@ -89,59 +89,49 @@ public class ApiRequestManager {
 
 
     public boolean updateUserData(final Map<String, String> updateRequest) {
-        Single<LoginResponse> res = apiService
+        Single<SimpleResponse> res = apiService
                 .putUserProfile(updateRequest);
 
         res.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<LoginResponse>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
-                    }
-
-                    @Override
-                    public void onSuccess(LoginResponse loginResponse) {
-                        Log.d("UPDATE_USER_API_RES:", loginResponse.getMsg());
-                        if (loginResponse.getSuccess()) {
-                            tosty(ctx,"Try Again! Failed To Update Profile! ");
-                        }
-                        else {
-                            tosty(ctx,"Profile updated!");
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        tosty(ctx,"Trying Again: Network Error!");
-                        Log.e("UPDATE_USER_API_ERROR:","Failed", e);
-                    }
-                });
-
-        return true;
-    }
-
-    public boolean updateUserPass(final Map<String, String> updateRequest) {
-        Single<LoginResponse> res = apiService
-                .putUpdatePass(updateRequest);
-
-        res.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new SingleObserver<LoginResponse>() {
+            .subscribe(new SingleObserver<SimpleResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     compositeDisposable.add(d);
                 }
 
                 @Override
-                public void onSuccess(LoginResponse loginResponse) {
-                    Log.d("UPDATE_PASS_API_RES:", loginResponse.getMsg());
-                    if (loginResponse.getSuccess()) {
-                        tosty(ctx,"Try Again! Failed To Update Password! ");
-                    }
-                    else {
-                        tosty(ctx,"Password updated!");
-                    }
+                public void onSuccess(SimpleResponse simpleResponse) {
+                    Log.d("UPDATE_USER_API_RES:", simpleResponse.getMsg() + simpleResponse.getSuccess());
+                    tosty(ctx,"Profile updated!");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    tosty(ctx,"Trying Again: Network Error!");
+                    Log.e("UPDATE_USER_API_ERROR:","Failed", e);
+                }
+            });
+
+        return true;
+    }
+
+    public boolean updateUserPass(final Map<String, String> updateRequest) {
+        Single<SimpleResponse> res = apiService
+                .putUpdatePass(updateRequest);
+
+        res.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<SimpleResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onSuccess(SimpleResponse simpleResponse) {
+                    Log.d("UPDATE_PASS_API_RES:", simpleResponse.getMsg());
+                    tosty(ctx,"Password updated!");
                 }
 
                 @Override

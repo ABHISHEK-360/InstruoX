@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".HomeFragments.DirectionsFragment"
-    android:background="@drawable/new_background"
-
+    android:background="@drawable/gradient_tert"
     android:id="@+id/directions_fragment">
 
     <LinearLayout
@@ -14,19 +13,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-
         <Button
             android:id="@+id/direction_iiest_1gate"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_margin="10dp"
             android:onClick="getDirection"
-
             android:background="@drawable/buttonstyle"
             android:textSize="20sp"
             android:textColor="#ffffff"
-
             android:gravity="center"
             android:text="IIEST,First Gate" />
 
@@ -39,9 +34,6 @@
             android:onClick="getDirection"
             android:textSize="20sp"
             android:textColor="#ffffff"
-
-
-
             android:background="@drawable/buttonstyle"
             android:text="Netaji Bhawan" />
 
@@ -53,11 +45,7 @@
             android:onClick="getDirection"
             android:textSize="20sp"
             android:textColor="#ffffff"
-
             android:background="@drawable/buttonstyle"
-
-
-
             android:gravity="center"
             android:text="Registration Desk" />
 
@@ -70,7 +58,6 @@
             android:onClick="getDirection"
             android:textSize="20sp"
             android:textColor="#ffffff"
-
             android:background="@drawable/buttonstyle"
             android:text="Institute-hall(I-Hall)" />
         <Button
@@ -82,9 +69,6 @@
             android:textColor="#ffffff"
             android:onClick="getDirection"
             android:background="@drawable/buttonstyle"
-
-
-
             android:gravity="center"
             android:text="New Building/S &amp; T  Building" />
 
@@ -109,7 +93,6 @@
             android:textSize="20sp"
             android:textColor="#ffffff"
             android:onClick="getDirection"
-
             android:background="@drawable/buttonstyle"
             android:text="Alumni Seminar Hall" />
 
@@ -120,11 +103,8 @@
             android:layout_margin="10dp"
             android:textSize="20sp"
             android:textColor="#ffffff"
-
             android:background="@drawable/buttonstyle"
-
             android:onClick="getDirection"
-
             android:gravity="center"
             android:text="Sengupta Hall" />
 
@@ -133,16 +113,12 @@
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_margin="10dp"
-
             android:background="@drawable/buttonstyle"
             android:textSize="20sp"
             android:textColor="#ffffff"
             android:onClick="getDirection"
-
             android:gravity="center"
             android:text="Sen Hall" />
-
-
     </LinearLayout>
 
 </ScrollView>

@@ -122,8 +122,8 @@ public class TechnicalTabFragment extends Fragment {
                 setAnimation(holder.getCardView(),position);
 
                 holder.getName_event().setText(""+model.getTITLE());
-                holder.getVenue().setText("Venue: "+model.getVENUE());
-                holder.getTiming().setText("Time: "+model.getTIME());
+               // holder.getVenue().setText("Venue: "+model.getVENUE());
+                //holder.getTiming().setText("Time: "+model.getTIME());
 
                 DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
                 final String eventId=snapshot.getId();

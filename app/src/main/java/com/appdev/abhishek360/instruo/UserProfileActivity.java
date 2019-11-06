@@ -226,48 +226,48 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
                 .getRegEvents();
 
         res.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<ArrayList<HashMap<String, String>>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        compositeDisposable.add(d);
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<ArrayList<HashMap<String, String>>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onSuccess(ArrayList<HashMap<String, String>> res) {
+                    for (HashMap<String, String> object : res){
+                        regEvents.add(object.get("name"));
+                        regEventId.add(object.get("event_key"));
+                        if(object.get("registration_fee")!=null) regEventsFee.add(object.get("registration_fee"));
+                        else regEventsFee.add("800");
+                        paymentStatus.add(0);
                     }
 
-                    @Override
-                    public void onSuccess(ArrayList<HashMap<String, String>> res) {
-                        for (HashMap<String, String> object : res){
-                            regEvents.add(object.get("name"));
-                            regEventId.add(object.get("event_key"));
-                            if(object.get("registration_fee")!=null) regEventsFee.add(object.get("registration_fee"));
-                            else regEventsFee.add("800");
-                            paymentStatus.add(0);
-                        }
+                    regEvents.add("Accommodation Fee");
+                    regEventsFee.add("200");
+                    regEventId.add("accommodation_fee");
+                    paymentStatus.add(0);
 
-                        regEvents.add("Accommodation Fee");
-                        regEventsFee.add("200");
-                        regEventId.add("accommodation_fee");
-                        paymentStatus.add(0);
+                    regEvents.add("Buy Coupon*");
+                    regEventsFee.add("600");
+                    regEventId.add("coupon_600");
+                    paymentStatus.add(0);
 
-                        regEvents.add("Buy Coupon*");
-                        regEventsFee.add("600");
-                        regEventId.add("coupon_600");
-                        paymentStatus.add(0);
+                    regEvents.add("Buy Coupon**");
+                    regEventsFee.add("1000");
+                    regEventId.add("coupon_1000");
+                    paymentStatus.add(0);
 
-                        regEvents.add("Buy Coupon**");
-                        regEventsFee.add("1000");
-                        regEventId.add("coupon_1000");
-                        paymentStatus.add(0);
+                    progressBar.setVisibility(View.GONE);
+                    SetUpViewPager(vp);
+                }
 
-                        progressBar.setVisibility(View.GONE);
-                        SetUpViewPager(vp);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("USER_EVENTS_API_ERROR", "Failed", e);
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
+                @Override
+                public void onError(Throwable e) {
+                    Log.e("USER_EVENTS_API_ERROR", "Failed", e);
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
     }
 
     public void readUserData() {

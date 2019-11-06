@@ -1,7 +1,6 @@
 package com.appdev.abhishek360.instruo.HomeFragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.appdev.abhishek360.instruo.EventTabFragments.AutomatonTabFragment;
@@ -10,7 +9,6 @@ import com.appdev.abhishek360.instruo.EventTabFragments.GamingTabFragment;
 import com.appdev.abhishek360.instruo.EventTabFragments.NonGenericTabFragment;
 import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
 import com.appdev.abhishek360.instruo.EventTabFragments.TechnicalTabFragment;
-import com.appdev.abhishek360.instruo.EventTabFragments.WorkshopTabFragment;
 import com.appdev.abhishek360.instruo.LoginActivity;
 import com.appdev.abhishek360.instruo.R;
 import com.appdev.abhishek360.instruo.Services.AlertService;
@@ -42,7 +40,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
 
 public class EventsFragment extends Fragment {
     private TabLayout tabs;
@@ -77,7 +74,7 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_events, container, false);
-        imageView=v.findViewById(R.id.events_tab_header_image);
+        //imageView=v.findViewById(R.id.events_tab_header_image);
         tabs = (TabLayout)v.findViewById(R.id.tab_layout);
         tabCode= this.getArguments().getInt("tCode");
 
@@ -91,56 +88,51 @@ public class EventsFragment extends Fragment {
 
         tabs.setupWithViewPager(vp);
         vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabs));
-        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                switch (position) {
-                    case 0 :
-                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
-                        break;
-
-                    case 1 :
-                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/automaton_poster.jpeg" );
-                        break;
-
-                    case 2 :
-                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/non_generic_poster.jpeg" );
-                        break;
-
-                    case 3 :
-                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
-                        break;
-
-                    case 4 :
-                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
-                        break;
-
-                    case 5 :
-                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
-                        break;
-                }
-
-                try {
-                    Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference)
-                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageView);
-                }
-                catch (Exception e) {
-                    Log.d("Event Image:",""+e);
-                    imageView.setImageResource(R.drawable.technical_poster_reduced);
-                }
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+//        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+//        {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                switch (position) {
+//                    case 0 :
+//                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
+//                        break;
+//
+//                    case 1 :
+//                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/automaton_poster.jpeg" );
+//                        break;
+//
+//                    case 2 :
+//                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/non_generic_poster.jpeg" );
+//                        break;
+//
+//                    case 3 :
+//                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/gaming_poster.jpeg" );
+//                        break;
+//
+//                    default :
+//                        storageReference = firebaseStorage.getReference().child("/EVENTS_INSTRUO/APP_ASSETS/EVENT_CAT_POSTER/technical_poster.jpeg" );
+//                }
+//
+//                try {
+//                    Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference)
+//                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(imageView);
+//                }
+//                catch (Exception e) {
+//                    Log.d("Event Image:",""+e);
+//                    imageView.setImageResource(R.drawable.technical_poster_reduced);
+//                }
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
         tabs.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp));
         SetUpViewPager(vp);
 
@@ -174,18 +166,20 @@ public class EventsFragment extends Fragment {
                     @Override
                     public void onError(Throwable e) {
                         Log.e("USER_EVENTS_API_ERROR", "Failed", e);
+                        SetUpViewPager(vp);
+                        vp.setCurrentItem(tabCode);
                     }
                 });
     }
 
     private void SetUpViewPager(ViewPager viewPager) {
-        EventPagerAdapter adapter = new EventPagerAdapter(getFragmentManager(),6);
+        EventPagerAdapter adapter = new EventPagerAdapter(getFragmentManager(),5);
 
         adapter.AddFragmentPage(new TechnicalTabFragment(),"Technical");
         adapter.AddFragmentPage(new AutomatonTabFragment(),"Automaton");
         adapter.AddFragmentPage(new NonGenericTabFragment(),"Non Generic");
         adapter.AddFragmentPage(new GamingTabFragment(),"Gaming");
-        adapter.AddFragmentPage(new WorkshopTabFragment(),"Workshops");
+//        adapter.AddFragmentPage(new WorkshopFragment(),"Workshops");
         adapter.AddFragmentPage(new ExhibitionsTabFragment(),"Exhibitions");
 
         viewPager.setAdapter(adapter);
@@ -199,5 +193,13 @@ public class EventsFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
+        }
+        super.onDestroy();
     }
 }

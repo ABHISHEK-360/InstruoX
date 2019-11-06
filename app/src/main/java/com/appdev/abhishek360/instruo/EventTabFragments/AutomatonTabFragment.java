@@ -47,7 +47,7 @@ public class AutomatonTabFragment extends Fragment {
     private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
     private StorageReference storageReference;
-    private FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
+    private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private CompositeDisposable compositeDisposable;
 
     public static AutomatonTabFragment newInstance(String param1, String param2) {
@@ -121,8 +121,8 @@ public class AutomatonTabFragment extends Fragment {
                 setAnimation(holder.getCardView(),position);
 
                 holder.getName_event().setText(""+model.getTITLE());
-                holder.getVenue().setText("Venue: "+model.getVENUE());
-                holder.getVenue().setText("Time: "+model.getTIME());
+                //holder.getVenue().setText("Venue: "+model.getVENUE());
+                //holder.getTiming().setText("Time: "+model.getTIME());
 
                 DocumentSnapshot snapshot = getSnapshots().getSnapshot(holder.getAdapterPosition());
                 final String eventId=snapshot.getId();
@@ -167,7 +167,7 @@ public class AutomatonTabFragment extends Fragment {
                     storageReference=firebaseStorage.getReference().child("/EVENTS_INSTRUO/AUTOMATON_EVENTS/" + eventId + ".jpeg");
 
                     Glide.with(getActivity()).using(new FirebaseImageLoader()).load(storageReference)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE).into(holder.getPoster_url());
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.getPoster_url());
                 }
                 catch (Exception e) {
                     Log.d("Event Image:",""+e);

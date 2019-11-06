@@ -84,14 +84,16 @@ public class UserDetailsFragment extends Fragment {
 
         editDetails.setOnClickListener(v1 -> {
             fullName.setEnabled(true);
-           // emailId.setEnabled(true);
-            contactNo.setEnabled(true);
+            college.setEnabled(true);
+            //contactNo.setEnabled(true);
         });
 
         updatedetails.setOnClickListener(v12 -> {
             Map<String, String> updateRequest = new HashMap<>();
             updateRequest.put("name", fullName.getText().toString());
             updateRequest.put("college", college.getText().toString());
+            fullName.setEnabled(false);
+            college.setEnabled(false);
 
             apiRequestManager.updateUserData(updateRequest);
         });

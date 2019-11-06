@@ -2,14 +2,14 @@
 <selector
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape
-
-            >
+        <shape>
             <gradient
-                android:startColor="#0e1216"
-                android:centerColor="#2a393e"
-                android:endColor="#0e1216"
-                android:angle="45"/>
+                android:startColor="#040005"
+                android:centerColor="#642B73"
+                android:endColor="#040005"
+                android:angle="45"
+                android:type="linear"
+                />
         </shape>
     </item>
 </selector>

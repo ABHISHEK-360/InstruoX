@@ -16,6 +16,7 @@ import io.fabric.sdk.android.Fabric;
 public class SplashActivity extends AppCompatActivity {
     private int SPLASH_TIME_OUT = 2000;
     private static SharedPreferences sharedPreferences;
+    private AnimatedVectorDrawable animatedVectorDrawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +27,11 @@ public class SplashActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(LoginActivity.spKey, MODE_PRIVATE);
 
-        //final String tokenKey = sharedPreferences.getString(LoginActivity.spAccessTokenKey,null);
         final String sessionId = sharedPreferences.getString(LoginActivity.spSessionId,null);
-        final String fullName =sharedPreferences.getString(LoginActivity.spFullNameKey,null);
-        final String email =sharedPreferences.getString(LoginActivity.spEmailKey,null);
 
-        ((AnimatedVectorDrawable) getWindow().getDecorView().getBackground()).start();
+        animatedVectorDrawable = ((AnimatedVectorDrawable) getWindow().getDecorView().getBackground());
+        animatedVectorDrawable.start();
+
         new Handler().postDelayed(() -> {
             if (sessionId!=null) {
                 Intent in = new Intent(getApplicationContext(), HomeActivity.class);
@@ -48,6 +48,16 @@ public class SplashActivity extends AppCompatActivity {
 
     public static SharedPreferences getAppPreferences(){
         return sharedPreferences;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if(animatedVectorDrawable!=null){
+            animatedVectorDrawable.start();
+            animatedVectorDrawable = null;
+        }
     }
 }
 
