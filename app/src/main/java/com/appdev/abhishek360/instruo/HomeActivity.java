@@ -3,6 +3,7 @@ package com.appdev.abhishek360.instruo;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,6 +22,12 @@ import com.appdev.abhishek360.instruo.HomeFragments.TeamFragment;
 import com.appdev.abhishek360.instruo.HomeFragments.WorkshopFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,6 +38,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,6 +51,8 @@ import android.widget.Toast;
 import net.glxn.qrgen.android.QRCode;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.appdev.abhishek360.instruo.SplashActivity.UPDATE_REQUEST_CODE;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -65,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        checkUpdateAvailable();
         sharedPreferences = getSharedPreferences(LoginActivity.spKey,MODE_PRIVATE);
         sessionId = sharedPreferences.getString(LoginActivity.spSessionId, null);
         if(sessionId!=null){
@@ -125,6 +136,41 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             nameView.setText(name);
             emailView.setText(email);
             //Glide.with(this).load(imgUrl).into(proPic);
+        }
+    }
+
+    private boolean checkUpdateAvailable(){
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this);
+
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // For a flexible update, use AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.FLEXIBLE,
+                            this,
+                            UPDATE_REQUEST_CODE);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return false;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult( requestCode, resultCode, data);
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.d("UPDATE FLOW FAILED!"," Result code: " + resultCode);
+                tosty(this, "Please update to use latest features and stability!");
+            }
         }
     }
 

@@ -8,8 +8,8 @@ import com.appdev.abhishek360.instruo.LoginActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class FireBaseInstanceIDService extends FirebaseMessagingService {
-    private static final String TAG = "Firebase Notification";
+public class FireBaseInstanceIDService extends MyFirebaseMessagingService {
+    private static final String TAG = "FIREBASE_NOTIFICATION";
 
     @Override
     public void onNewToken(String s) {

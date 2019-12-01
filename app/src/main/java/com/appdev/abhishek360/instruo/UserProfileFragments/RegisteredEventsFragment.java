@@ -1,7 +1,6 @@
 package com.appdev.abhishek360.instruo.UserProfileFragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,34 +8,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.appdev.abhishek360.instruo.Adapters.RegEventItemAdapter;
 import com.appdev.abhishek360.instruo.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import instamojo.library.InstapayListener;
-
 
 public class RegisteredEventsFragment extends Fragment {
     private ArrayList<String> regEventsList;
     private ArrayList<String> entryFee;
     private ArrayList<Integer> paymentStatus;
+    private ArrayList<String> transId;
+    private ArrayList<String> paymentTime;
     //private ArrayList<String> accountDetails;
-    private InstapayListener listener;
     private RecyclerView recyclerView;
     private RegEventItemAdapter adapter;
 
-    public static RegisteredEventsFragment newInstance(ArrayList<String> events, ArrayList<String> eventEntryFee, ArrayList<Integer> paymentStatus) {
+    public static RegisteredEventsFragment newInstance(ArrayList<String> events, ArrayList<String> eventEntryFee, ArrayList<Integer> paymentStatus, ArrayList<String> transId, ArrayList<String> paymentTime ) {
         RegisteredEventsFragment fragment = new RegisteredEventsFragment();
         Bundle args = new Bundle();
         args.putStringArrayList("events", events);
         args.putStringArrayList("entryFee", eventEntryFee);
         args.putIntegerArrayList("paymentStatus", paymentStatus);
+        args.putStringArrayList("transId", transId);
+        args.putStringArrayList("paymentTime", paymentTime);
 
         fragment.setArguments(args);
         return fragment;
@@ -50,6 +45,8 @@ public class RegisteredEventsFragment extends Fragment {
             regEventsList = getArguments().getStringArrayList("events");
             entryFee = getArguments().getStringArrayList("entryFee");
             paymentStatus = getArguments().getIntegerArrayList("paymentStatus");
+            transId = getArguments().getStringArrayList("transId");
+            paymentTime = getArguments().getStringArrayList("paymentTime");
         }
     }
 
@@ -66,7 +63,10 @@ public class RegisteredEventsFragment extends Fragment {
 
         adapter.setRegEventName(regEventsList);
         adapter.setRegFee(entryFee);
-        adapter.setPaymentStaus(paymentStatus);
+        adapter.setPaymentStatus(paymentStatus);
+        adapter.setTransId(transId);
+        adapter.setPaymentTime(paymentTime);
+
         //adapter.setAccountDetails(accountDetails);
         adapter.setActivity(this.getActivity());
 

@@ -39,4 +39,4 @@ Thumbs.db
 .externalNativeBuild
 app/release
 app/google-services.json
-
+app/a360_deploy_key_admin.json

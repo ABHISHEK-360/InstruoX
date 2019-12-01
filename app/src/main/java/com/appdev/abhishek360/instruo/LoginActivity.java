@@ -3,6 +3,7 @@ package com.appdev.abhishek360.instruo;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -30,6 +31,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
@@ -44,6 +50,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
+
+import static com.appdev.abhishek360.instruo.SplashActivity.UPDATE_REQUEST_CODE;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView username, pass, forgotPass;
@@ -72,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        checkUpdateAvailable();
         alertService = new AlertService(this);
         compositeDisposable = new CompositeDisposable();
         apiService = ApiClientInstance
@@ -132,6 +141,31 @@ public class LoginActivity extends AppCompatActivity {
             Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(registerIntent);
         });
+    }
+
+    private boolean checkUpdateAvailable(){
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this);
+
+        com.google.android.play.core.tasks.Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // For a flexible update, use AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo,
+                            AppUpdateType.FLEXIBLE,
+                            this,
+                            UPDATE_REQUEST_CODE);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        return false;
     }
 
     public void showPopUp(View V) {
@@ -405,6 +439,12 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("google_signin", "success request");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             onRequest(task);
+        }
+        else if (requestCode == UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.d("UPDATE FLOW FAILED!"," Result code: " + resultCode);
+                tosty(this, "Please update to use latest features and stability!");
+            }
         }
     }
 

@@ -27,7 +27,9 @@
     <string name="instruo_edition">The 11th Edition</string>
     <string name="instruo_legacy">The Largest Technical Fest of Kolkata</string>
     <string name="instruo_terms_conds"><![CDATA[Terms & Conditions:]]></string>
-    <string name="coupon_600_ins">*For participation in all events except  Gaming and Robotics</string>
+    <string name="coupon_600_ins">*For participation in all events except  Gaming and Automaton</string>
+    <string name="team_pay_ins">*For Automaton events one of the Team member only needs to pay.</string>
     <string name="coupon_1000_ins">**For participation in all Robotics events.</string>
+    <string name="default_notification_channel_id">GENERAL_NOTIFY_CHANNEL</string>
 
 </resources>

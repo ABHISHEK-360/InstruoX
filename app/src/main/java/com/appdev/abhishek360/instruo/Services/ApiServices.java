@@ -22,6 +22,8 @@ public interface ApiServices {
     Single<SimpleResponse> postForgotPassword(@Body Map<String,String> requestModel);
     @POST("user/events")
     Single<SimpleResponse> postRegEvent(@Body Map<String,String> requestModel);
+    @POST("payment/")
+    Single<SimpleResponse> postPaymentEvnt(@Body Map<String,String> requestModel);
 
     @GET("user/profile")
     Single<UserProfileModel> getUserProfile();
@@ -29,6 +31,8 @@ public interface ApiServices {
     Single<UserProfileModel> getLogout();
     @GET("user/events")
     Single<ArrayList<HashMap<String,String>>> getRegEvents();
+    @GET("user/payments")
+    Single<ArrayList<HashMap<String,String>>> getUserPayments();
 
     @PUT("user/profile")
     Single<SimpleResponse> putUserProfile(@Body Map<String,String> requestModel);

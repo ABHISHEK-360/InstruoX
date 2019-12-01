@@ -13,6 +13,28 @@ public class SimpleResponse {
     @Expose
     @SerializedName("accessToken")
     private String accessToken = "a360";
+    @Expose
+    @SerializedName("order_id")
+    private String orderId = "gshhkkjs-sjhbhs";
+    @Expose
+    @SerializedName("url")
+    private String paymentUrl = "xyz";
+
+    public String getPaymentUrl() {
+        return paymentUrl;
+    }
+
+    public void setPaymentUrl(String paymentUrl) {
+        this.paymentUrl = paymentUrl;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public String getAccessToken() {
         return accessToken;

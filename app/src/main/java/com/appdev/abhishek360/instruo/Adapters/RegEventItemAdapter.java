@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,8 @@ public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapte
     private ArrayList<String> regFee;
     //private ArrayList<String> accountDetails;
     private ArrayList<Integer> paymentStatus;
+    private ArrayList<String> transId;
+    private ArrayList<String> paymentTime;
     private UserProfileActivity activity;
 
     public void setActivity(Activity activity) {
@@ -38,8 +41,15 @@ public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapte
         this.regFee = regFee;
     }
 
+    public void setTransId(ArrayList<String> transId) {
+        this.transId = transId;
+    }
 
-    public void setPaymentStaus(ArrayList<Integer> paymentStatus) {
+    public void setPaymentTime(ArrayList<String> paymentTime) {
+        this.paymentTime = paymentTime;
+    }
+
+    public void setPaymentStatus(ArrayList<Integer> paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
@@ -58,20 +68,27 @@ public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapte
 
         if (!regFee.get(position).isEmpty()) {
             if (paymentStatus.get(position) == 1) {
+                holder.paidLayout.setVisibility(View.VISIBLE);
+                holder.transIdTV.setText("Transaction Id: "+transId.get(position));
+                holder.timeTV.setText("Time: "+paymentTime.get(position));
+                holder.transIdTV.setVisibility(View.VISIBLE);
+                holder.timeTV.setVisibility(View.VISIBLE);
                 holder.pay_fee.setText("Paid:- ₹ " + regFee.get(position));
-                holder.pay_fee.setEnabled(false);
+                holder.pay_fee.setOnClickListener(v -> {
+                    AlertService alertService = new AlertService(activity);
+                    alertService.showAlert("Payment Receipt", "Please check your E-Mail for receipt.");
+                });
 
             } else {
                 holder.pay_fee.setText("Pay:- ₹ " + regFee.get(position));
+                holder.pay_fee.setOnClickListener(v -> {
+                    String regFee_str = regFee.get(position);
+                    //AlertService alertService = new AlertService(activity);
+                    //alertService.showAlert("Message", "Payment will be available soon.");
+                    activity.payAmt(position, regFee_str);
+                });
             }
         } else holder.pay_fee.setEnabled(false);
-
-        holder.pay_fee.setOnClickListener(v -> {
-            String regFee_str = regFee.get(position);
-            AlertService alertService = new AlertService(activity);
-            alertService.showAlert("Message", "Payment will be available soon.");
-            //activity.payAmt(position, regFee_str);
-        });
     }
 
     @Override
@@ -80,12 +97,17 @@ public class RegEventItemAdapter extends RecyclerView.Adapter<RegEventItemAdapte
     }
 
     public static class RegEventsViewHolder extends RecyclerView.ViewHolder {
-        TextView name_event;
-        Button pay_fee;
+        private TextView name_event, transIdTV, timeTV;
+        private LinearLayout paidLayout;
+        private Button pay_fee;
+
 
         public RegEventsViewHolder(View itemView) {
             super(itemView);
             name_event = (TextView) itemView.findViewById(R.id.myprofile_view_holder_name);
+            paidLayout = itemView.findViewById(R.id.reg_event_holder_paid_layout);
+            transIdTV = (TextView) itemView.findViewById(R.id.myprofile_view_holder_tran_id);
+            timeTV = (TextView) itemView.findViewById(R.id.myprofile_view_holder_date);
             pay_fee = (Button) itemView.findViewById(R.id.myprofile_view_holder_paynow);
         }
     }

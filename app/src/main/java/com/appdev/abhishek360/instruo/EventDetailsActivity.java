@@ -68,15 +68,14 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         eventDetails = new EventAdapter();
-        //eventDetails = (EventAdapter) i.getParcelableExtra(KEY_EVENT_OBJECT);
         eventId = i.getStringExtra(KEY_EVENT_ID);
         eventCat = i.getStringExtra(KEY_EVENT_CAT);
+        posterRef_str = i.getStringExtra(KEY_POSTER_REF);
+
         getEventDetails(eventId);
 
-        eventId = i.getExtras().getString("eventId","myEvent");
-        posterRef_str = i.getExtras().getString(KEY_POSTER_REF);
-
         StorageReference storageReference=  firebaseStorage.getReference().child(posterRef_str);
+        Log.d("poster ref:", posterRef_str);
 
         Glide.with(this).using(new FirebaseImageLoader()).load(storageReference)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE).into(poster_image);
@@ -109,6 +108,12 @@ public class EventDetailsActivity extends AppCompatActivity {
             Toast.makeText(this,"Please, Sign up to Participate in Events!", Toast.LENGTH_LONG).show();
         else
             apiRequestManager.registerEvent(eventId);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     private void getEventDetails(String eventId){

@@ -2,9 +2,11 @@ package com.appdev.abhishek360.instruo;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.appdev.abhishek360.instruo.Adapters.EventPagerAdapter;
+import com.appdev.abhishek360.instruo.ApiModels.SimpleResponse;
 import com.appdev.abhishek360.instruo.ApiModels.UserProfileModel;
 import com.appdev.abhishek360.instruo.Services.AlertService;
 import com.appdev.abhishek360.instruo.Services.ApiClientInstance;
@@ -26,9 +29,7 @@ import com.appdev.abhishek360.instruo.Services.NetworkConnectionListener;
 import com.appdev.abhishek360.instruo.UserProfileFragments.RegisteredEventsFragment;
 import com.appdev.abhishek360.instruo.UserProfileFragments.UserDetailsFragment;
 import com.google.android.material.tabs.TabLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.instamojo.android.Instamojo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,8 +37,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import instamojo.library.InstamojoPay;
-import instamojo.library.InstapayListener;
 import io.reactivex.Single;
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -49,12 +48,11 @@ import static com.appdev.abhishek360.instruo.LoginActivity.spEmailKey;
 import static com.appdev.abhishek360.instruo.LoginActivity.spFullNameKey;
 import static com.appdev.abhishek360.instruo.LoginActivity.tosty;
 
-public class UserProfileActivity extends AppCompatActivity implements NetworkConnectionListener {
+public class UserProfileActivity extends AppCompatActivity implements NetworkConnectionListener, Instamojo.InstamojoPaymentCallback {
     private TabLayout tabs;
     private int tabCode;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor spEditor;
-    private OnAboutDataReceivedListener mAboutDataListener;
     private ViewPager vp;
     private ProgressBar progressBar;
 
@@ -63,14 +61,12 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
     private ArrayList<String> regEventId = new ArrayList<>();
     private ArrayList<String> regEvents =  new ArrayList<>();
     private ArrayList<String> regEventsFee =  new ArrayList<>();
+    private ArrayList<String> transId =  new ArrayList<>();
+    private ArrayList<String> paymentTime =  new ArrayList<>();
     private ArrayList<Integer> paymentStatus = new ArrayList<>();
-    private Set<String> eventsNameSet = new HashSet<>();
-    private InstapayListener listener;
     private AlertService alertService;
-    private final String WEBHOOK_KEY = "http://webhook.instruo.in/api/v1/payment/instamojohook";
 
     private Dialog dialog;
-    private InstamojoPay instamojoPay;
     private String[] paymentDetail;
     private int eventIndex;
     private static Set<String> gamingEvents = new HashSet<>();
@@ -116,32 +112,30 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         KEY_EVENTS_FEE.put("csgo", 500);
         KEY_EVENTS_FEE.put("fifa", 100);
 
-        KEY_EVENTS_FEE.put("mathemania", 100);
-        KEY_EVENTS_FEE.put("war_of_titans", 100);
-        KEY_EVENTS_FEE.put("battle_of_bards", 100);
-        KEY_EVENTS_FEE.put("innovation_challenge", 100);
-        KEY_EVENTS_FEE.put("wonder_girls", 100);
-        KEY_EVENTS_FEE.put("prashnavali", 100);
-        KEY_EVENTS_FEE.put("face_off", 100);
-        KEY_EVENTS_FEE.put("business_prototype", 100);
-        KEY_EVENTS_FEE.put("mayday_mystery", 100);
+        KEY_EVENTS_FEE.put("mathemania", 150);
+        KEY_EVENTS_FEE.put("war_of_titans", 150);
+        KEY_EVENTS_FEE.put("battle_of_bards", 150);
+        KEY_EVENTS_FEE.put("innovation_challenge", 150);
+        KEY_EVENTS_FEE.put("wonder_girls", 150);
+        KEY_EVENTS_FEE.put("prashnavali", 150);
+        KEY_EVENTS_FEE.put("face_off", 150);
+        KEY_EVENTS_FEE.put("business_prototype", 150);
+        KEY_EVENTS_FEE.put("mayday_mystery", 150);
 
-        KEY_EVENTS_FEE.put("junkyard", 100);
-        KEY_EVENTS_FEE.put("papyrus", 100);
-        KEY_EVENTS_FEE.put("web_d", 100);
-        KEY_EVENTS_FEE.put("access_denied", 100);
-        KEY_EVENTS_FEE.put("ode_to_code", 100);
-        KEY_EVENTS_FEE.put("boomerang", 100);
-        KEY_EVENTS_FEE.put("electronicazz", 100);
-        KEY_EVENTS_FEE.put("wiredin", 100);
+        KEY_EVENTS_FEE.put("junkyard", 150);
+        KEY_EVENTS_FEE.put("papyrus", 150);
+        KEY_EVENTS_FEE.put("web_d", 150);
+        KEY_EVENTS_FEE.put("access_denied", 150);
+        KEY_EVENTS_FEE.put("ode_to_code", 150);
+        KEY_EVENTS_FEE.put("boomerang", 150);
+        KEY_EVENTS_FEE.put("electronicazz", 150);
+        KEY_EVENTS_FEE.put("wiredin", 150);
 
-        KEY_EVENTS_FEE.put("colosseum_15", 2000);
-        KEY_EVENTS_FEE.put("colosseum_60", 3000);
         KEY_EVENTS_FEE.put("death_race", 800);
-        KEY_EVENTS_FEE.put("robovengers", 800);
-        KEY_EVENTS_FEE.put("relative_velocity_challenge", 800);
+        KEY_EVENTS_FEE.put("natterjack", 800);
+        KEY_EVENTS_FEE.put("metal_gear", 800);
         KEY_EVENTS_FEE.put("soccred_games", 800);
-        KEY_EVENTS_FEE.put("tri_wizard", 800);
+        KEY_EVENTS_FEE.put("illuminati", 800);
     }
 
     private ArrayList<String> accountDetails = new ArrayList<>();
@@ -149,14 +143,18 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Instamojo.getInstance().initialize(this, Instamojo.Environment.PRODUCTION);
+
         tabCode = getIntent().getIntExtra("tabCode", 0);
         setContentView(R.layout.activity_my_profile);
         dialog = new Dialog(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.action_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         compositeDisposable = new CompositeDisposable();
         alertService = new AlertService(this);
@@ -214,7 +212,12 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
     public void SetUpViewPager(ViewPager viewPager) {
         EventPagerAdapter adapter = new EventPagerAdapter(getSupportFragmentManager(), 2);
         adapter.AddFragmentPage(UserDetailsFragment.newInstance(accountDetails), "Account Details");
-        adapter.AddFragmentPage(RegisteredEventsFragment.newInstance(regEvents, regEventsFee, paymentStatus), "Registered Events");
+        adapter.AddFragmentPage(RegisteredEventsFragment.newInstance(regEvents,
+                regEventsFee,
+                paymentStatus,
+                transId,
+                paymentTime
+        ), "Registered Events");
         adapter.notifyDataSetChanged();
 
         viewPager.setAdapter(adapter);
@@ -235,31 +238,59 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
 
                 @Override
                 public void onSuccess(ArrayList<HashMap<String, String>> res) {
+
+                    boolean accoFlag = false;
+                    boolean coupon600Flag = false;
+                    boolean coupon1000Flag = false;
+
                     for (HashMap<String, String> object : res){
                         regEvents.add(object.get("name"));
-                        regEventId.add(object.get("event_key"));
+                        String eventKey = object.get("event_key");
+                        regEventId.add(eventKey);
                         if(object.get("registration_fee")!=null) regEventsFee.add(object.get("registration_fee"));
                         else regEventsFee.add("800");
                         paymentStatus.add(0);
+                        transId.add(null);
+                        paymentTime.add(null);
+
+                        if(eventKey.equals("accommodation_fee"))
+                            accoFlag = true;
+
+                        if(eventKey.equals("coupon_600"))
+                            coupon600Flag = true;
+
+                        if(eventKey.equals("coupon_1000"))
+                            coupon1000Flag = true;
                     }
 
-                    regEvents.add("Accommodation Fee");
-                    regEventsFee.add("200");
-                    regEventId.add("accommodation_fee");
-                    paymentStatus.add(0);
+                    if(!accoFlag) {
+                        regEvents.add("Accommodation Fee");
+                        regEventsFee.add("300");
+                        regEventId.add("accommodation_fee");
+                        paymentStatus.add(0);
+                        transId.add(null);
+                        paymentTime.add(null);
+                    }
 
-                    regEvents.add("Buy Coupon*");
-                    regEventsFee.add("600");
-                    regEventId.add("coupon_600");
-                    paymentStatus.add(0);
+                     if(!coupon600Flag){
+                         regEvents.add("Buy Coupon*");
+                         regEventsFee.add("600");
+                         regEventId.add("coupon_600");
+                         paymentStatus.add(0);
+                         transId.add(null);
+                         paymentTime.add(null);
+                     }
 
-                    regEvents.add("Buy Coupon**");
-                    regEventsFee.add("1000");
-                    regEventId.add("coupon_1000");
-                    paymentStatus.add(0);
+                     if(!coupon1000Flag) {
+                         regEvents.add("Buy Coupon**");
+                         regEventsFee.add("1000");
+                         regEventId.add("coupon_1000");
+                         paymentStatus.add(0);
+                         transId.add(null);
+                         paymentTime.add(null);
+                     }
 
-                    progressBar.setVisibility(View.GONE);
-                    SetUpViewPager(vp);
+                    loadUserPayments();
                 }
 
                 @Override
@@ -268,6 +299,40 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
                     progressBar.setVisibility(View.GONE);
                 }
             });
+    }
+
+    public void loadUserPayments(){
+        Single<ArrayList<HashMap<String, String>>> res = apiService
+                .getUserPayments();
+
+        res.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleObserver<ArrayList<HashMap<String, String>>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onSuccess(ArrayList<HashMap<String, String>> res) {
+                        Log.d("USER_PAYMENT_API_RES", res.toString());
+                        for (HashMap<String, String> object : res){
+                            int index = regEventId.indexOf(object.get("event_key"));
+                            paymentStatus.set(index, 1);
+                            transId.set(index, object.get("transaction_id"));
+                            paymentTime.set(index, object.get("created"));
+                        }
+
+                        progressBar.setVisibility(View.GONE);
+                        SetUpViewPager(vp);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("USER_PAYMENTS_API_ERROR", "Failed", e);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
     public void readUserData() {
@@ -303,212 +368,63 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
                     progressBar.setVisibility(View.GONE);
                 }
             });
+    }
 
-//        HurlStack hurlStack = new HurlStack()
-//        {
-//            @Override
-//            protected HttpURLConnection createConnection(URL url) throws IOException
-//            {
-//                HttpsURLConnection httpsURLConnection = (HttpsURLConnection) super.createConnection(url);
-//                try
-//                {
-//                    httpsURLConnection.setSSLSocketFactory(getSSLSocketFactory());
-//                    httpsURLConnection.setHostnameVerifier(getHostnameVerifier());
-//                } catch (Exception e)
-//                {
-//                    e.printStackTrace();
-//                }
-//                return httpsURLConnection;
-//            }
-//        };
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(this,hurlStack);
-//
-//        String URL = "https://instruo.in/api/v1/user";
-//
-//        jsonRequestAdapter jsonRequestAdapter = new jsonRequestAdapter();
-//
-//        jsonRequestAdapter.setRequestAction("READ");
-//        jsonRequestAdapter.setRequestData("username","leo4");
-//        jsonRequestAdapter.setRequestData("password","null");
-//        jsonRequestAdapter.setRequestParameteres("filter",null);
-//
-//
-//
-//        final Gson json = new GsonBuilder().serializeNulls().create();
-//
-//
-//
-//        final String jsonRequest = json.toJson(jsonRequestAdapter);
-//
-//        //tosty(this,jsonRequest);
-//        //Log.d("JSON: ",jsonRequest);
-//
-//
-//
-//        JsonObjectRequest objectRequest = new JsonObjectRequest(
-//                Request.Method.POST,
-//                URL,
-//                jsonRequest,
-//                new Response.Listener<JSONObject>()
-//                {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        try {
-//                            if (response.get("responseStatus").equals("FAILED")&&response.get("responseMessage").equals("Not Authorized2!!!")) {
-//                                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-//                                builder.setTitle("Session Expired!");
-//                                builder.setCancelable(false);
-//                                builder.setMessage("Please Login Again to Continue!");
-//                                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        dialog.cancel();
-//                                        Intent  in = new Intent(getApplicationContext(),LoginActivity.class);
-//                                        spEditor=sharedPreferences.edit();
-//                                        spEditor.clear();
-//                                        spEditor.apply();
-//                                        startActivity(in);
-//                                        finish();
-//                                    }
-//                                });
-//
-//                                AlertDialog alert = builder.create();
-//                                alert.show();
-//                                //tosty(getApplicationContext(),"User Data Access Failed: "+response.get("responseMessage"));
-//
-//                                //progresBar.setVisibility(View.GONE);
-//                            }
-//                            if (response.get("responseStatus").equals("OK")&& (response.get("responseMessage")).equals("USER RETRIEVED SUCCESSFULLY")) {
-//                                JSONObject jsonData = new JSONObject(""+response).getJSONObject("responseData");
-//
-//                                accountDetails.add(jsonData.get("userName").toString());
-//                                accountDetails.add(jsonData.get("userEmail").toString());
-//                                accountDetails.add(jsonData.get("college").toString());
-//
-//                                JSONArray obj = jsonData.getJSONArray("contact");
-//
-//                                accountDetails.add(obj.getString(0));
-//
-//                                JSONArray object=jsonData.getJSONArray("events");
-//                                JSONArray objectPayments=jsonData.getJSONArray("payments");
-//
-//                                int noOfRegisterEvents =object.length();
-//                                int noOfPayments=objectPayments.length();
-//                                eventsName = new ArrayList<>();
-//                                regEventId= new ArrayList<>();
-//                                regEventsFee= new ArrayList<>();
-//                                paymentStatus= new ArrayList<>();
-//
-//                                eventsName.add("Accommodation Fee");
-//                                regEventsFee.add("200");
-//                                regEventId.add("accommodation_fee");
-//                                eventsNameSet.add("accommodation_fee");
-//
-//                                eventsName.add("Buy Coupon*");
-//                                regEventsFee.add("500");
-//                                regEventId.add("coupon_500");
-//                                eventsNameSet.add("coupon_500");
-//
-//                                eventsName.add("Buy Coupon**");
-//                                regEventsFee.add("1000");
-//                                regEventId.add("coupon_1000");
-//                                eventsNameSet.add("coupon_1000");
-//
-//                                for(int i=0;i<noOfRegisterEvents;i++) {
-//                                    String events=object.getString(i);
-//                                    JSONObject jsonEvents = new JSONObject(""+events);
-//
-//                                    eventsName.add(jsonEvents.get("name").toString());
-//                                    regEventsFee.add(""+KEY_EVENTS_FEE.get(jsonEvents.get("description").toString()));
-//                                    regEventId.add(jsonEvents.get("description").toString());
-//
-//                                    eventsNameSet.add(jsonEvents.get("description").toString());
-//                                }
-//
-//                                for (int i=0;i<noOfPayments;i++) {
-//                                    String payments=objectPayments.getString(i);
-//
-//                                    JSONObject jsonPayments = new JSONObject(""+payments);
-//                                    paymentStatus.add( jsonPayments.get("description").toString());
-//                                }
-//
-//                                //List<Object> events= new ArrayList<Object>();
-//
-//                                spEditor=sharedPreferences.edit();
-//                                spEditor.putStringSet(spEventsKey,eventsNameSet).apply();
-//
-//                                progressBar.setVisibility(View.GONE);
-//                                SetUpViewPager(vp);
-//
-//                                //tosty(getApplicationContext(),"Events "+eventsName);
-//                                //Log.d("Event Details:",""+eventsName);
-//
-//
-//
-//
-//
-//                            }
-//                        }
-//                        catch (JSONException e)
-//                        {
-//                            e.printStackTrace();
-//                        }
-//
-//                        //Log.d("Response",""+response);
-//
-//                    }
-//                },
-//                new Response.ErrorListener()
-//                {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error)
-//                    {
-//                        Log.d("Error:",""+error);
-//                        tosty(getApplicationContext(),"Trying Again: Network Error!");
-//                       finish();
-//
-//
-//
-//                    }
-//                }
-//        )
-//        {
-//            public Map<String, String> getHeaders() throws AuthFailureError
-//            {
-//                Map<String, String>  params = new HashMap<String, String>();
-//                params.put("authorization", token);
-//
-//
-//                return params;
-//            }
-//        };
-//
-//        requestQueue.add(objectRequest);
+    private void getPaymentUrl(String event_id){
+        Map<String, String> requestModel = new HashMap<>();
+        requestModel.put("event_key", event_id);
+        Single<SimpleResponse> res = apiService
+                .postPaymentEvnt(requestModel);
+
+        res.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new SingleObserver<SimpleResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onSuccess(SimpleResponse res) {
+                    String paymentUrl = res.getPaymentUrl();
+                    Log.e("PAYMENT_API_RES", paymentUrl);
+
+                    Log.d("Order Id:", res.getOrderId());
+
+                    Instamojo.getInstance().initiatePayment(
+                            UserProfileActivity.this,
+                            res.getOrderId(),
+                            UserProfileActivity.this
+                    );
+
+                    progressBar.setVisibility(View.GONE);
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Log.e("PAYMENT_API_ERROR", "Failed", e);
+                    progressBar.setVisibility(View.GONE);
+
+                }
+            });
     }
 
     public void payAmt(final int index, final String regFee_str) {
-        //String purpose = "Paying "+regFee_str+"for "+eventsName.get(index)+","+regEventId.get(index);
-        //tosty(getApplicationContext(),purpose);
 
         eventIndex = index;
 
         if (validateCollege(accountDetails.get(2), regEventId.get(index))) {
             alertService.showAlert("Free Registration!", "Participation for IIEST Shibpur students is free except Gaming Events.");
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Free Registration!");
-//            builder.setMessage("Participation for IIEST Shibpur students is free except Gaming Events.");
-//            builder.setPositiveButton("OK", (dialog, which) -> dialog.cancel());
-//
-//            AlertDialog alert = builder.create();
-//            alert.show();
             return;
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Payment Alert!");
-        builder.setMessage("Pay Registration Fee Rs." + regFee_str);
+        builder.setMessage("Pay Registration Fee Rs." + regFee_str+"\n*transaction charges of 1.9% will be added on payment screen");
         builder.setPositiveButton("Pay", (dialog, which) -> {
-            callInstamojoPay(accountDetails.get(1), accountDetails.get(3), regFee_str, regEventId.get(index), accountDetails.get(0));
+            getPaymentUrl(regEventId.get(index));
+            progressBar.setVisibility(View.VISIBLE);
             dialog.cancel();
         });
 
@@ -525,76 +441,6 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         return false;
     }
 
-    public ArrayList<String> getRegEventId() {
-        return regEventId;
-    }
-
-    private void callInstamojoPay(String email, String phone, String amount, String purpose, String buyername) {
-        tosty(getApplicationContext(), purpose);
-        final Activity activity = this;
-        instamojoPay = new InstamojoPay();
-        IntentFilter filter = new IntentFilter("ai.devsupport.instamojo");
-        activity.registerReceiver(instamojoPay, filter);
-        JSONObject pay = new JSONObject();
-        try {
-            pay.put("email", email);
-            pay.put("phone", phone);
-            pay.put("amount", amount);
-            pay.put("purpose", purpose);
-            pay.put("name", buyername);
-            pay.put("webhook", WEBHOOK_KEY);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        initListener();
-        instamojoPay.start(activity, pay, listener);
-        // showPopUp(paymentDetail);
-    }
-
-    private void initListener() {
-        listener = new InstapayListener() {
-            @Override
-            public void onSuccess(String s) {
-                tosty(getApplicationContext(), "Payment Successful: " + s);
-                paymentDetail = s.split(":");
-
-                showAlert(paymentDetail);
-
-                //showPopUp(paymentDetail);
-            }
-
-            @Override
-            public void onFailure(int i, String s) {
-                tosty(getApplicationContext(), "Failed: " + s);
-                s = "status=failed:orderId=null:txnId=null:paymentId=null:token=null";
-                paymentDetail = s.split(":");
-
-                showAlert(paymentDetail);
-
-                //unregisterReceiver(instamojoPay);
-            }
-        };
-    }
-
-    public void showAlert(final String[] payDetail) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("" + payDetail[0]);
-        builder.setCancelable(false);
-        builder.setMessage("" + payDetail[1] + "\n" + payDetail[3] + "\nAmount= " + regEventsFee.get(eventIndex) + "\nEventName= " + regEvents.get(eventIndex) + "\nEmail= " + accountDetails.get(1) + "\n\n   *Receipt will be sent to registered Email.");
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            dialog.cancel();
-            Intent in = new Intent(getApplicationContext(), HomeActivity.class);
-            in.putExtra("name", accountDetails.get(0));
-            in.putExtra("email", accountDetails.get(1));
-            startActivity(in);
-            finish();
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -610,12 +456,26 @@ public class UserProfileActivity extends AppCompatActivity implements NetworkCon
         tosty(getApplicationContext(), "Internet Unavailable!");
     }
 
-    public interface OnAboutDataReceivedListener {
-        void onDataReceived(Map model);
+    @Override
+    public void onInstamojoPaymentComplete(String orderId, String tranId, String paymentId, String status) {
+        //showPopUp(new String[]);
+        alertService.showAlert("Payment Response", "Status"+status+"\nOrder ID "+
+                orderId+"\nTransaction: "+
+                tranId+"\nPayment Id"+paymentId+
+                "\nReceipt sent to Registered email."+
+                "\nIt may take up to 6hrs to reflect payment here.");
     }
 
-    public void setAboutDataListener(OnAboutDataReceivedListener listener) {
-        this.mAboutDataListener = listener;
+    @Override
+    public void onPaymentCancelled() {
+        tosty(UserProfileActivity.this, "Payment cancelled by user");
+
     }
 
+    @Override
+    public void onInitiatePaymentFailure(String s) {
+        Log.d("PAYMENT_FAILED", s);
+        alertService.showAlert("Payment Failed", s);
+        tosty(UserProfileActivity.this, "Payment Failed: "+s);
+    }
 }

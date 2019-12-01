@@ -159,8 +159,8 @@ public class TechnicalTabFragment extends Fragment {
 
                         //readUserData(eventId, token);
                         final ApiRequestManager apiRequestManager = new ApiRequestManager(
-                                getContext().getApplicationContext(),
-                                compositeDisposable
+                            getContext().getApplicationContext(),
+                            compositeDisposable
                         );
 
                         apiRequestManager.registerEvent(eventId);

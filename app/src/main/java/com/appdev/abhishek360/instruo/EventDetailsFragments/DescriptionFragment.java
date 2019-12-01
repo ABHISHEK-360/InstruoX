@@ -107,7 +107,7 @@ public class DescriptionFragment extends Fragment {
     }
 
     private void setupDocsAdapter() {
-        Query q=firebaseFirestore.collection("/EVENTS_INSTRUO_DOCS/"+eventId+"/DOCS");
+        Query q = firebaseFirestore.collection("/EVENTS_INSTRUO_DOCS/"+eventId+"/DOCS");
 
         FirestoreRecyclerOptions<DocsAdapter> res = new FirestoreRecyclerOptions.Builder<DocsAdapter>()
                 .setQuery(q,DocsAdapter.class).build();

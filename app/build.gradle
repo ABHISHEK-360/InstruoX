@@ -7,6 +7,12 @@ buildscript {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
+
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play' version '2.1.0'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
@@ -20,14 +26,20 @@ android {
         applicationId "com.appdev.abhishek360.instruo"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 321
-        versionName '2.1.0'
+        versionCode 325
+        versionName '2.1.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
     applicationVariants.all { variant ->
         variant.resValue "string", "versionName", "v" + variant.versionName
+    }
+
+    play {
+        track = 'beta' //'alpha','beta' or 'production'
+        serviceAccountEmail = PLAYSTORE_DEPLOY_EMAIL
+        serviceAccountCredentials = file(PLAYSTORE_DEPLOY_KEY_PATH)
     }
 
     buildTypes {
@@ -52,11 +64,14 @@ android {
     }
     buildToolsVersion = '28.0.3'
 }
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 dependencies {
+    implementation 'com.instamojo:android-sdk:3.2.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.play:core:1.6.4'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -87,8 +102,6 @@ dependencies {
 
     implementation 'androidx.arch.core:core-runtime:2.1.0'
     implementation 'androidx.arch.core:core-common:2.1.0'
-
-    implementation 'ai.devsupport.instamojo:instamojolib:0.1.5'
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation 'com.github.kenglxn.QRGen:android:2.5.0'
